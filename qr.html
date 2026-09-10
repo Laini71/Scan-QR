@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+  QR Murid SK Tun Fuad
+</title>
+
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+</script>
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    #f1f5f9;
+
+  color:
+    #172033;
+
+}
+
+
+/* HEADER */
+
+.header {
+
+  background:
+    linear-gradient(
+      135deg,
+      #075985,
+      #0284c7
+    );
+
+  color:
+    white;
+
+  padding:
+    25px;
+
+}
+
+
+.header-inner {
+
+  max-width:
+    1200px;
+
+  margin:
+    auto;
+
+}
+
+
+.header h1 {
+
+  margin:
+    0;
+
+}
+
+
+.header p {
+
+  margin:
+    8px 0 0;
+
+}
+
+
+/* CONTAINER */
+
+.container {
+
+  max-width:
+    1200px;
+
+  margin:
+    auto;
+
+  padding:
+    20px;
+
+}
+
+
+/* TOOLBAR */
+
+.toolbar {
+
+  background:
+    white;
+
+  padding:
+    18px;
+
+  border-radius:
+    18px;
+
+  margin-bottom:
+    20px;
+
+  box-shadow:
+    0 5px 20px
+    rgba(0,0,0,.08);
+
+}
+
+
+.toolbar-row {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    12px;
+
+  align-items:
+    center;
+
+}
+
+
+select,
+input {
+
+  padding:
+    12px;
+
+  border:
+    1px solid #cbd5e1;
+
+  border-radius:
+    10px;
+
+  font-size:
+    15px;
+
+}
+
+
+input {
+
+  flex:
+    1;
+
+  min-width:
+    200px;
+
+}
+
+
+/* BUTTON */
+
+button,
+.button-link {
+
+  border:
+    none;
+
+  padding:
+    12px 18px;
+
+  border-radius:
+    10px;
+
+  cursor:
+    pointer;
+
+  font-weight:
+    bold;
+
+  text-decoration:
+    none;
+
+  display:
+    inline-block;
+
+}
+
+
+.btn-print {
+
+  background:
+    #0f766e;
+
+  color:
+    white;
+
+}
+
+
+.btn-back {
+
+  background:
+    #2563eb;
+
+  color:
+    white;
+
+}
+
+
+/* STATUS */
+
+.status {
+
+  margin-top:
+    15px;
+
+  font-weight:
+    bold;
+
+}
+
+
+/* QR GRID */
+
+#qrGrid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(
+        230px,
+        1fr
+      )
+    );
+
+  gap:
+    18px;
+
+}
+
+
+/* QR CARD */
+
+.qr-card {
+
+  background:
+    white;
+
+  border:
+    2px solid #e2e8f0;
+
+  border-radius:
+    18px;
+
+  padding:
+    18px;
+
+  text-align:
+    center;
+
+  page-break-inside:
+    avoid;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.06);
+
+}
+
+
+.school-name {
+
+  font-size:
+    12px;
+
+  font-weight:
+    bold;
+
+  color:
+    #0369a1;
+
+}
+
+
+.card-title {
+
+  font-size:
+    13px;
+
+  font-weight:
+    bold;
+
+  margin-top:
+    4px;
+
+}
+
+
+.qr-image {
+
+  margin:
+    15px auto;
+
+  display:
+    flex;
+
+  justify-content:
+    center;
+
+}
+
+
+.student-name {
+
+  font-weight:
+    bold;
+
+  font-size:
+    17px;
+
+  margin-top:
+    8px;
+
+}
+
+
+.student-class {
+
+  margin-top:
+    5px;
+
+  font-size:
+    15px;
+
+}
+
+
+.student-id {
+
+  margin-top:
+    5px;
+
+  font-size:
+    12px;
+
+  color:
+    #64748b;
+
+}
+
+
+.qr-id {
+
+  margin-top:
+    8px;
+
+  font-size:
+    10px;
+
+  word-break:
+    break-all;
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* LOADING */
+
+.loading {
+
+  background:
+    white;
+
+  padding:
+    30px;
+
+  border-radius:
+    18px;
+
+  text-align:
+    center;
+
+}
+
+
+@media print {
+
+  body {
+
+    background:
+      white;
+
+  }
+
+
+  .header,
+  .toolbar {
+
+    display:
+      none !important;
+
+  }
+
+
+  .container {
+
+    max-width:
+      none;
+
+    padding:
+      0;
+
+  }
+
+
+  #qrGrid {
+
+    display:
+      grid;
+
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+
+    gap:
+      8mm;
+
+  }
+
+
+  .qr-card {
+
+    box-shadow:
+      none;
+
+    border:
+      1px solid #999;
+
+    border-radius:
+      8px;
+
+    padding:
+      10px;
+
+  }
+
+}
+
+
+@media (
+  max-width: 600px
+) {
+
+  #qrGrid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .toolbar-row {
+
+    flex-direction:
+      column;
+
+    align-items:
+      stretch;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+<div class="header-inner">
+
+<h1>
+🥛 Jana QR Murid
+</h1>
+
+<p>
+Sistem Pengagihan Susu QR
+SK Tun Fuad 2026
+</p>
+
+</div>
+
+</header>
+
+
+<div class="container">
+
+
+<section class="toolbar">
+
+<div class="toolbar-row">
+
+
+<a
+  class="button-link btn-back"
+  href="index.html">
+  📷 Kembali Ke Scanner
+</a>
+
+
+<select
+  id="classFilter"
+  onchange="applyFilter()">
+
+<option value="">
+Semua Kelas
+</option>
+
+</select>
+
+
+<input
+  type="text"
+  id="searchInput"
+  placeholder="Cari nama murid..."
+  oninput="applyFilter()"
+>
+
+
+<button
+  class="btn-print"
+  onclick="window.print()">
+
+🖨️ Cetak QR
+
+</button>
+
+
+</div>
+
+
+<div
+  id="status"
+  class="status">
+
+Memuatkan murid...
+
+</div>
+
+</section>
+
+
+<div
+  id="qrGrid">
+
+<div class="loading">
+⏳ Sedang mengambil data murid...
+</div>
+
+</div>
+
+
+</div>
+
+
+<script src="qr.js"></script>
+
+
+</body>
+
+</html>
