@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Sistem Pengagihan Susu QR SK Tun Fuad 2026
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+  <header class="header">
+
+    <div class="milk-logo">
+      🥛
+    </div>
+
+    <div>
+
+      <h1>
+        Sistem Pengagihan Susu QR
+      </h1>
+
+      <h2>
+        SK Tun Fuad 2026
+      </h2>
+
+      <p>
+        SKTF, Together We RISE
+      </p>
+
+    </div>
+
+  </header>
+
+
+
+  <main>
+
+
+    <!-- STATUS SISTEM -->
+
+    <section class="status-card">
+
+      <span
+        id="systemDot"
+        class="dot"
+      ></span>
+
+      <span id="systemStatus">
+        Memeriksa sistem...
+      </span>
+
+    </section>
+
+
+
+    <!-- SCANNER -->
+
+    <section class="card">
+
+      <h2>
+        📷 Imbas QR Murid
+      </h2>
+
+      <p class="subtitle">
+
+        Imbas QR murid untuk merekod
+        pengambilan susu.
+
+      </p>
+
+
+      <div id="reader"></div>
+
+
+      <div class="buttons">
+
+        <button
+          id="btnStart"
+          class="btn btn-blue"
+          onclick="startScanner()"
+        >
+          📷 MULA IMBASAN
+        </button>
+
+
+        <button
+          id="btnStop"
+          class="btn btn-red"
+          onclick="stopScanner()"
+          disabled
+        >
+          ⏹ HENTIKAN
+        </button>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- LOADING -->
+
+    <section
+      id="loadingBox"
+      class="card loading hidden"
+    >
+
+      <div class="spinner"></div>
+
+      <h3>
+        Sedang menyemak rekod...
+      </h3>
+
+      <p>
+        Sila tunggu sebentar.
+      </p>
+
+    </section>
+
+
+
+    <!-- RESULT -->
+
+    <section
+      id="resultBox"
+      class="result hidden"
+    >
+
+      <div
+        id="resultIcon"
+        class="result-icon"
+      ></div>
+
+      <h2 id="resultTitle"></h2>
+
+      <h3 id="studentName"></h3>
+
+      <p id="studentClass"></p>
+
+      <p id="resultTime"></p>
+
+      <p id="resultMessage"></p>
+
+    </section>
+
+
+
+    <!-- UJIAN MANUAL -->
+
+    <section class="card">
+
+      <h3>
+        🔎 Ujian Manual QR
+      </h3>
+
+      <input
+        type="text"
+        id="manualQr"
+        value="SKTF-MILK-STD001"
+        placeholder="QR ID murid"
+      >
+
+      <button
+        class="btn btn-green full"
+        onclick="manualScan()"
+      >
+        PROSES QR
+      </button>
+
+    </section>
+
+
+  </main>
+
+
+
+  <footer>
+
+    Sistem Pengagihan Susu QR
+    <br>
+    SK Tun Fuad 2026
+
+  </footer>
+
+
+</div>
+
+
+<script
+  src="https://unpkg.com/html5-qrcode"
+></script>
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
