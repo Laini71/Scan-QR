@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Dashboard Pengagihan Susu SKTF 2026
+</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background:
+    #f1f5f9;
+
+  color:
+    #172033;
+
+}
+
+.header {
+
+  background:
+    linear-gradient(
+      135deg,
+      #075985,
+      #0284c7
+    );
+
+  color:
+    white;
+
+  padding:
+    24px;
+
+}
+
+.header-inner {
+
+  max-width:
+    1250px;
+
+  margin:
+    auto;
+
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header p {
+  margin: 6px 0 0;
+}
+
+.container {
+
+  max-width:
+    1250px;
+
+  margin:
+    auto;
+
+  padding:
+    20px;
+
+}
+
+.toolbar {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    10px;
+
+  margin-bottom:
+    20px;
+
+}
+
+.btn {
+
+  border: 0;
+
+  padding:
+    12px 18px;
+
+  border-radius:
+    12px;
+
+  text-decoration:
+    none;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+.blue {
+  background: #2563eb;
+  color: white;
+}
+
+.green {
+  background: #0f766e;
+  color: white;
+}
+
+.orange {
+  background: #ea580c;
+  color: white;
+}
+
+.cards {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    15px;
+
+}
+
+.card {
+
+  background:
+    white;
+
+  padding:
+    22px;
+
+  border-radius:
+    18px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.07);
+
+}
+
+.card-label {
+
+  color:
+    #64748b;
+
+  font-size:
+    14px;
+
+}
+
+.card-value {
+
+  font-size:
+    38px;
+
+  font-weight:
+    bold;
+
+  margin-top:
+    8px;
+
+}
+
+.section {
+
+  margin-top:
+    20px;
+
+  background:
+    white;
+
+  padding:
+    20px;
+
+  border-radius:
+    18px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.07);
+
+}
+
+.section h2 {
+  margin-top: 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
+}
+
+th,
+td {
+
+  padding:
+    12px;
+
+  text-align:
+    left;
+
+  border-bottom:
+    1px solid #e2e8f0;
+
+}
+
+th {
+
+  background:
+    #f8fafc;
+
+}
+
+.progress {
+
+  height:
+    10px;
+
+  background:
+    #e2e8f0;
+
+  border-radius:
+    100px;
+
+  overflow:
+    hidden;
+
+}
+
+.progress-bar {
+
+  height:
+    100%;
+
+  background:
+    #10b981;
+
+}
+
+.status {
+
+  margin-bottom:
+    15px;
+
+  padding:
+    13px 16px;
+
+  border-radius:
+    12px;
+
+  background:
+    white;
+
+}
+
+.search {
+
+  width:
+    100%;
+
+  padding:
+    12px;
+
+  margin-bottom:
+    12px;
+
+  border:
+    1px solid #cbd5e1;
+
+  border-radius:
+    10px;
+
+  font-size:
+    15px;
+
+}
+
+.hidden {
+  display: none;
+}
+
+@media (
+  max-width: 850px
+) {
+
+  .cards {
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+  }
+
+}
+
+@media (
+  max-width: 500px
+) {
+
+  .cards {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+<div class="header-inner">
+
+<h1>
+🥛 Dashboard Pengagihan Susu
+</h1>
+
+<p>
+SK Tun Fuad 2026 • SKTF, Together We RISE
+</p>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+
+<div class="toolbar">
+
+<a
+  class="btn blue"
+  href="index.html">
+📷 Scanner
+</a>
+
+<a
+  class="btn green"
+  href="qr.html">
+🔳 Jana QR Murid
+</a>
+
+<button
+  class="btn orange"
+  onclick="loadDashboard()">
+🔄 Refresh
+</button>
+
+</div>
+
+
+<div
+  id="systemStatus"
+  class="status">
+
+⏳ Memuatkan dashboard...
+
+</div>
+
+
+<section class="cards">
+
+<div class="card">
+
+<div class="card-label">
+Jumlah Murid Aktif
+</div>
+
+<div
+  id="totalActive"
+  class="card-value">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-label">
+Sudah Ambil Hari Ini
+</div>
+
+<div
+  id="distributedCount"
+  class="card-value">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-label">
+Belum Ambil
+</div>
+
+<div
+  id="pendingCount"
+  class="card-value">
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-label">
+Peratus Pengagihan
+</div>
+
+<div
+  id="percentage"
+  class="card-value">
+0%
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>
+📊 Statistik Mengikut Kelas
+</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Kelas</th>
+
+<th>Murid</th>
+
+<th>Sudah Ambil</th>
+
+<th>Belum Ambil</th>
+
+<th>Prestasi</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="classTable">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>
+✅ Murid Sudah Ambil Susu
+</h2>
+
+<input
+  id="takenSearch"
+  class="search"
+  placeholder="Cari nama atau kelas..."
+  oninput="renderTaken()"
+>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Bil.</th>
+
+<th>Nama</th>
+
+<th>Kelas</th>
+
+<th>Masa</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="takenTable">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<section class="section">
+
+<h2>
+⏳ Murid Belum Ambil Susu
+</h2>
+
+<input
+  id="pendingSearch"
+  class="search"
+  placeholder="Cari nama atau kelas..."
+  oninput="renderPending()"
+>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Bil.</th>
+
+<th>Nama</th>
+
+<th>Kelas</th>
+
+<th>ID Murid</th>
+
+</tr>
+
+</thead>
+
+<tbody
+  id="pendingTable">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<script src="dashboard.js"></script>
+
+
+</body>
+
+</html>
