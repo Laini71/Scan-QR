@@ -12,9 +12,7 @@ let dashboardData = null;
 window.addEventListener(
   'load',
   function () {
-
     loadDashboard();
-
   }
 );
 
@@ -26,25 +24,19 @@ window.addEventListener(
 function callAppsScript(params) {
 
   return new Promise(
-    function (
-      resolve,
-      reject
-    ) {
+    function (resolve, reject) {
 
       const callbackName =
-        'dashboardCallback_' +
+        'dashboardApi_' +
         Date.now() +
         '_' +
         Math.floor(
-          Math.random() *
-          100000
+          Math.random() * 100000
         );
 
 
       const script =
-        document.createElement(
-          'script'
-        );
+        document.createElement('script');
 
 
       const timeout =
@@ -64,22 +56,14 @@ function callAppsScript(params) {
         );
 
 
-      window[
-        callbackName
-      ] =
-        function (
-          result
-        ) {
+      window[callbackName] =
+        function (result) {
 
-          clearTimeout(
-            timeout
-          );
+          clearTimeout(timeout);
 
           cleanup();
 
-          resolve(
-            result
-          );
+          resolve(result);
 
         };
 
@@ -87,23 +71,12 @@ function callAppsScript(params) {
       function cleanup() {
 
         try {
-
-          delete window[
-            callbackName
-          ];
-
+          delete window[callbackName];
         } catch (e) {}
 
 
-        if (
-          script.parentNode
-        ) {
-
-          script.parentNode
-            .removeChild(
-              script
-            );
-
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
         }
 
       }
@@ -113,16 +86,12 @@ function callAppsScript(params) {
         new URLSearchParams();
 
 
-      Object.keys(
-        params
-      ).forEach(
-        function (
-          key
-        ) {
+      Object.keys(params).forEach(
+        function (key) {
 
           query.set(
             key,
-            params[key]
+            params[key] ?? ''
           );
 
         }
@@ -150,25 +119,20 @@ function callAppsScript(params) {
       script.onerror =
         function () {
 
-          clearTimeout(
-            timeout
-          );
+          clearTimeout(timeout);
 
           cleanup();
 
           reject(
             new Error(
-              'Tidak dapat menghubungi server.'
+              'Gagal menghubungi server.'
             )
           );
 
         };
 
 
-      document.body
-        .appendChild(
-          script
-        );
+      document.body.appendChild(script);
 
     }
   );
@@ -182,22 +146,16 @@ function callAppsScript(params) {
 
 async function loadDashboard() {
 
-  const status =
-    document.getElementById(
-      'systemStatus'
-    );
-
-
-  status.innerText =
-    '⏳ Mengemas kini dashboard...';
+  setStatus(
+    '⏳ Mengambil data dashboard...'
+  );
 
 
   try {
 
     const result =
       await callAppsScript({
-        action:
-          'dashboard'
+        action: 'dashboard'
       });
 
 
@@ -210,7 +168,7 @@ async function loadDashboard() {
         result &&
         result.message
           ? result.message
-          : 'Data dashboard tidak dapat dimuatkan.'
+          : 'Dashboard gagal dimuatkan.'
       );
 
     }
@@ -220,33 +178,23 @@ async function loadDashboard() {
       result;
 
 
-    renderSummary();
-
-    renderClassStats();
-
-    renderTaken();
-
-    renderPending();
+    renderDashboard();
 
 
-    status.innerText =
-      '✅ Data dikemas kini • ' +
-      result.date +
-      ' • ' +
-      result.timestamp;
+    setStatus(
+      '✅ Dashboard berjaya dikemas kini.'
+    );
 
   }
 
   catch (error) {
 
-    console.error(
-      error
-    );
+    console.error(error);
 
-
-    status.innerText =
+    setStatus(
       '❌ ' +
-      error.message;
+      error.message
+    );
 
   }
 
@@ -254,44 +202,93 @@ async function loadDashboard() {
 
 
 /* =====================================================
-   SUMMARY
+   RENDER DASHBOARD
 ===================================================== */
 
-function renderSummary() {
+function renderDashboard() {
+
+  if (!dashboardData) {
+    return;
+  }
+
 
   const summary =
-    dashboardData.summary;
+    dashboardData.summary || {};
 
 
-  setText(
-    'totalActive',
-    summary.totalActive
-  );
+  document.getElementById(
+    'reportDate'
+  ).textContent =
+    dashboardData.date || '-';
 
 
-  setText(
-    'distributedCount',
-    summary.distributed
-  );
+  document.getElementById(
+    'lastUpdate'
+  ).textContent =
+    dashboardData.timestamp || '-';
 
 
-  setText(
-    'pendingCount',
-    summary.pending
-  );
+  document.getElementById(
+    'totalActive'
+  ).textContent =
+    summary.totalActive || 0;
 
 
-  setText(
-    'percentage',
-    summary.percentage +
-    '%'
-  );
+  document.getElementById(
+    'totalTaken'
+  ).textContent =
+    summary.distributed || 0;
+
+
+  document.getElementById(
+    'totalPending'
+  ).textContent =
+    summary.pending || 0;
+
+
+  const percentage =
+    Number(
+      summary.percentage || 0
+    );
+
+
+  document.getElementById(
+    'percentage'
+  ).textContent =
+    percentage + '%';
+
+
+  document.getElementById(
+    'progressText'
+  ).textContent =
+    percentage + '% selesai';
+
+
+  document.getElementById(
+    'progressBar'
+  ).style.width =
+    Math.min(
+      100,
+      Math.max(
+        0,
+        percentage
+      )
+    ) + '%';
+
+
+  renderClassStats();
+
+  buildClassFilters();
+
+  renderTakenStudents();
+
+  renderPendingStudents();
 
 }
 
 
 /* =====================================================
-   CLASS
+   STATISTIK KELAS
 ===================================================== */
 
 function renderClassStats() {
@@ -302,67 +299,154 @@ function renderClassStats() {
     );
 
 
+  const data =
+    dashboardData.byClass || [];
+
+
+  if (!data.length) {
+
+    tbody.innerHTML =
+      `
+      <tr>
+        <td colspan="5" class="center">
+          Tiada data kelas.
+        </td>
+      </tr>
+      `;
+
+    return;
+
+  }
+
+
   tbody.innerHTML =
-    '';
+    data.map(
+      function (item) {
 
+        return `
+          <tr>
 
-  dashboardData.byClass
-    .forEach(
-      function (
-        item
-      ) {
+            <td>
+              <strong>
+                ${escapeHtml(
+                  item.className
+                )}
+              </strong>
+            </td>
 
-        const row =
-          document.createElement(
-            'tr'
-          );
+            <td class="center">
+              ${item.total || 0}
+            </td>
 
+            <td class="center">
+              <span class="badge badge-success">
+                ${item.taken || 0}
+              </span>
+            </td>
 
-        row.innerHTML =
-          `
-          <td>
-            <strong>
-              ${escapeHtml(item.className)}
-            </strong>
-          </td>
+            <td class="center">
+              <span class="badge badge-warning">
+                ${item.pending || 0}
+              </span>
+            </td>
 
-          <td>
-            ${item.total}
-          </td>
+            <td class="center">
+              <strong>
+                ${item.percentage || 0}%
+              </strong>
+            </td>
 
-          <td>
-            ${item.taken}
-          </td>
-
-          <td>
-            ${item.pending}
-          </td>
-
-          <td>
-
-            <div>
-              ${item.percentage}%
-            </div>
-
-            <div class="progress">
-
-              <div
-                class="progress-bar"
-                style="width:${item.percentage}%">
-              </div>
-
-            </div>
-
-          </td>
-          `;
-
-
-        tbody.appendChild(
-          row
-        );
+          </tr>
+        `;
 
       }
+    )
+    .join('');
+
+}
+
+
+/* =====================================================
+   FILTER KELAS
+===================================================== */
+
+function buildClassFilters() {
+
+  const classes =
+    (dashboardData.byClass || [])
+      .map(
+        function (item) {
+          return item.className;
+        }
+      );
+
+
+  fillClassSelect(
+    'takenClassFilter',
+    classes
+  );
+
+
+  fillClassSelect(
+    'pendingClassFilter',
+    classes
+  );
+
+}
+
+
+function fillClassSelect(
+  elementId,
+  classes
+) {
+
+  const select =
+    document.getElementById(
+      elementId
     );
+
+
+  const current =
+    select.value;
+
+
+  select.innerHTML =
+    '<option value="">Semua Kelas</option>';
+
+
+  classes.forEach(
+    function (className) {
+
+      const option =
+        document.createElement(
+          'option'
+        );
+
+
+      option.value =
+        className;
+
+
+      option.textContent =
+        className;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  if (
+    classes.includes(current)
+  ) {
+
+    select.value =
+      current;
+
+  }
 
 }
 
@@ -371,7 +455,7 @@ function renderClassStats() {
    SUDAH AMBIL
 ===================================================== */
 
-function renderTaken() {
+function renderTakenStudents() {
 
   if (!dashboardData) {
     return;
@@ -379,43 +463,67 @@ function renderTaken() {
 
 
   const keyword =
-    String(
-      document
-        .getElementById(
-          'takenSearch'
-        )
-        .value || ''
-    )
+    document
+      .getElementById(
+        'takenSearch'
+      )
+      .value
       .trim()
       .toLowerCase();
 
 
-  const records =
-    dashboardData
-      .distributedStudents
-      .filter(
-        function (
-          item
-        ) {
+  const classFilter =
+    document
+      .getElementById(
+        'takenClassFilter'
+      )
+      .value;
 
-          const text =
-            (
-              item.name +
-              ' ' +
-              item.className
+
+  const students =
+    (
+      dashboardData
+        .distributedStudents ||
+      []
+    )
+    .filter(
+      function (student) {
+
+        const text =
+          (
+            String(
+              student.name || ''
+            ) +
+            ' ' +
+            String(
+              student.className || ''
+            ) +
+            ' ' +
+            String(
+              student.studentId || ''
             )
-              .toLowerCase();
+          )
+          .toLowerCase();
 
 
-          return (
-            !keyword ||
-            text.includes(
-              keyword
-            )
-          );
+        const searchMatch =
+          !keyword ||
+          text.includes(keyword);
 
-        }
-      );
+
+        const classMatch =
+          !classFilter ||
+          student.className ===
+          classFilter;
+
+
+        return (
+          searchMatch &&
+          classMatch
+        );
+
+      }
+    );
 
 
   const tbody =
@@ -424,19 +532,13 @@ function renderTaken() {
     );
 
 
-  tbody.innerHTML =
-    '';
-
-
-  if (
-    records.length === 0
-  ) {
+  if (!students.length) {
 
     tbody.innerHTML =
       `
       <tr>
-        <td colspan="4">
-          Tiada rekod.
+        <td colspan="6" class="center">
+          Tiada rekod dijumpai.
         </td>
       </tr>
       `;
@@ -446,44 +548,55 @@ function renderTaken() {
   }
 
 
-  records.forEach(
-    function (
-      item,
-      index
-    ) {
+  tbody.innerHTML =
+    students.map(
+      function (student, index) {
 
-      const row =
-        document.createElement(
-          'tr'
-        );
+        return `
+          <tr>
 
+            <td>
+              ${index + 1}
+            </td>
 
-      row.innerHTML =
-        `
-        <td>
-          ${index + 1}
-        </td>
+            <td>
+              <strong>
+                ${escapeHtml(
+                  student.name
+                )}
+              </strong>
+            </td>
 
-        <td>
-          ${escapeHtml(item.name)}
-        </td>
+            <td>
+              ${escapeHtml(
+                student.className
+              )}
+            </td>
 
-        <td>
-          ${escapeHtml(item.className)}
-        </td>
+            <td>
+              ${escapeHtml(
+                student.studentId
+              )}
+            </td>
 
-        <td>
-          ${escapeHtml(item.time)}
-        </td>
+            <td>
+              ${escapeHtml(
+                student.time || '-'
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                student.teacher || '-'
+              )}
+            </td>
+
+          </tr>
         `;
 
-
-      tbody.appendChild(
-        row
-      );
-
-    }
-  );
+      }
+    )
+    .join('');
 
 }
 
@@ -492,7 +605,7 @@ function renderTaken() {
    BELUM AMBIL
 ===================================================== */
 
-function renderPending() {
+function renderPendingStudents() {
 
   if (!dashboardData) {
     return;
@@ -500,43 +613,67 @@ function renderPending() {
 
 
   const keyword =
-    String(
-      document
-        .getElementById(
-          'pendingSearch'
-        )
-        .value || ''
-    )
+    document
+      .getElementById(
+        'pendingSearch'
+      )
+      .value
       .trim()
       .toLowerCase();
 
 
-  const records =
-    dashboardData
-      .pendingStudents
-      .filter(
-        function (
-          item
-        ) {
+  const classFilter =
+    document
+      .getElementById(
+        'pendingClassFilter'
+      )
+      .value;
 
-          const text =
-            (
-              item.name +
-              ' ' +
-              item.className
+
+  const students =
+    (
+      dashboardData
+        .pendingStudents ||
+      []
+    )
+    .filter(
+      function (student) {
+
+        const text =
+          (
+            String(
+              student.name || ''
+            ) +
+            ' ' +
+            String(
+              student.className || ''
+            ) +
+            ' ' +
+            String(
+              student.studentId || ''
             )
-              .toLowerCase();
+          )
+          .toLowerCase();
 
 
-          return (
-            !keyword ||
-            text.includes(
-              keyword
-            )
-          );
+        const searchMatch =
+          !keyword ||
+          text.includes(keyword);
 
-        }
-      );
+
+        const classMatch =
+          !classFilter ||
+          student.className ===
+          classFilter;
+
+
+        return (
+          searchMatch &&
+          classMatch
+        );
+
+      }
+    );
 
 
   const tbody =
@@ -545,19 +682,13 @@ function renderPending() {
     );
 
 
-  tbody.innerHTML =
-    '';
-
-
-  if (
-    records.length === 0
-  ) {
+  if (!students.length) {
 
     tbody.innerHTML =
       `
       <tr>
-        <td colspan="4">
-          Semua murid sudah mengambil susu.
+        <td colspan="5" class="center">
+          🎉 Semua murid sudah mengambil susu.
         </td>
       </tr>
       `;
@@ -567,104 +698,85 @@ function renderPending() {
   }
 
 
-  records.forEach(
-    function (
-      item,
-      index
-    ) {
+  tbody.innerHTML =
+    students.map(
+      function (student, index) {
 
-      const row =
-        document.createElement(
-          'tr'
-        );
+        return `
+          <tr>
 
+            <td>
+              ${index + 1}
+            </td>
 
-      row.innerHTML =
-        `
-        <td>
-          ${index + 1}
-        </td>
+            <td>
+              <strong>
+                ${escapeHtml(
+                  student.name
+                )}
+              </strong>
+            </td>
 
-        <td>
-          ${escapeHtml(item.name)}
-        </td>
+            <td>
+              ${escapeHtml(
+                student.className
+              )}
+            </td>
 
-        <td>
-          ${escapeHtml(item.className)}
-        </td>
+            <td>
+              ${escapeHtml(
+                student.studentId
+              )}
+            </td>
 
-        <td>
-          ${escapeHtml(item.studentId)}
-        </td>
+            <td>
+              <span class="badge badge-warning">
+                BELUM AMBIL
+              </span>
+            </td>
+
+          </tr>
         `;
 
-
-      tbody.appendChild(
-        row
-      );
-
-    }
-  );
+      }
+    )
+    .join('');
 
 }
 
 
 /* =====================================================
-   UTIL
+   STATUS
 ===================================================== */
 
-function setText(
-  id,
-  value
-) {
+function setStatus(text) {
 
   const element =
     document.getElementById(
-      id
+      'dashboardStatus'
     );
 
 
   if (element) {
-
-    element.innerText =
-      value;
-
+    element.textContent = text;
   }
 
 }
 
 
-function escapeHtml(
-  value
-) {
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
 
   return String(
     value || ''
   )
-
-    .replace(
-      /&/g,
-      '&amp;'
-    )
-
-    .replace(
-      /</g,
-      '&lt;'
-    )
-
-    .replace(
-      />/g,
-      '&gt;'
-    )
-
-    .replace(
-      /"/g,
-      '&quot;'
-    )
-
-    .replace(
-      /'/g,
-      '&#039;'
-    );
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
 
 }
