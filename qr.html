@@ -93,6 +93,102 @@ body {
 }
 
 
+/* MENU */
+
+.qr-menu {
+
+  max-width:
+    1200px;
+
+  margin:
+    18px auto 0;
+
+  padding:
+    0 20px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(6, 1fr);
+
+  gap:
+    10px;
+
+}
+
+
+.qr-menu a,
+.qr-menu button {
+
+  border:
+    none;
+
+  text-decoration:
+    none;
+
+  background:
+    white;
+
+  color:
+    #075985;
+
+  padding:
+    13px 8px;
+
+  border-radius:
+    12px;
+
+  text-align:
+    center;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.08);
+
+  font-size:
+    14px;
+
+}
+
+
+.qr-menu a:hover,
+.qr-menu button:hover {
+
+  background:
+    #e0f2fe;
+
+}
+
+
+.qr-menu .active {
+
+  background:
+    #0284c7;
+
+  color:
+    white;
+
+}
+
+
+.qr-menu .active:hover {
+
+  background:
+    #0369a1;
+
+  color:
+    white;
+
+}
+
+
 /* CONTAINER */
 
 .container {
@@ -211,17 +307,6 @@ button,
 
   background:
     #0f766e;
-
-  color:
-    white;
-
-}
-
-
-.btn-back {
-
-  background:
-    #2563eb;
 
   color:
     white;
@@ -421,6 +506,7 @@ button,
 
 
   .header,
+  .qr-menu,
   .toolbar {
 
     display:
@@ -477,6 +563,20 @@ button,
 
 
 @media (
+  max-width: 850px
+) {
+
+  .qr-menu {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+  }
+
+}
+
+
+@media (
   max-width: 600px
 ) {
 
@@ -521,9 +621,50 @@ Sistem Pengagihan Susu QR
 SK Tun Fuad 2026
 </p>
 
+<p>
+<strong>
+SKTF, Together We RISE
+</strong>
+</p>
+
 </div>
 
 </header>
+
+
+<nav class="qr-menu">
+
+  <a href="index.html">
+    📷 Scanner
+  </a>
+
+  <a href="dashboard.html">
+    📊 Dashboard
+  </a>
+
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
+
+  <a
+    href="qr.html"
+    class="active"
+  >
+    🔳 Jana QR
+  </a>
+
+  <a href="report.html">
+    📄 Laporan
+  </a>
+
+  <button
+    type="button"
+    onclick="location.reload()"
+  >
+    🔄 Refresh
+  </button>
+
+</nav>
 
 
 <div class="container">
@@ -532,13 +673,6 @@ SK Tun Fuad 2026
 <section class="toolbar">
 
 <div class="toolbar-row">
-
-
-<a
-  class="button-link btn-back"
-  href="index.html">
-  📷 Kembali Ke Scanner
-</a>
 
 
 <select
