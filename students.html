@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Pengurusan Murid | SK Tun Fuad
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .student-header {
+      background:
+        linear-gradient(
+          135deg,
+          #0d47a1,
+          #1976d2
+        );
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .student-header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .student-header p {
+      margin: 4px 0;
+      opacity: .95;
+    }
+
+
+    /* =========================
+       MENU
+    ========================= */
+
+    .student-menu {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 0 15px;
+
+      display: grid;
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 10px;
+    }
+
+    .student-menu a,
+    .student-menu button {
+
+      border: none;
+      text-decoration: none;
+
+      background: white;
+      color: #0d47a1;
+
+      padding: 13px 10px;
+
+      border-radius: 12px;
+
+      text-align: center;
+
+      font-weight: bold;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.08);
+
+      cursor: pointer;
+
+      font-size: 14px;
+    }
+
+    .student-menu a:hover,
+    .student-menu button:hover {
+      background: #e3f2fd;
+    }
+
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .student-container {
+      max-width: 1200px;
+      margin: 20px auto 50px;
+      padding: 0 15px;
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status-box {
+
+      background: white;
+
+      padding: 14px 18px;
+
+      border-radius: 12px;
+
+      margin-bottom: 18px;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.07);
+
+      font-weight: bold;
+
+      color: #0d47a1;
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .student-card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 22px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.08);
+    }
+
+    .student-card h2 {
+
+      margin-top: 0;
+
+      color: #0d47a1;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+      padding-bottom: 12px;
+    }
+
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 16px;
+    }
+
+    .form-group {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+    }
+
+    .form-group.full {
+
+      grid-column:
+        1 / -1;
+    }
+
+    .form-group label {
+
+      font-weight: bold;
+
+      font-size: 14px;
+
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border:
+        1px solid #d1d5db;
+
+      border-radius: 10px;
+
+      font-size: 15px;
+
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+
+      outline: none;
+
+      border-color: #1976d2;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(25,118,210,.12);
+    }
+
+    .form-group textarea {
+
+      min-height: 85px;
+
+      resize: vertical;
+    }
+
+
+    /* =========================
+       BUTTON FORM
+    ========================= */
+
+    .form-actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 18px;
+
+      flex-wrap: wrap;
+    }
+
+    .save-btn {
+
+      border: none;
+
+      background: #1976d2;
+
+      color: white;
+
+      padding: 13px 22px;
+
+      border-radius: 10px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      font-size: 15px;
+    }
+
+    .save-btn:hover {
+      background: #0d47a1;
+    }
+
+    .reset-btn {
+
+      border: none;
+
+      background: #e5e7eb;
+
+      color: #374151;
+
+      padding: 13px 22px;
+
+      border-radius: 10px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      font-size: 15px;
+    }
+
+
+    /* =========================
+       FILTER
+    ========================= */
+
+    .filter-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        2fr 1fr;
+
+      gap: 12px;
+
+      margin-bottom: 18px;
+    }
+
+    .filter-grid input,
+    .filter-grid select {
+
+      padding: 12px;
+
+      border:
+        1px solid #d1d5db;
+
+      border-radius: 10px;
+
+      font-size: 14px;
+    }
+
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrapper {
+
+      width: 100%;
+
+      overflow-x: auto;
+    }
+
+    .student-table {
+
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 850px;
+    }
+
+    .student-table th {
+
+      background: #0d47a1;
+
+      color: white;
+
+      padding: 12px 10px;
+
+      text-align: left;
+
+      font-size: 14px;
+    }
+
+    .student-table td {
+
+      padding: 12px 10px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+      font-size: 14px;
+
+      vertical-align: middle;
+    }
+
+    .student-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+
+    /* =========================
+       BADGE STATUS
+    ========================= */
+
+    .badge {
+
+      display: inline-block;
+
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      font-size: 12px;
+
+      font-weight: bold;
+    }
+
+    .badge-active {
+
+      background: #dcfce7;
+
+      color: #166534;
+    }
+
+    .badge-inactive {
+
+      background: #fee2e2;
+
+      color: #991b1b;
+    }
+
+
+    /* =========================
+       BUTTON TABLE
+    ========================= */
+
+    .small-btn {
+
+      border: none;
+
+      padding: 7px 10px;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      margin:
+        2px 3px 2px 0;
+    }
+
+    .edit-btn {
+
+      background: #fff3cd;
+
+      color: #7c5700;
+    }
+
+    .status-btn {
+
+      background: #e3f2fd;
+
+      color: #0d47a1;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .student-footer {
+
+      text-align: center;
+
+      padding: 25px 15px;
+
+      color: #6b7280;
+
+      font-size: 13px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (
+      max-width: 768px
+    ) {
+
+      .student-header h1 {
+        font-size: 24px;
+      }
+
+      .student-menu {
+
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .form-grid {
+
+        grid-template-columns:
+          1fr;
+      }
+
+      .form-group.full {
+
+        grid-column: auto;
+      }
+
+      .filter-grid {
+
+        grid-template-columns:
+          1fr;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ==========================================
+       HEADER
+  =========================================== -->
+
+  <header class="student-header">
+
+    <div style="font-size:48px;">
+      👨‍🎓
+    </div>
+
+    <h1>
+      Pengurusan Murid
+    </h1>
+
+    <p>
+      Sistem Pengagihan Susu QR
+    </p>
+
+    <p>
+      <strong>
+        SK Tun Fuad 2026
+      </strong>
+    </p>
+
+    <p>
+      SKTF, Together We RISE
+    </p>
+
+  </header>
+
+
+
+  <!-- ==========================================
+       MENU
+  =========================================== -->
+
+  <nav class="student-menu">
+
+    <a href="index.html">
+      📷 Scanner
+    </a>
+
+    <a href="dashboard.html">
+      📊 Dashboard
+    </a>
+
+    <a href="qr.html">
+      🔳 Jana QR
+    </a>
+
+    <button
+      type="button"
+      onclick="loadStudents()"
+    >
+      🔄 Refresh
+    </button>
+
+  </nav>
+
+
+
+  <!-- ==========================================
+       MAIN
+  =========================================== -->
+
+  <main class="student-container">
+
+
+    <!-- STATUS -->
+
+    <div
+      id="status"
+      class="status-box"
+    >
+      ⏳ Mengambil data murid...
+    </div>
+
+
+
+    <!-- ========================================
+         FORM MURID
+    ========================================= -->
+
+    <section class="student-card">
+
+      <h2 id="formTitle">
+        ➕ Tambah Murid
+      </h2>
+
+
+      <input
+        type="hidden"
+        id="studentId"
+      >
+
+
+      <div class="form-grid">
+
+
+        <!-- NAMA -->
+
+        <div class="form-group">
+
+          <label for="studentName">
+            Nama Murid *
+          </label>
+
+          <input
+            type="text"
+            id="studentName"
+            placeholder="Contoh: ABU BIN BAKAR"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <!-- KELAS -->
+
+        <div class="form-group">
+
+          <label for="studentClass">
+            Kelas *
+          </label>
+
+          <select id="studentClass">
+
+            <option value="">
+              -- Pilih Kelas --
+            </option>
+
+            <option value="1A">
+              1A
+            </option>
+
+            <option value="2A">
+              2A
+            </option>
+
+            <option value="3A">
+              3A
+            </option>
+
+            <option value="4A">
+              4A
+            </option>
+
+            <option value="5A">
+              5A
+            </option>
+
+            <option value="6A">
+              6A
+            </option>
+
+            <option value="6B">
+              6B
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- TAHUN -->
+
+        <div class="form-group">
+
+          <label for="studentYear">
+            Tahun
+          </label>
+
+          <select id="studentYear">
+
+            <option value="">
+              -- Pilih Tahun --
+            </option>
+
+            <option value="1">
+              Tahun 1
+            </option>
+
+            <option value="2">
+              Tahun 2
+            </option>
+
+            <option value="3">
+              Tahun 3
+            </option>
+
+            <option value="4">
+              Tahun 4
+            </option>
+
+            <option value="5">
+              Tahun 5
+            </option>
+
+            <option value="6">
+              Tahun 6
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- JANTINA -->
+
+        <div class="form-group">
+
+          <label for="studentGender">
+            Jantina
+          </label>
+
+          <select id="studentGender">
+
+            <option value="">
+              -- Pilih Jantina --
+            </option>
+
+            <option value="LELAKI">
+              LELAKI
+            </option>
+
+            <option value="PEREMPUAN">
+              PEREMPUAN
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- NO KP -->
+
+        <div class="form-group">
+
+          <label for="studentNoKp">
+            No. KP / MyKid
+          </label>
+
+          <input
+            type="text"
+            id="studentNoKp"
+            placeholder="Pilihan"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <!-- CATATAN -->
+
+        <div class="form-group full">
+
+          <label for="studentNotes">
+            Catatan
+          </label>
+
+          <textarea
+            id="studentNotes"
+            placeholder="Catatan tambahan jika ada"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <!-- BUTTON -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="save-btn"
+          onclick="saveStudent()"
+        >
+          💾 SIMPAN MURID
+        </button>
+
+
+        <button
+          type="button"
+          class="reset-btn"
+          onclick="resetForm()"
+        >
+          🔄 RESET
+        </button>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ========================================
+         SENARAI MURID
+    ========================================= -->
+
+    <section class="student-card">
+
+      <h2>
+        👨‍🎓 Senarai Murid
+      </h2>
+
+
+      <!-- SEARCH -->
+
+      <div class="filter-grid">
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Cari nama, ID atau kelas..."
+          oninput="renderStudents()"
+        >
+
+
+        <select
+          id="statusFilter"
+          onchange="renderStudents()"
+        >
+
+          <option value="">
+            Semua Status
+          </option>
+
+          <option value="AKTIF">
+            AKTIF
+          </option>
+
+          <option value="TIDAK AKTIF">
+            TIDAK AKTIF
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- TABLE -->
+
+      <div class="table-wrapper">
+
+        <table class="student-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Bil.
+              </th>
+
+              <th>
+                ID
+              </th>
+
+              <th>
+                Nama Murid
+              </th>
+
+              <th>
+                Kelas
+              </th>
+
+              <th>
+                Jantina
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Tindakan
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="studentTable">
+
+            <tr>
+
+              <td
+                colspan="7"
+                style="
+                  text-align:center;
+                  padding:30px;
+                "
+              >
+                ⏳ Memuatkan data murid...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+
+  <footer class="student-footer">
+
+    Sistem Pengagihan Susu QR
+    SK Tun Fuad 2026
+
+    <br>
+
+    SKTF, Together We RISE
+
+  </footer>
+
+
+
+  <!-- ==========================================
+       JAVASCRIPT
+  =========================================== -->
+
+  <script src="students.js"></script>
+
+
+</body>
+
+</html>
