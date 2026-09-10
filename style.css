@@ -76,7 +76,7 @@ body {
 ========================================================= */
 
 main {
-  max-width: 650px;
+  max-width: 850px;
 
   margin: auto;
 
@@ -97,12 +97,17 @@ main {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(4, 1fr);
 
   gap: 10px;
 }
 
 .menu-btn {
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: none;
+
   background: white;
 
   color: #0f172a;
@@ -115,7 +120,12 @@ main {
 
   border-radius: 14px;
 
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.25;
   font-weight: 700;
+
+  cursor: pointer;
 
   box-shadow:
     0 5px 15px
@@ -123,7 +133,8 @@ main {
 
   transition:
     transform .2s ease,
-    background .2s ease;
+    background .2s ease,
+    box-shadow .2s ease;
 }
 
 .menu-btn:hover {
@@ -132,6 +143,10 @@ main {
 
   background:
     #eff6ff;
+
+  box-shadow:
+    0 7px 18px
+    rgba(0,0,0,.09);
 }
 
 .menu-active {
@@ -490,7 +505,25 @@ footer {
 
 
 /* =========================================================
-   RESPONSIVE TABLET / TELEFON
+   RESPONSIVE TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+  main {
+    max-width: 650px;
+  }
+
+  .main-menu {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE TELEFON
 ========================================================= */
 
 @media (max-width: 600px) {
@@ -519,7 +552,8 @@ footer {
   }
 
   .main-menu {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(2, 1fr);
   }
 
   .quick-grid {
@@ -538,6 +572,10 @@ footer {
 ========================================================= */
 
 @media (max-width: 380px) {
+
+  .main-menu {
+    grid-template-columns: 1fr;
+  }
 
   .card,
   .result,
