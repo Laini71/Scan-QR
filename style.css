@@ -3,7 +3,6 @@
 }
 
 body {
-
   margin: 0;
 
   font-family:
@@ -11,24 +10,20 @@ body {
     Helvetica,
     sans-serif;
 
-  background:
-    #f1f5f9;
-
-  color:
-    #1e293b;
-
+  background: #f1f5f9;
+  color: #1e293b;
 }
-
 
 .app {
-
   min-height: 100vh;
-
 }
 
 
-.header {
+/* =========================================================
+   HEADER
+========================================================= */
 
+.header {
   background:
     linear-gradient(
       135deg,
@@ -38,339 +33,310 @@ body {
 
   color: white;
 
-  padding:
-    25px 20px;
+  padding: 25px 20px;
 
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  gap:
-    16px;
-
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
-
 
 .milk-logo {
+  width: 70px;
+  height: 70px;
 
-  width:
-    70px;
+  border-radius: 20px;
 
-  height:
-    70px;
+  background: white;
 
-  border-radius:
-    20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  background:
-    white;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  font-size:
-    40px;
-
+  font-size: 40px;
 }
-
 
 .header h1 {
-
-  margin:
-    0;
-
-  font-size:
-    22px;
-
+  margin: 0;
+  font-size: 22px;
 }
-
 
 .header h2 {
-
-  margin:
-    5px 0;
-
-  font-size:
-    18px;
-
+  margin: 5px 0;
+  font-size: 18px;
 }
-
 
 .header p {
-
-  margin:
-    0;
-
-  opacity:
-    .9;
-
+  margin: 0;
+  opacity: .9;
 }
 
+
+/* =========================================================
+   MAIN
+========================================================= */
 
 main {
+  max-width: 650px;
 
-  max-width:
-    650px;
+  margin: auto;
 
-  margin:
-    auto;
-
-  padding:
-    20px;
-
+  padding: 20px;
 }
 
+
+/* =========================================================
+   MENU UTAMA
+========================================================= */
+
+.main-menu {
+  width: 100%;
+
+  margin:
+    0 auto 20px auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+.menu-btn {
+  background: white;
+
+  color: #0f172a;
+
+  text-decoration: none;
+
+  text-align: center;
+
+  padding: 14px 10px;
+
+  border-radius: 14px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.07);
+
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.menu-btn:hover {
+  transform:
+    translateY(-2px);
+
+  background:
+    #eff6ff;
+}
+
+.menu-active {
+  background: #2563eb;
+  color: white;
+}
+
+.menu-active:hover {
+  background: #1d4ed8;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
 
 .card,
 .result,
 .status-card {
+  background: white;
 
-  background:
-    white;
+  border-radius: 20px;
 
-  border-radius:
-    20px;
+  padding: 22px;
 
-  padding:
-    22px;
-
-  margin-bottom:
-    20px;
+  margin-bottom: 20px;
 
   box-shadow:
     0 8px 25px
     rgba(0,0,0,.08);
-
 }
-
 
 .card h2 {
-
-  text-align:
-    center;
-
-  margin-top:
-    0;
-
+  text-align: center;
+  margin-top: 0;
 }
-
 
 .subtitle {
-
-  text-align:
-    center;
-
-  color:
-    #64748b;
-
+  text-align: center;
+  color: #64748b;
 }
 
+
+/* =========================================================
+   STATUS SISTEM
+========================================================= */
+
+.status-card {
+  padding: 14px 20px;
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+
+  flex-shrink: 0;
+
+  border-radius: 100%;
+
+  background: #f59e0b;
+}
+
+.dot.online {
+  background: #22c55e;
+}
+
+.dot.offline {
+  background: #ef4444;
+}
+
+
+/* =========================================================
+   QR SCANNER
+========================================================= */
 
 #reader {
+  width: 100%;
 
-  width:
-    100%;
+  margin-top: 15px;
 
-  margin-top:
-    15px;
+  overflow: hidden;
 
-  overflow:
-    hidden;
+  border-radius: 15px;
 
-  border-radius:
-    15px;
+  background: #f8fafc;
+}
 
+#reader video {
+  width: 100% !important;
+
+  border-radius: 15px;
 }
 
 
-.buttons {
+/* =========================================================
+   BUTTON
+========================================================= */
 
-  display:
-    grid;
+.buttons {
+  display: grid;
 
   grid-template-columns:
     1fr 1fr;
 
-  gap:
-    12px;
+  gap: 12px;
 
-  margin-top:
-    20px;
-
+  margin-top: 20px;
 }
-
 
 .btn {
+  border: none;
 
-  border:
-    none;
+  border-radius: 14px;
 
-  border-radius:
-    14px;
+  padding: 16px;
 
-  padding:
-    16px;
+  font-size: 15px;
 
-  font-size:
-    15px;
+  font-weight: 700;
 
-  font-weight:
-    700;
+  cursor: pointer;
 
-  cursor:
-    pointer;
-
+  transition:
+    transform .2s ease,
+    opacity .2s ease;
 }
 
+.btn:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+}
 
 .btn:disabled {
-
-  opacity:
-    .5;
-
+  opacity: .5;
+  cursor: not-allowed;
 }
-
 
 .btn-blue {
-
-  background:
-    #0874d1;
-
-  color:
-    white;
-
+  background: #0874d1;
+  color: white;
 }
-
 
 .btn-red {
-
-  background:
-    #dc2626;
-
-  color:
-    white;
-
+  background: #dc2626;
+  color: white;
 }
-
 
 .btn-green {
-
-  background:
-    #0f766e;
-
-  color:
-    white;
-
+  background: #0f766e;
+  color: white;
 }
-
 
 .full {
-
-  width:
-    100%;
-
-  margin-top:
-    12px;
-
+  width: 100%;
+  margin-top: 12px;
 }
 
 
+/* =========================================================
+   INPUT
+========================================================= */
+
 input {
+  width: 100%;
 
-  width:
-    100%;
-
-  padding:
-    15px;
+  padding: 15px;
 
   border:
     1px solid #cbd5e1;
 
-  border-radius:
-    12px;
+  border-radius: 12px;
 
-  font-size:
-    16px;
+  font-size: 16px;
 
+  outline: none;
+}
+
+input:focus {
+  border-color: #0284c7;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(2,132,199,.12);
 }
 
 
-.status-card {
-
-  padding:
-    14px 20px;
-
-  display:
-    flex;
-
-  gap:
-    10px;
-
-  align-items:
-    center;
-
-}
-
-
-.dot {
-
-  width:
-    12px;
-
-  height:
-    12px;
-
-  border-radius:
-    100%;
-
-  background:
-    #f59e0b;
-
-}
-
-
-.dot.online {
-
-  background:
-    #22c55e;
-
-}
-
-
-.dot.offline {
-
-  background:
-    #ef4444;
-
-}
-
+/* =========================================================
+   LOADING
+========================================================= */
 
 .loading {
-
-  text-align:
-    center;
-
+  text-align: center;
 }
 
-
 .spinner {
+  margin: auto;
 
-  margin:
-    auto;
-
-  width:
-    45px;
-
-  height:
-    45px;
+  width: 45px;
+  height: 45px;
 
   border:
     5px solid #e2e8f0;
@@ -378,112 +344,210 @@ input {
   border-top:
     5px solid #0284c7;
 
-  border-radius:
-    50%;
+  border-radius: 50%;
 
   animation:
     spin 1s linear infinite;
-
 }
 
-
 @keyframes spin {
-
   to {
     transform:
       rotate(360deg);
   }
-
 }
 
+
+/* =========================================================
+   RESULT SCAN
+========================================================= */
 
 .result {
-
-  text-align:
-    center;
-
+  text-align: center;
 }
-
 
 .result-icon {
-
-  font-size:
-    65px;
-
+  font-size: 65px;
 }
 
-
 .result-success {
-
   border:
     3px solid #22c55e;
 
-  background:
-    #f0fdf4;
-
+  background: #f0fdf4;
 }
 
-
 .result-duplicate {
-
   border:
     3px solid #f59e0b;
 
-  background:
-    #fffbeb;
-
+  background: #fffbeb;
 }
 
-
 .result-error {
-
   border:
     3px solid #ef4444;
 
-  background:
-    #fef2f2;
-
+  background: #fef2f2;
 }
 
+
+/* =========================================================
+   QUICK ACCESS
+========================================================= */
+
+.quick-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 14px;
+
+  margin-top: 15px;
+}
+
+.quick-card {
+  background: #f8fafc;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius: 15px;
+
+  padding: 20px;
+
+  text-decoration: none;
+
+  color: #172033;
+
+  text-align: center;
+
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+.quick-card:hover {
+  background: #eff6ff;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(0,0,0,.07);
+}
+
+.quick-icon {
+  font-size: 38px;
+
+  margin-bottom: 8px;
+}
+
+.quick-card strong {
+  display: block;
+
+  font-size: 17px;
+}
+
+.quick-card span {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   UTILITI
+========================================================= */
 
 .hidden {
-
-  display:
-    none;
-
+  display: none !important;
 }
 
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 footer {
+  text-align: center;
 
-  text-align:
-    center;
+  padding: 30px;
 
-  padding:
-    30px;
+  color: #64748b;
 
-  color:
-    #64748b;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE TABLET / TELEFON
+========================================================= */
+
+@media (max-width: 600px) {
+
+  main {
+    padding: 12px;
+  }
+
+  .header {
+    padding: 20px 15px;
+  }
+
+  .milk-logo {
+    width: 60px;
+    height: 60px;
+
+    font-size: 34px;
+  }
+
+  .header h1 {
+    font-size: 19px;
+  }
+
+  .header h2 {
+    font-size: 16px;
+  }
+
+  .main-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+  }
 
 }
 
 
-@media (
-  max-width: 520px
-) {
+/* =========================================================
+   TELEFON KECIL
+========================================================= */
 
-  .buttons {
+@media (max-width: 380px) {
 
-    grid-template-columns:
-      1fr;
-
+  .card,
+  .result,
+  .status-card {
+    padding: 16px;
+    border-radius: 16px;
   }
 
-  main {
-
-    padding:
-      12px;
-
+  .btn {
+    padding: 14px 10px;
   }
 
 }
