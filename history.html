@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Rekod Pengagihan Susu | SK Tun Fuad
+  </title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+
+
+    .header {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      padding: 30px 18px;
+      text-align: center;
+    }
+
+
+    .header-icon {
+      font-size: 48px;
+    }
+
+
+    .header h1 {
+      margin: 5px 0;
+      font-size: 30px;
+    }
+
+
+    .header p {
+      margin: 5px 0;
+    }
+
+
+    .menu {
+      max-width: 1250px;
+      margin: 18px auto 0;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+
+    .menu a,
+    .menu button {
+      border: 0;
+      text-decoration: none;
+      background: white;
+      color: #0d47a1;
+      padding: 13px 8px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+      font-size: 14px;
+    }
+
+
+    .menu a:hover,
+    .menu button:hover {
+      background: #e3f2fd;
+    }
+
+
+    .menu .active {
+      background: #1976d2;
+      color: white;
+    }
+
+
+    .container {
+      max-width: 1250px;
+      margin: 20px auto 50px;
+      padding: 0 15px;
+    }
+
+
+    .status {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      color: #0d47a1;
+      font-weight: bold;
+      box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    }
+
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    }
+
+
+    .card h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto auto auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+
+    .form-group label {
+      font-weight: bold;
+      color: #374151;
+    }
+
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 14px;
+      background: white;
+    }
+
+
+    .btn {
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: #1976d2;
+    }
+
+
+    .btn.today {
+      background: #0f766e;
+    }
+
+
+    .btn.month {
+      background: #7c3aed;
+    }
+
+
+    .btn.export {
+      background: #15803d;
+    }
+
+
+    .btn.print {
+      background: #475569;
+    }
+
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+
+    .summary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      border-left: 6px solid #1976d2;
+    }
+
+
+    .summary-card:nth-child(2) {
+      border-left-color: #16a34a;
+    }
+
+
+    .summary-card:nth-child(3) {
+      border-left-color: #f59e0b;
+    }
+
+
+    .summary-card:nth-child(4) {
+      border-left-color: #7c3aed;
+    }
+
+
+    .summary-icon {
+      font-size: 28px;
+    }
+
+
+    .summary-label {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+
+    .summary-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+
+    .meta {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+
+    th {
+      background: #f1f5f9;
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #dce3ec;
+    }
+
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+
+    .center {
+      text-align: center;
+    }
+
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+
+    @media print {
+
+      body {
+        background: white;
+      }
+
+
+      .menu,
+      .status,
+      .date-grid,
+      .action-row,
+      .filters {
+        display: none !important;
+      }
+
+
+      .header {
+        background: white !important;
+        color: black !important;
+        padding: 10px;
+      }
+
+
+      .card,
+      .summary-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+
+    }
+
+
+    @media (max-width: 950px) {
+
+      .menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+
+      .date-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+
+    @media (max-width: 550px) {
+
+      .date-grid,
+      .summary-grid,
+      .meta-grid,
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+  <div class="header-icon">
+    🗂️
+  </div>
+
+  <h1>
+    Rekod / Sejarah Pengagihan Susu
+  </h1>
+
+  <p>
+    SK Tun Fuad 2026
+  </p>
+
+  <p>
+    <strong>
+      SKTF, Together We RISE
+    </strong>
+  </p>
+
+</header>
+
+
+<nav class="menu">
+
+  <a href="index.html">
+    📷 Scanner
+  </a>
+
+  <a href="dashboard.html">
+    📊 Dashboard
+  </a>
+
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
+
+  <a href="qr.html">
+    🔳 Jana QR
+  </a>
+
+  <a href="report.html">
+    📄 Laporan
+  </a>
+
+  <a
+    href="history.html"
+    class="active"
+  >
+    🗂️ Rekod
+  </a>
+
+  <button
+    type="button"
+    onclick="loadHistory()"
+  >
+    🔄 Refresh
+  </button>
+
+</nav>
+
+
+<main class="container">
+
+
+  <div
+    id="historyStatus"
+    class="status"
+  >
+    ⏳ Mengambil rekod pengagihan...
+  </div>
+
+
+  <section class="card">
+
+    <h2>
+      📅 Julat Tarikh
+    </h2>
+
+
+    <div class="date-grid">
+
+      <div class="form-group">
+
+        <label for="startDate">
+          Tarikh Mula
+        </label>
+
+        <input
+          type="date"
+          id="startDate"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="endDate">
+          Tarikh Akhir
+        </label>
+
+        <input
+          type="date"
+          id="endDate"
+        >
+
+      </div>
+
+
+      <button
+        class="btn"
+        onclick="loadHistory()"
+      >
+        🔍 Papar Rekod
+      </button>
+
+
+      <button
+        class="btn today"
+        onclick="setTodayRange()"
+      >
+        📅 Hari Ini
+      </button>
+
+
+      <button
+        class="btn month"
+        onclick="setThisMonthRange()"
+      >
+        🗓️ Bulan Ini
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <div class="action-row">
+
+    <button
+      class="btn export"
+      onclick="exportCsv()"
+    >
+      📥 Eksport CSV
+    </button>
+
+    <button
+      class="btn print"
+      onclick="window.print()"
+    >
+      🖨️ Cetak / Simpan PDF
+    </button>
+
+  </div>
+
+
+  <section class="card">
+
+    <div class="meta-grid">
+
+      <div class="meta">
+        <strong>
+          📅 Julat:
+        </strong>
+
+        <span id="rangeText">
+          -
+        </span>
+      </div>
+
+
+      <div class="meta">
+        <strong>
+          🕐 Dijana:
+        </strong>
+
+        <span id="generatedAt">
+          -
+        </span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="summary-grid">
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        🥛
+      </div>
+
+      <div class="summary-label">
+        Jumlah Rekod Agihan
+      </div>
+
+      <div
+        id="totalRecords"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        👨‍🎓
+      </div>
+
+      <div class="summary-label">
+        Murid Unik
+      </div>
+
+      <div
+        id="uniqueStudents"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        📅
+      </div>
+
+      <div class="summary-label">
+        Hari Ada Pengagihan
+      </div>
+
+      <div
+        id="totalDays"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        🏫
+      </div>
+
+      <div class="summary-label">
+        Kelas Terlibat
+      </div>
+
+      <div
+        id="totalClasses"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="two-column">
+
+
+    <section class="card">
+
+      <h2>
+        📆 Ringkasan Harian
+      </h2>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Tarikh</th>
+              <th class="center">
+                Jumlah Agihan
+              </th>
+            </tr>
+          </thead>
+
+          <tbody id="dailyTable">
+
+            <tr>
+              <td
+                colspan="3"
+                class="center"
+              >
+                Memuatkan data...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <h2>
+        🏫 Ringkasan Mengikut Kelas
+      </h2>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Kelas</th>
+              <th class="center">
+                Jumlah Agihan
+              </th>
+            </tr>
+          </thead>
+
+          <tbody id="classTable">
+
+            <tr>
+              <td
+                colspan="3"
+                class="center"
+              >
+                Memuatkan data...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+  </div>
+
+
+  <section class="card">
+
+    <h2>
+      🗂️ Senarai Rekod Pengagihan
+    </h2>
+
+
+    <div class="filters">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Cari nama, ID murid, kelas, guru atau tarikh..."
+        oninput="renderRecords()"
+      >
+
+
+      <select
+        id="classFilter"
+        onchange="renderRecords()"
+      >
+
+        <option value="">
+          Semua Kelas
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Bil.</th>
+            <th>Tarikh</th>
+            <th>Masa</th>
+            <th>Nama Murid</th>
+            <th>Kelas</th>
+            <th>ID Murid</th>
+            <th>Guru</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody id="recordTable">
+
+          <tr>
+            <td
+              colspan="8"
+              class="center"
+            >
+              Memuatkan data...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+</main>
+
+
+<footer>
+
+  Sistem Pengagihan Susu QR
+  <br>
+  SK Tun Fuad 2026
+  <br><br>
+  SKTF, Together We RISE
+
+</footer>
+
+
+<script src="history.js"></script>
+
+
+</body>
+
+</html>
