@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Pengurusan Stok Susu | SK Tun Fuad
+  </title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      text-align: center;
+      padding: 30px 18px;
+    }
+
+    .header .icon {
+      font-size: 48px;
+    }
+
+    .header h1 {
+      margin: 5px 0;
+      font-size: 30px;
+    }
+
+    .header p {
+      margin: 5px 0;
+    }
+
+    .menu {
+      max-width: 1350px;
+      margin: 18px auto 0;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+    }
+
+    .menu a,
+    .menu button {
+      border: 0;
+      background: white;
+      color: #0d47a1;
+      text-decoration: none;
+      text-align: center;
+      padding: 13px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+      font-size: 14px;
+    }
+
+    .menu a:hover,
+    .menu button:hover {
+      background: #e3f2fd;
+    }
+
+    .menu .active {
+      background: #1976d2;
+      color: white;
+    }
+
+    .container {
+      max-width: 1350px;
+      margin: 20px auto 50px;
+      padding: 0 15px;
+    }
+
+    .status,
+    .card,
+    .summary-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    }
+
+    .status {
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      color: #0d47a1;
+      font-weight: bold;
+    }
+
+    .mode {
+      margin-bottom: 18px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-weight: bold;
+    }
+
+    .mode.active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .mode.low {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      padding: 20px;
+      border-left: 6px solid #1976d2;
+    }
+
+    .summary-card:nth-child(2) {
+      border-left-color: #16a34a;
+    }
+
+    .summary-card:nth-child(3) {
+      border-left-color: #ef4444;
+    }
+
+    .summary-card:nth-child(4) {
+      border-left-color: #f59e0b;
+    }
+
+    .summary-icon {
+      font-size: 28px;
+    }
+
+    .summary-label {
+      color: #64748b;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .summary-value {
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    .card {
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #0d47a1;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: bold;
+      color: #374151;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: #1976d2;
+    }
+
+    .btn.green {
+      background: #15803d;
+    }
+
+    .btn.gray {
+      background: #475569;
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .meta {
+      padding: 12px;
+      border-radius: 10px;
+      background: #f8fafc;
+      margin-bottom: 15px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #dce3ec;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .badge.in {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.out {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media print {
+
+      .menu,
+      .status,
+      .mode,
+      .stock-form,
+      .filters,
+      .actions {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .header {
+        background: white !important;
+        color: black !important;
+      }
+
+      .card,
+      .summary-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+
+    @media (max-width: 950px) {
+
+      .menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .summary-grid,
+      .form-grid,
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: auto;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="icon">
+    📦
+  </div>
+
+  <h1>
+    Pengurusan Stok Susu
+  </h1>
+
+  <p>
+    SK Tun Fuad 2026
+  </p>
+
+  <p>
+    <strong>
+      SKTF, Together We RISE
+    </strong>
+  </p>
+
+</header>
+
+
+<nav class="menu">
+
+  <a href="index.html">
+    📷 Scanner
+  </a>
+
+  <a href="dashboard.html">
+    📊 Dashboard
+  </a>
+
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
+
+  <a href="qr.html">
+    🔳 Jana QR
+  </a>
+
+  <a href="report.html">
+    📄 Laporan
+  </a>
+
+  <a href="history.html">
+    🗂️ Rekod
+  </a>
+
+  <a
+    href="stock.html"
+    class="active"
+  >
+    📦 Stok
+  </a>
+
+  <button
+    type="button"
+    onclick="loadStock()"
+  >
+    🔄 Refresh
+  </button>
+
+</nav>
+
+
+<main class="container">
+
+  <div
+    id="stockStatus"
+    class="status"
+  >
+    ⏳ Mengambil data stok...
+  </div>
+
+
+  <div
+    id="trackingMode"
+    class="mode"
+  >
+    Memeriksa mod penjejakan...
+  </div>
+
+
+  <section class="summary-grid">
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        📦
+      </div>
+
+      <div class="summary-label">
+        Baki Stok Semasa
+      </div>
+
+      <div
+        id="currentBalance"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        ➕
+      </div>
+
+      <div class="summary-label">
+        Jumlah Stok Masuk
+      </div>
+
+      <div
+        id="totalIn"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        ➖
+      </div>
+
+      <div class="summary-label">
+        Jumlah Diagihkan
+      </div>
+
+      <div
+        id="totalOut"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <div class="summary-icon">
+        🥛
+      </div>
+
+      <div class="summary-label">
+        Agihan Hari Ini
+      </div>
+
+      <div
+        id="todayOut"
+        class="summary-value"
+      >
+        0
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="card stock-form">
+
+    <h2>
+      ➕ Rekod Stok Masuk
+    </h2>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+
+        <label for="quantity">
+          Jumlah Unit Susu *
+        </label>
+
+        <input
+          type="number"
+          id="quantity"
+          min="1"
+          placeholder="Contoh: 500"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="batch">
+          No. Batch
+        </label>
+
+        <input
+          type="text"
+          id="batch"
+          placeholder="Contoh: BATCH-SEP-2026"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="expiryDate">
+          Tarikh Luput
+        </label>
+
+        <input
+          type="date"
+          id="expiryDate"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="teacher">
+          Guru / Penerima Stok
+        </label>
+
+        <input
+          type="text"
+          id="teacher"
+          value="GURU SKTF"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="reference">
+          Rujukan / DO
+        </label>
+
+        <input
+          type="text"
+          id="reference"
+          placeholder="Contoh: DO-001"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Tarikh Rekod
+        </label>
+
+        <input
+          type="text"
+          value="Automatik ikut masa server"
+          disabled
+        >
+
+      </div>
+
+
+      <div class="form-group full">
+
+        <label for="notes">
+          Catatan
+        </label>
+
+        <textarea
+          id="notes"
+          placeholder="Contoh: Penghantaran susu bulan September 2026"
+        ></textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="actions">
+
+      <button
+        id="btnSaveStock"
+        class="btn green"
+        onclick="saveStockIn()"
+      >
+        📦 SIMPAN STOK MASUK
+      </button>
+
+      <button
+        class="btn gray"
+        onclick="resetStockForm()"
+      >
+        🔄 RESET
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="card">
+
+    <h2>
+      📋 Rekod Pergerakan Stok
+    </h2>
+
+    <div class="meta">
+      🕐 Kemaskini:
+      <strong id="generatedAt">
+        -
+      </strong>
+    </div>
+
+    <div class="filters">
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Cari tarikh, batch, guru, rujukan atau catatan..."
+        oninput="renderTransactions()"
+      >
+
+      <select
+        id="typeFilter"
+        onchange="renderTransactions()"
+      >
+        <option value="">
+          Semua Jenis
+        </option>
+
+        <option value="MASUK">
+          Stok Masuk
+        </option>
+
+        <option value="KELUAR">
+          Stok Keluar / Agihan
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="actions">
+
+      <button
+        class="btn"
+        onclick="loadStock()"
+      >
+        🔄 Refresh Data
+      </button>
+
+      <button
+        class="btn gray"
+        onclick="window.print()"
+      >
+        🖨️ Cetak / Simpan PDF
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Bil.</th>
+            <th>Tarikh</th>
+            <th>Masa</th>
+            <th>Jenis</th>
+            <th>Jumlah</th>
+            <th>Baki</th>
+            <th>Batch</th>
+            <th>Guru</th>
+            <th>Catatan</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="transactionTable">
+
+          <tr>
+            <td
+              colspan="9"
+              class="center"
+            >
+              Memuatkan transaksi...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  Sistem Pengagihan Susu QR
+  <br>
+  SK Tun Fuad 2026
+  <br><br>
+  SKTF, Together We RISE
+
+</footer>
+
+
+<script src="stock.js"></script>
+
+</body>
+
+</html>
