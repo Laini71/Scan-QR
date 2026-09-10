@@ -2,6 +2,7 @@
 <html lang="ms">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -13,333 +14,864 @@
     Laporan Pengagihan Susu | SK Tun Fuad
   </title>
 
+
   <style>
 
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f3f6fb;
-      color: #172033;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        #f3f6fb;
+
+      color:
+        #172033;
+
     }
+
+
+    /* ==========================================
+       HEADER
+    =========================================== */
 
     .header {
-      background: linear-gradient(135deg, #0d47a1, #1976d2);
-      color: white;
-      padding: 30px 18px;
-      text-align: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0d47a1,
+          #1976d2
+        );
+
+      color:
+        white;
+
+      padding:
+        30px 18px;
+
+      text-align:
+        center;
+
     }
+
 
     .header-icon {
-      font-size: 48px;
+
+      font-size:
+        48px;
+
+      margin-bottom:
+        5px;
+
     }
+
 
     .header h1 {
-      margin: 5px 0;
-      font-size: 30px;
+
+      margin:
+        0;
+
+      font-size:
+        30px;
+
     }
+
 
     .header p {
-      margin: 5px 0;
+
+      margin:
+        6px 0 0;
+
     }
+
+
+    /* ==========================================
+       MENU
+    =========================================== */
 
     .menu {
-      max-width: 1250px;
-      margin: 18px auto 0;
-      padding: 0 15px;
 
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      max-width:
+        1250px;
+
+      margin:
+        18px auto 0;
+
+      padding:
+        0 15px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(6, 1fr);
+
+      gap:
+        10px;
+
     }
 
-    .menu a {
-      background: white;
-      color: #0d47a1;
-      text-decoration: none;
-      padding: 13px 8px;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+
+    .menu a,
+    .menu button {
+
+      border:
+        none;
+
+      text-decoration:
+        none;
+
+      background:
+        white;
+
+      color:
+        #0d47a1;
+
+      padding:
+        13px 8px;
+
+      border-radius:
+        12px;
+
+      text-align:
+        center;
+
+      font-weight:
+        bold;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.08);
+
+      font-size:
+        14px;
+
     }
 
-    .menu a:hover {
-      background: #e3f2fd;
+
+    .menu a:hover,
+    .menu button:hover {
+
+      background:
+        #e3f2fd;
+
     }
+
 
     .menu .active {
-      background: #1976d2;
-      color: white;
+
+      background:
+        #1976d2;
+
+      color:
+        white;
+
     }
+
+
+    .menu .active:hover {
+
+      background:
+        #0d47a1;
+
+      color:
+        white;
+
+    }
+
+
+    /* ==========================================
+       CONTAINER
+    =========================================== */
 
     .container {
-      max-width: 1250px;
-      margin: 20px auto 50px;
-      padding: 0 15px;
+
+      max-width:
+        1250px;
+
+      margin:
+        20px auto 50px;
+
+      padding:
+        0 15px;
+
     }
+
+
+    /* ==========================================
+       STATUS
+    =========================================== */
 
     .status {
-      background: white;
-      padding: 14px 18px;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      font-weight: bold;
-      color: #0d47a1;
-      box-shadow: 0 3px 12px rgba(0,0,0,.07);
+
+      background:
+        white;
+
+      padding:
+        14px 18px;
+
+      border-radius:
+        12px;
+
+      margin-bottom:
+        18px;
+
+      font-weight:
+        bold;
+
+      color:
+        #0d47a1;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.07);
+
     }
+
+
+    /* ==========================================
+       CARD
+    =========================================== */
 
     .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+
+      background:
+        white;
+
+      border-radius:
+        16px;
+
+      padding:
+        20px;
+
+      margin-bottom:
+        20px;
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.08);
+
     }
+
 
     .card h2 {
-      margin-top: 0;
-      color: #0d47a1;
+
+      margin-top:
+        0;
+
+      color:
+        #0d47a1;
+
     }
+
+
+    /* ==========================================
+       REPORT CONTROL
+    =========================================== */
 
     .report-control {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: end;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        1fr auto auto auto;
+
+      gap:
+        10px;
+
+      align-items:
+        end;
+
     }
+
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        6px;
+
     }
+
 
     .form-group label {
-      font-weight: bold;
-      color: #374151;
+
+      font-weight:
+        bold;
+
+      color:
+        #374151;
+
     }
+
 
     .form-group input {
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 15px;
+
+      width:
+        100%;
+
+      padding:
+        12px;
+
+      border:
+        1px solid #d1d5db;
+
+      border-radius:
+        10px;
+
+      font-size:
+        15px;
+
     }
+
+
+    /* ==========================================
+       BUTTONS
+    =========================================== */
 
     .btn {
-      border: none;
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      background: #1976d2;
+
+      border:
+        none;
+
+      padding:
+        12px 18px;
+
+      border-radius:
+        10px;
+
+      font-weight:
+        bold;
+
+      cursor:
+        pointer;
+
+      color:
+        white;
+
+      background:
+        #1976d2;
+
+      font-size:
+        14px;
+
     }
+
+
+    .btn.today {
+
+      background:
+        #0f766e;
+
+    }
+
 
     .btn.print {
-      background: #475569;
+
+      background:
+        #475569;
+
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
-    }
 
-    .summary-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .summary-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: #1976d2;
-    }
-
-    .summary-card.success::before {
-      background: #16a34a;
-    }
-
-    .summary-card.warning::before {
-      background: #f59e0b;
-    }
-
-    .summary-card.percent::before {
-      background: #7c3aed;
-    }
-
-    .summary-icon {
-      font-size: 30px;
-    }
-
-    .summary-label {
-      margin-top: 9px;
-      font-size: 14px;
-      color: #64748b;
-    }
-
-    .summary-value {
-      margin-top: 5px;
-      font-size: 34px;
-      font-weight: 800;
-    }
+    /* ==========================================
+       META
+    =========================================== */
 
     .report-meta {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap:
+        10px;
+
     }
+
 
     .meta-item {
-      background: #f8fafc;
-      border-radius: 10px;
-      padding: 12px;
+
+      background:
+        #f8fafc;
+
+      border-radius:
+        10px;
+
+      padding:
+        12px;
+
     }
+
+
+    /* ==========================================
+       SUMMARY
+    =========================================== */
+
+    .summary-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap:
+        15px;
+
+      margin-bottom:
+        20px;
+
+    }
+
+
+    .summary-card {
+
+      background:
+        white;
+
+      border-radius:
+        16px;
+
+      padding:
+        20px;
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.08);
+
+      position:
+        relative;
+
+      overflow:
+        hidden;
+
+    }
+
+
+    .summary-card::before {
+
+      content:
+        "";
+
+      position:
+        absolute;
+
+      left:
+        0;
+
+      top:
+        0;
+
+      bottom:
+        0;
+
+      width:
+        6px;
+
+      background:
+        #1976d2;
+
+    }
+
+
+    .summary-card.success::before {
+
+      background:
+        #16a34a;
+
+    }
+
+
+    .summary-card.warning::before {
+
+      background:
+        #f59e0b;
+
+    }
+
+
+    .summary-card.percent::before {
+
+      background:
+        #7c3aed;
+
+    }
+
+
+    .summary-icon {
+
+      font-size:
+        30px;
+
+    }
+
+
+    .summary-label {
+
+      margin-top:
+        9px;
+
+      font-size:
+        14px;
+
+      color:
+        #64748b;
+
+    }
+
+
+    .summary-value {
+
+      margin-top:
+        5px;
+
+      font-size:
+        34px;
+
+      font-weight:
+        800;
+
+    }
+
+
+    /* ==========================================
+       FILTER
+    =========================================== */
+
+    .filters {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        2fr 1fr;
+
+      gap:
+        10px;
+
+      margin-bottom:
+        15px;
+
+    }
+
+
+    .filters input,
+    .filters select {
+
+      width:
+        100%;
+
+      padding:
+        12px;
+
+      border:
+        1px solid #d4dbe7;
+
+      border-radius:
+        10px;
+
+      font-size:
+        14px;
+
+      background:
+        white;
+
+    }
+
+
+    /* ==========================================
+       TABLE
+    =========================================== */
 
     .table-wrap {
-      overflow-x: auto;
+
+      overflow-x:
+        auto;
+
     }
+
 
     table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
+
+      width:
+        100%;
+
+      border-collapse:
+        collapse;
+
+      min-width:
+        720px;
+
     }
+
 
     th {
-      background: #f1f5f9;
-      padding: 12px 10px;
-      text-align: left;
-      border-bottom: 1px solid #dce3ec;
+
+      background:
+        #f1f5f9;
+
+      padding:
+        12px 10px;
+
+      text-align:
+        left;
+
+      color:
+        #172033;
+
+      border-bottom:
+        1px solid #dce3ec;
+
     }
+
 
     td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #e5e7eb;
+
+      padding:
+        12px 10px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
     }
+
 
     tbody tr:hover {
-      background: #f8fafc;
+
+      background:
+        #f8fafc;
+
     }
+
 
     .center {
-      text-align: center;
+
+      text-align:
+        center;
+
     }
+
 
     .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
+
+      display:
+        inline-block;
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        999px;
+
+      font-size:
+        12px;
+
+      font-weight:
+        bold;
+
     }
+
 
     .badge-success {
-      background: #dcfce7;
-      color: #166534;
+
+      background:
+        #dcfce7;
+
+      color:
+        #166534;
+
     }
+
 
     .badge-warning {
-      background: #fef3c7;
-      color: #92400e;
+
+      background:
+        #fef3c7;
+
+      color:
+        #92400e;
+
     }
 
-    .search-box {
-      margin-bottom: 15px;
-    }
 
-    .search-box input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 14px;
-    }
+    /* ==========================================
+       FOOTER
+    =========================================== */
 
     footer {
-      text-align: center;
-      padding: 25px 15px;
-      color: #64748b;
-      font-size: 13px;
+
+      text-align:
+        center;
+
+      padding:
+        25px 15px;
+
+      color:
+        #64748b;
+
+      font-size:
+        13px;
+
     }
+
+
+    /* ==========================================
+       PRINT
+    =========================================== */
 
     @media print {
 
       body {
-        background: white;
+
+        background:
+          white;
+
       }
+
 
       .menu,
       .status,
       .report-control,
-      .search-box {
-        display: none !important;
+      .filters {
+
+        display:
+          none !important;
+
       }
 
+
       .header {
-        background: white !important;
-        color: black !important;
-        padding: 10px;
+
+        background:
+          white !important;
+
+        color:
+          black !important;
+
+        padding:
+          10px;
+
       }
+
 
       .card,
       .summary-card {
-        box-shadow: none;
-        border: 1px solid #ddd;
+
+        box-shadow:
+          none;
+
+        border:
+          1px solid #ddd;
+
       }
 
     }
 
-    @media (max-width: 850px) {
 
-      .summary-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    /* ==========================================
+       MOBILE
+    =========================================== */
+
+    @media (
+      max-width: 850px
+    ) {
 
       .menu {
-        grid-template-columns: repeat(2, 1fr);
+
+        grid-template-columns:
+          repeat(2, 1fr);
+
       }
 
+
+      .summary-grid {
+
+        grid-template-columns:
+          repeat(2, 1fr);
+
+      }
+
+
       .report-control {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
 
     }
 
-    @media (max-width: 550px) {
+
+    @media (
+      max-width: 550px
+    ) {
 
       .summary-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
+
 
       .report-meta {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
 
+
+      .filters {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
       .header h1 {
-        font-size: 24px;
+
+        font-size:
+          24px;
+
       }
 
     }
 
   </style>
+
 </head>
 
+
 <body>
+
+
+  <!-- ==========================================
+       HEADER
+  =========================================== -->
 
   <header class="header">
 
@@ -363,6 +895,11 @@
 
   </header>
 
+
+
+  <!-- ==========================================
+       MENU
+  =========================================== -->
 
   <nav class="menu">
 
@@ -389,24 +926,39 @@
       📄 Laporan
     </a>
 
+    <button
+      type="button"
+      onclick="loadReport()"
+    >
+      🔄 Refresh
+    </button>
+
   </nav>
 
 
+
   <main class="container">
+
+
+    <!-- STATUS -->
 
     <div
       id="reportStatus"
       class="status"
     >
-      ⏳ Sila pilih tarikh laporan.
+      ⏳ Mengambil laporan...
     </div>
 
+
+
+    <!-- PILIH TARIKH -->
 
     <section class="card">
 
       <h2>
         📅 Pilih Tarikh Laporan
       </h2>
+
 
       <div class="report-control">
 
@@ -423,6 +975,7 @@
 
         </div>
 
+
         <button
           type="button"
           class="btn"
@@ -430,6 +983,16 @@
         >
           🔍 Papar Laporan
         </button>
+
+
+        <button
+          type="button"
+          class="btn today"
+          onclick="setTodayAndLoad()"
+        >
+          📅 Hari Ini
+        </button>
+
 
         <button
           type="button"
@@ -444,18 +1007,36 @@
     </section>
 
 
+
+    <!-- META -->
+
     <section class="card">
 
       <div class="report-meta">
 
         <div class="meta-item">
-          <strong>Tarikh Laporan:</strong>
-          <span id="displayDate">-</span>
+
+          <strong>
+            📅 Tarikh Laporan:
+          </strong>
+
+          <span id="displayDate">
+            -
+          </span>
+
         </div>
 
+
         <div class="meta-item">
-          <strong>Dijana:</strong>
-          <span id="generatedAt">-</span>
+
+          <strong>
+            🕐 Dijana:
+          </strong>
+
+          <span id="generatedAt">
+            -
+          </span>
+
         </div>
 
       </div>
@@ -463,7 +1044,11 @@
     </section>
 
 
+
+    <!-- SUMMARY -->
+
     <section class="summary-grid">
+
 
       <div class="summary-card">
 
@@ -492,7 +1077,7 @@
         </div>
 
         <div class="summary-label">
-          Sudah Ambil
+          Sudah Ambil Susu
         </div>
 
         <div
@@ -512,7 +1097,7 @@
         </div>
 
         <div class="summary-label">
-          Belum Ambil
+          Belum Ambil Susu
         </div>
 
         <div
@@ -547,32 +1132,60 @@
     </section>
 
 
+
+    <!-- STATISTIK KELAS -->
+
     <section class="card">
 
       <h2>
         🏫 Statistik Mengikut Kelas
       </h2>
 
+
       <div class="table-wrap">
 
         <table>
 
           <thead>
+
             <tr>
-              <th>Kelas</th>
-              <th class="center">Jumlah</th>
-              <th class="center">Sudah Ambil</th>
-              <th class="center">Belum Ambil</th>
-              <th class="center">Peratus</th>
+
+              <th>
+                Kelas
+              </th>
+
+              <th class="center">
+                Jumlah
+              </th>
+
+              <th class="center">
+                Sudah Ambil
+              </th>
+
+              <th class="center">
+                Belum Ambil
+              </th>
+
+              <th class="center">
+                Peratus
+              </th>
+
             </tr>
+
           </thead>
+
 
           <tbody id="classTable">
 
             <tr>
-              <td colspan="5" class="center">
-                Tiada laporan dipilih.
+
+              <td
+                colspan="5"
+                class="center"
+              >
+                Memuatkan data...
               </td>
+
             </tr>
 
           </tbody>
@@ -583,6 +1196,9 @@
 
     </section>
 
+
+
+    <!-- SUDAH AMBIL -->
 
     <section class="card">
 
@@ -590,38 +1206,79 @@
         ✅ Murid Sudah Ambil Susu
       </h2>
 
-      <div class="search-box">
+
+      <div class="filters">
 
         <input
           type="text"
           id="takenSearch"
-          placeholder="Cari nama atau kelas..."
+          placeholder="Cari nama, ID atau kelas..."
           oninput="renderTaken()"
         >
 
+
+        <select
+          id="takenClassFilter"
+          onchange="renderTaken()"
+        >
+
+          <option value="">
+            Semua Kelas
+          </option>
+
+        </select>
+
       </div>
+
 
       <div class="table-wrap">
 
         <table>
 
           <thead>
+
             <tr>
-              <th>Bil.</th>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>ID Murid</th>
-              <th>Masa</th>
-              <th>Guru</th>
+
+              <th>
+                Bil.
+              </th>
+
+              <th>
+                Nama
+              </th>
+
+              <th>
+                Kelas
+              </th>
+
+              <th>
+                ID Murid
+              </th>
+
+              <th>
+                Masa
+              </th>
+
+              <th>
+                Guru
+              </th>
+
             </tr>
+
           </thead>
+
 
           <tbody id="takenTable">
 
             <tr>
-              <td colspan="6" class="center">
-                Tiada laporan dipilih.
+
+              <td
+                colspan="6"
+                class="center"
+              >
+                Memuatkan data...
               </td>
+
             </tr>
 
           </tbody>
@@ -632,6 +1289,9 @@
 
     </section>
 
+
+
+    <!-- BELUM AMBIL -->
 
     <section class="card">
 
@@ -639,37 +1299,75 @@
         ⏳ Murid Belum Ambil Susu
       </h2>
 
-      <div class="search-box">
+
+      <div class="filters">
 
         <input
           type="text"
           id="pendingSearch"
-          placeholder="Cari nama atau kelas..."
+          placeholder="Cari nama, ID atau kelas..."
           oninput="renderPending()"
         >
 
+
+        <select
+          id="pendingClassFilter"
+          onchange="renderPending()"
+        >
+
+          <option value="">
+            Semua Kelas
+          </option>
+
+        </select>
+
       </div>
+
 
       <div class="table-wrap">
 
         <table>
 
           <thead>
+
             <tr>
-              <th>Bil.</th>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>ID Murid</th>
-              <th>Status</th>
+
+              <th>
+                Bil.
+              </th>
+
+              <th>
+                Nama
+              </th>
+
+              <th>
+                Kelas
+              </th>
+
+              <th>
+                ID Murid
+              </th>
+
+              <th>
+                Status
+              </th>
+
             </tr>
+
           </thead>
+
 
           <tbody id="pendingTable">
 
             <tr>
-              <td colspan="5" class="center">
-                Tiada laporan dipilih.
+
+              <td
+                colspan="5"
+                class="center"
+              >
+                Memuatkan data...
               </td>
+
             </tr>
 
           </tbody>
@@ -680,17 +1378,53 @@
 
     </section>
 
+
   </main>
 
 
+
   <footer>
-    Sistem Pengagihan Susu QR SK Tun Fuad 2026
+
+    Sistem Pengagihan Susu QR
     <br>
+    SK Tun Fuad 2026
+    <br><br>
     SKTF, Together We RISE
+
   </footer>
+
 
 
   <script src="report.js"></script>
 
+
+  <script>
+
+    function setTodayAndLoad() {
+
+      if (
+        typeof setTodayDate ===
+        'function'
+      ) {
+
+        setTodayDate();
+
+      }
+
+      if (
+        typeof loadReport ===
+        'function'
+      ) {
+
+        loadReport();
+
+      }
+
+    }
+
+  </script>
+
+
 </body>
+
 </html>
