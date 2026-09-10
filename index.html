@@ -27,6 +27,10 @@
 <div class="app">
 
 
+  <!-- =========================================
+       HEADER
+  ========================================== -->
+
   <header class="header">
 
     <div class="milk-logo">
@@ -56,7 +60,42 @@
   <main>
 
 
-    <!-- STATUS SISTEM -->
+    <!-- =========================================
+         MENU UTAMA
+    ========================================== -->
+
+    <section class="main-menu">
+
+      <a
+        href="index.html"
+        class="menu-btn menu-active"
+      >
+        📷 Scanner
+      </a>
+
+
+      <a
+        href="dashboard.html"
+        class="menu-btn"
+      >
+        📊 Dashboard
+      </a>
+
+
+      <a
+        href="qr.html"
+        class="menu-btn"
+      >
+        🔳 Jana QR Murid
+      </a>
+
+    </section>
+
+
+
+    <!-- =========================================
+         STATUS SERVER
+    ========================================== -->
 
     <section class="status-card">
 
@@ -73,7 +112,9 @@
 
 
 
-    <!-- SCANNER -->
+    <!-- =========================================
+         SCANNER
+    ========================================== -->
 
     <section class="card">
 
@@ -82,10 +123,8 @@
       </h2>
 
       <p class="subtitle">
-
         Imbas QR murid untuk merekod
         pengambilan susu.
-
       </p>
 
 
@@ -119,7 +158,9 @@
 
 
 
-    <!-- LOADING -->
+    <!-- =========================================
+         LOADING
+    ========================================== -->
 
     <section
       id="loadingBox"
@@ -140,7 +181,9 @@
 
 
 
-    <!-- RESULT -->
+    <!-- =========================================
+         RESULT
+    ========================================== -->
 
     <section
       id="resultBox"
@@ -166,7 +209,9 @@
 
 
 
-    <!-- UJIAN MANUAL -->
+    <!-- =========================================
+         UJIAN MANUAL
+    ========================================== -->
 
     <section class="card">
 
@@ -191,6 +236,67 @@
     </section>
 
 
+
+    <!-- =========================================
+         QUICK ACCESS
+    ========================================== -->
+
+    <section class="card">
+
+      <h3>
+        ⚡ Akses Pantas
+      </h3>
+
+
+      <div class="quick-grid">
+
+
+        <a
+          href="dashboard.html"
+          class="quick-card"
+        >
+
+          <div class="quick-icon">
+            📊
+          </div>
+
+          <strong>
+            Dashboard
+          </strong>
+
+          <span>
+            Lihat rekod pengagihan hari ini
+          </span>
+
+        </a>
+
+
+
+        <a
+          href="qr.html"
+          class="quick-card"
+        >
+
+          <div class="quick-icon">
+            🔳
+          </div>
+
+          <strong>
+            Jana QR Murid
+          </strong>
+
+          <span>
+            Jana dan cetak QR semua murid
+          </span>
+
+        </a>
+
+
+      </div>
+
+    </section>
+
+
   </main>
 
 
@@ -200,6 +306,8 @@
     Sistem Pengagihan Susu QR
     <br>
     SK Tun Fuad 2026
+    <br><br>
+    SKTF, Together We RISE
 
   </footer>
 
@@ -208,8 +316,8 @@
 
 
 <script
-  src="https://unpkg.com/html5-qrcode"
-></script>
+  src="https://unpkg.com/html5-qrcode">
+</script>
 
 <script src="script.js"></script>
 
