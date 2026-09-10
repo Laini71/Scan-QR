@@ -4,7 +4,7 @@
 ============================================================ */
 
 const APPS_SCRIPT_URL =
-  'https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbytIw-xa_0FdLtZFfeRpLil3lrYjnNKo0jYJsN5dY5icdxSmHEXnH6ugDbz5Enn9P8-fA/exec';
+  'https://script.google.com/macros/s/AKfycbytIw-xa_0FdLtZFfeRpLil3lrYjnNKo0jYJsN5dY5icdxSmHEXnH6ugDbz5Enn9P8-fA/exec';
 
 
 let html5QrCode = null;
