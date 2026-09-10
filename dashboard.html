@@ -2,609 +2,804 @@
 <html lang="ms">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>
-Dashboard Pengagihan Susu SKTF 2026
-</title>
-
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-
-  margin: 0;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background:
-    #f1f5f9;
-
-  color:
-    #172033;
-
-}
-
-.header {
-
-  background:
-    linear-gradient(
-      135deg,
-      #075985,
-      #0284c7
-    );
-
-  color:
-    white;
-
-  padding:
-    24px;
-
-}
-
-.header-inner {
-
-  max-width:
-    1250px;
-
-  margin:
-    auto;
-
-}
-
-.header h1 {
-  margin: 0;
-}
-
-.header p {
-  margin: 6px 0 0;
-}
-
-.container {
-
-  max-width:
-    1250px;
-
-  margin:
-    auto;
-
-  padding:
-    20px;
-
-}
-
-.toolbar {
-
-  display:
-    flex;
-
-  flex-wrap:
-    wrap;
-
-  gap:
-    10px;
-
-  margin-bottom:
-    20px;
-
-}
-
-.btn {
-
-  border: 0;
-
-  padding:
-    12px 18px;
-
-  border-radius:
-    12px;
-
-  text-decoration:
-    none;
-
-  font-weight:
-    bold;
-
-  cursor:
-    pointer;
-
-}
-
-.blue {
-  background: #2563eb;
-  color: white;
-}
-
-.green {
-  background: #0f766e;
-  color: white;
-}
-
-.orange {
-  background: #ea580c;
-  color: white;
-}
-
-.cards {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
-  gap:
-    15px;
-
-}
-
-.card {
-
-  background:
-    white;
-
-  padding:
-    22px;
-
-  border-radius:
-    18px;
-
-  box-shadow:
-    0 5px 18px
-    rgba(0,0,0,.07);
-
-}
-
-.card-label {
-
-  color:
-    #64748b;
-
-  font-size:
-    14px;
-
-}
-
-.card-value {
-
-  font-size:
-    38px;
-
-  font-weight:
-    bold;
-
-  margin-top:
-    8px;
-
-}
-
-.section {
-
-  margin-top:
-    20px;
-
-  background:
-    white;
-
-  padding:
-    20px;
-
-  border-radius:
-    18px;
-
-  box-shadow:
-    0 5px 18px
-    rgba(0,0,0,.07);
-
-}
-
-.section h2 {
-  margin-top: 0;
-}
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-
-  width:
-    100%;
-
-  border-collapse:
-    collapse;
-
-}
-
-th,
-td {
-
-  padding:
-    12px;
-
-  text-align:
-    left;
-
-  border-bottom:
-    1px solid #e2e8f0;
-
-}
-
-th {
-
-  background:
-    #f8fafc;
-
-}
-
-.progress {
-
-  height:
-    10px;
-
-  background:
-    #e2e8f0;
-
-  border-radius:
-    100px;
-
-  overflow:
-    hidden;
-
-}
-
-.progress-bar {
-
-  height:
-    100%;
-
-  background:
-    #10b981;
-
-}
-
-.status {
-
-  margin-bottom:
-    15px;
-
-  padding:
-    13px 16px;
-
-  border-radius:
-    12px;
-
-  background:
-    white;
-
-}
-
-.search {
-
-  width:
-    100%;
-
-  padding:
-    12px;
-
-  margin-bottom:
-    12px;
-
-  border:
-    1px solid #cbd5e1;
-
-  border-radius:
-    10px;
-
-  font-size:
-    15px;
-
-}
-
-.hidden {
-  display: none;
-}
-
-@media (
-  max-width: 850px
-) {
-
-  .cards {
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-  }
-
-}
-
-@media (
-  max-width: 500px
-) {
-
-  .cards {
-    grid-template-columns:
-      1fr;
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Dashboard Susu | SK Tun Fuad
+  </title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      padding: 30px 18px;
+      text-align: center;
+    }
+
+    .header-icon {
+      font-size: 50px;
+      margin-bottom: 5px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .header p {
+      margin: 7px 0 0;
+    }
+
+    /* =========================
+       MENU
+    ========================= */
+
+    .menu {
+      max-width: 1250px;
+      margin: 18px auto 0;
+      padding: 0 15px;
+
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .menu a,
+    .menu button {
+      border: 0;
+      text-decoration: none;
+      background: white;
+      color: #0d47a1;
+      padding: 13px 8px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+      font-size: 14px;
+    }
+
+    .menu a:hover,
+    .menu button:hover {
+      background: #e3f2fd;
+    }
+
+    .menu .active {
+      background: #1976d2;
+      color: white;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .container {
+      max-width: 1250px;
+      margin: 20px auto 50px;
+      padding: 0 15px;
+    }
+
+    .status {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      color: #0d47a1;
+      font-weight: bold;
+      box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    }
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: #1976d2;
+    }
+
+    .summary-card.success::before {
+      background: #16a34a;
+    }
+
+    .summary-card.warning::before {
+      background: #f59e0b;
+    }
+
+    .summary-card.percent::before {
+      background: #7c3aed;
+    }
+
+    .summary-icon {
+      font-size: 30px;
+    }
+
+    .summary-label {
+      color: #64748b;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .summary-value {
+      font-size: 34px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* =========================
+       PROGRESS
+    ========================= */
+
+    .progress-card {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+
+    .progress-card h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 25px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1976d2, #16a34a);
+      border-radius: 999px;
+      transition: width .5s ease;
+    }
+
+    .progress-text {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+    /* =========================
+       FILTER
+    ========================= */
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d4dbe7;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th {
+      background: #f1f5f9;
+      padding: 12px 10px;
+      text-align: left;
+      color: #172033;
+      border-bottom: 1px solid #dce3ec;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .badge-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* =========================
+       ACTION
+    ========================= */
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .action-btn {
+      border: 0;
+      padding: 12px 17px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #1976d2;
+      color: white;
+    }
+
+    .action-btn.secondary {
+      background: #475569;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    /* =========================
+       PRINT
+    ========================= */
+
+    @media print {
+
+      body {
+        background: white;
+      }
+
+      .menu,
+      .action-row,
+      .filters,
+      .status {
+        display: none !important;
+      }
+
+      .header {
+        background: white !important;
+        color: black !important;
+        padding: 10px;
+      }
+
+      .summary-card,
+      .progress-card,
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+    }
+
+    @media (max-width: 550px) {
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+    }
+
+  </style>
 </head>
 
 
 <body>
 
+  <!-- HEADER -->
 
-<header class="header">
+  <header class="header">
 
-<div class="header-inner">
+    <div class="header-icon">
+      🥛
+    </div>
 
-<h1>
-🥛 Dashboard Pengagihan Susu
-</h1>
+    <h1>
+      Dashboard Pengagihan Susu
+    </h1>
 
-<p>
-SK Tun Fuad 2026 • SKTF, Together We RISE
-</p>
+    <p>
+      SK Tun Fuad 2026
+    </p>
 
-</div>
+    <p>
+      <strong>
+        SKTF, Together We RISE
+      </strong>
+    </p>
 
-</header>
+  </header>
 
 
-<main class="container">
+  <!-- MENU -->
 
+  <nav class="menu">
 
-<div class="toolbar">
+    <a href="index.html">
+      📷 Scanner
+    </a>
 
-<a
-  class="btn blue"
-  href="index.html">
-📷 Scanner
-</a>
+    <a
+      href="dashboard.html"
+      class="active"
+    >
+      📊 Dashboard
+    </a>
 
-<a
-  class="btn green"
-  href="qr.html">
-🔳 Jana QR Murid
-</a>
+    <a href="students.html">
+      👨‍🎓 Murid
+    </a>
 
-<button
-  class="btn orange"
-  onclick="loadDashboard()">
-🔄 Refresh
-</button>
+    <a href="qr.html">
+      🔳 Jana QR
+    </a>
 
-</div>
+    <button
+      type="button"
+      onclick="loadDashboard()"
+    >
+      🔄 Refresh
+    </button>
 
+  </nav>
 
-<div
-  id="systemStatus"
-  class="status">
 
-⏳ Memuatkan dashboard...
+  <main class="container">
 
-</div>
+    <!-- STATUS -->
 
+    <div
+      id="dashboardStatus"
+      class="status"
+    >
+      ⏳ Mengambil data dashboard...
+    </div>
 
-<section class="cards">
 
-<div class="card">
+    <!-- TARIKH -->
 
-<div class="card-label">
-Jumlah Murid Aktif
-</div>
+    <div class="card">
 
-<div
-  id="totalActive"
-  class="card-value">
-0
-</div>
+      <strong>
+        📅 Tarikh:
+      </strong>
 
-</div>
+      <span id="reportDate">
+        -
+      </span>
 
+      &nbsp;&nbsp;
 
-<div class="card">
+      <strong>
+        🕐 Kemaskini:
+      </strong>
 
-<div class="card-label">
-Sudah Ambil Hari Ini
-</div>
+      <span id="lastUpdate">
+        -
+      </span>
 
-<div
-  id="distributedCount"
-  class="card-value">
-0
-</div>
+    </div>
 
-</div>
 
+    <!-- SUMMARY -->
 
-<div class="card">
+    <section class="summary-grid">
 
-<div class="card-label">
-Belum Ambil
-</div>
+      <div class="summary-card">
 
-<div
-  id="pendingCount"
-  class="card-value">
-0
-</div>
+        <div class="summary-icon">
+          👨‍🎓
+        </div>
 
-</div>
+        <div class="summary-label">
+          Jumlah Murid Aktif
+        </div>
 
+        <div
+          id="totalActive"
+          class="summary-value"
+        >
+          0
+        </div>
 
-<div class="card">
+      </div>
 
-<div class="card-label">
-Peratus Pengagihan
-</div>
 
-<div
-  id="percentage"
-  class="card-value">
-0%
-</div>
+      <div class="summary-card success">
 
-</div>
+        <div class="summary-icon">
+          ✅
+        </div>
 
-</section>
+        <div class="summary-label">
+          Sudah Ambil Susu
+        </div>
 
+        <div
+          id="totalTaken"
+          class="summary-value"
+        >
+          0
+        </div>
 
-<section class="section">
+      </div>
 
-<h2>
-📊 Statistik Mengikut Kelas
-</h2>
 
-<div class="table-wrap">
+      <div class="summary-card warning">
 
-<table>
+        <div class="summary-icon">
+          ⏳
+        </div>
 
-<thead>
+        <div class="summary-label">
+          Belum Ambil Susu
+        </div>
 
-<tr>
+        <div
+          id="totalPending"
+          class="summary-value"
+        >
+          0
+        </div>
 
-<th>Kelas</th>
+      </div>
 
-<th>Murid</th>
 
-<th>Sudah Ambil</th>
+      <div class="summary-card percent">
 
-<th>Belum Ambil</th>
+        <div class="summary-icon">
+          📈
+        </div>
 
-<th>Prestasi</th>
+        <div class="summary-label">
+          Peratus Pengagihan
+        </div>
 
-</tr>
+        <div
+          id="percentage"
+          class="summary-value"
+        >
+          0%
+        </div>
 
-</thead>
+      </div>
 
-<tbody
-  id="classTable">
-</tbody>
+    </section>
 
-</table>
 
-</div>
+    <!-- PROGRESS -->
 
-</section>
+    <section class="progress-card">
 
+      <h2>
+        📈 Kemajuan Pengagihan Hari Ini
+      </h2>
 
-<section class="section">
+      <div class="progress-track">
 
-<h2>
-✅ Murid Sudah Ambil Susu
-</h2>
+        <div
+          id="progressBar"
+          class="progress-bar"
+        ></div>
 
-<input
-  id="takenSearch"
-  class="search"
-  placeholder="Cari nama atau kelas..."
-  oninput="renderTaken()"
->
+      </div>
 
-<div class="table-wrap">
+      <div
+        id="progressText"
+        class="progress-text"
+      >
+        0%
+      </div>
 
-<table>
+    </section>
 
-<thead>
 
-<tr>
+    <!-- ACTION -->
 
-<th>Bil.</th>
+    <div class="action-row">
 
-<th>Nama</th>
+      <button
+        class="action-btn"
+        onclick="loadDashboard()"
+      >
+        🔄 Refresh Data
+      </button>
 
-<th>Kelas</th>
+      <button
+        class="action-btn secondary"
+        onclick="window.print()"
+      >
+        🖨️ Cetak / Simpan PDF
+      </button>
 
-<th>Masa</th>
+    </div>
 
-</tr>
 
-</thead>
+    <!-- STATISTIK KELAS -->
 
-<tbody
-  id="takenTable">
-</tbody>
+    <section class="card">
 
-</table>
+      <h2>
+        🏫 Statistik Mengikut Kelas
+      </h2>
 
-</div>
+      <div class="table-wrap">
 
-</section>
+        <table>
 
+          <thead>
+            <tr>
+              <th>Kelas</th>
+              <th class="center">Jumlah</th>
+              <th class="center">Sudah Ambil</th>
+              <th class="center">Belum Ambil</th>
+              <th class="center">Peratus</th>
+            </tr>
+          </thead>
 
-<section class="section">
+          <tbody id="classTable">
 
-<h2>
-⏳ Murid Belum Ambil Susu
-</h2>
+            <tr>
+              <td colspan="5" class="center">
+                Memuatkan data...
+              </td>
+            </tr>
 
-<input
-  id="pendingSearch"
-  class="search"
-  placeholder="Cari nama atau kelas..."
-  oninput="renderPending()"
->
+          </tbody>
 
-<div class="table-wrap">
+        </table>
 
-<table>
+      </div>
 
-<thead>
+    </section>
 
-<tr>
 
-<th>Bil.</th>
+    <!-- SUDAH AMBIL -->
 
-<th>Nama</th>
+    <section class="card">
 
-<th>Kelas</th>
+      <h2>
+        ✅ Murid Sudah Ambil Susu
+      </h2>
 
-<th>ID Murid</th>
+      <div class="filters">
 
-</tr>
+        <input
+          type="text"
+          id="takenSearch"
+          placeholder="Cari nama atau kelas..."
+          oninput="renderTakenStudents()"
+        >
 
-</thead>
+        <select
+          id="takenClassFilter"
+          onchange="renderTakenStudents()"
+        >
+          <option value="">
+            Semua Kelas
+          </option>
+        </select>
 
-<tbody
-  id="pendingTable">
-</tbody>
+      </div>
 
-</table>
+      <div class="table-wrap">
 
-</div>
+        <table>
 
-</section>
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Nama</th>
+              <th>Kelas</th>
+              <th>ID Murid</th>
+              <th>Masa</th>
+              <th>Guru</th>
+            </tr>
+          </thead>
 
+          <tbody id="takenTable">
 
-</main>
+            <tr>
+              <td colspan="6" class="center">
+                Memuatkan data...
+              </td>
+            </tr>
 
+          </tbody>
 
-<script src="dashboard.js"></script>
+        </table>
 
+      </div>
+
+    </section>
+
+
+    <!-- BELUM AMBIL -->
+
+    <section class="card">
+
+      <h2>
+        ⏳ Murid Belum Ambil Susu
+      </h2>
+
+      <div class="filters">
+
+        <input
+          type="text"
+          id="pendingSearch"
+          placeholder="Cari nama atau kelas..."
+          oninput="renderPendingStudents()"
+        >
+
+        <select
+          id="pendingClassFilter"
+          onchange="renderPendingStudents()"
+        >
+          <option value="">
+            Semua Kelas
+          </option>
+        </select>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Bil.</th>
+              <th>Nama</th>
+              <th>Kelas</th>
+              <th>ID Murid</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="pendingTable">
+
+            <tr>
+              <td colspan="5" class="center">
+                Memuatkan data...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    Sistem Pengagihan Susu QR SK Tun Fuad 2026
+    <br>
+    SKTF, Together We RISE
+  </footer>
+
+
+  <script src="dashboard.js"></script>
 
 </body>
-
 </html>
