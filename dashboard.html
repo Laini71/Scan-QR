@@ -298,6 +298,90 @@
     }
 
     /* =========================
+       STATUS STOK SUSU
+    ========================= */
+
+    .stock-panel {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    }
+
+    .stock-panel h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+    .stock-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .stock-card {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 18px;
+      border-left: 6px solid #1976d2;
+    }
+
+    .stock-card.in {
+      border-left-color: #16a34a;
+    }
+
+    .stock-card.out {
+      border-left-color: #ef4444;
+    }
+
+    .stock-card.status-normal {
+      border-left-color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    .stock-card.status-low {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .stock-card.status-empty {
+      border-left-color: #dc2626;
+      background: #fef2f2;
+    }
+
+    .stock-label {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .stock-value {
+      font-size: 30px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .stock-status-text {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 850px) {
+      .stock-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      .stock-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    /* =========================
        ACTION
     ========================= */
 
@@ -623,6 +707,79 @@
     </section>
 
 
+    <!-- STATUS STOK SUSU -->
+
+    <section class="stock-panel">
+
+      <h2>
+        📦 Status Stok Susu
+      </h2>
+
+      <div class="stock-grid">
+
+        <div class="stock-card">
+          <div>📦</div>
+          <div class="stock-label">
+            Baki Stok Semasa
+          </div>
+          <div
+            id="dashStockBalance"
+            class="stock-value"
+          >
+            -
+          </div>
+        </div>
+
+
+        <div class="stock-card in">
+          <div>➕</div>
+          <div class="stock-label">
+            Jumlah Stok Masuk
+          </div>
+          <div
+            id="dashStockIn"
+            class="stock-value"
+          >
+            -
+          </div>
+        </div>
+
+
+        <div class="stock-card out">
+          <div>🥛</div>
+          <div class="stock-label">
+            Agihan Hari Ini
+          </div>
+          <div
+            id="dashStockTodayOut"
+            class="stock-value"
+          >
+            -
+          </div>
+        </div>
+
+
+        <div
+          id="dashStockStatusCard"
+          class="stock-card"
+        >
+          <div>⚠️</div>
+          <div class="stock-label">
+            Status Stok
+          </div>
+          <div
+            id="dashStockStatus"
+            class="stock-status-text"
+          >
+            Memeriksa...
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
     <!-- ACTION -->
 
     <div class="action-row">
@@ -810,6 +967,8 @@
     SKTF, Together We RISE
   </footer>
 
+
+  <script src="dashboard-stock.js"></script>
 
   <script src="dashboard.js"></script>
 
