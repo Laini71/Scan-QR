@@ -11,15 +11,13 @@ let stockData = null;
 window.addEventListener(
   'load',
   function () {
-
     loadStock();
-
   }
 );
 
 
 /* =========================================================
-   PANGGIL API APPS SCRIPT GUNA JSONP
+   PANGGIL API APPS SCRIPT
 ========================================================= */
 
 function callApi(params) {
@@ -35,10 +33,12 @@ function callApi(params) {
           Math.random() * 100000
         );
 
+
       const script =
         document.createElement(
           'script'
         );
+
 
       const timer =
         setTimeout(
@@ -60,15 +60,11 @@ function callApi(params) {
       window[callback] =
         function (result) {
 
-          clearTimeout(
-            timer
-          );
+          clearTimeout(timer);
 
           cleanup();
 
-          resolve(
-            result
-          );
+          resolve(result);
 
         };
 
@@ -77,14 +73,10 @@ function callApi(params) {
 
         try {
 
-          delete window[
-            callback
-          ];
+          delete window[callback];
 
         }
-        catch (e) {
-
-        }
+        catch (e) {}
 
 
         if (
@@ -92,9 +84,7 @@ function callApi(params) {
         ) {
 
           script.parentNode
-            .removeChild(
-              script
-            );
+            .removeChild(script);
 
         }
 
@@ -105,19 +95,17 @@ function callApi(params) {
         new URLSearchParams();
 
 
-      Object.keys(
-        params
-      )
-      .forEach(
-        function (key) {
+      Object.keys(params)
+        .forEach(
+          function (key) {
 
-          query.set(
-            key,
-            params[key] ?? ''
-          );
+            query.set(
+              key,
+              params[key] ?? ''
+            );
 
-        }
-      );
+          }
+        );
 
 
       query.set(
@@ -141,11 +129,10 @@ function callApi(params) {
       script.onerror =
         function () {
 
-          clearTimeout(
-            timer
-          );
+          clearTimeout(timer);
 
           cleanup();
+
 
           reject(
             new Error(
@@ -157,9 +144,7 @@ function callApi(params) {
 
 
       document.body
-        .appendChild(
-          script
-        );
+        .appendChild(script);
 
     }
   );
@@ -168,7 +153,7 @@ function callApi(params) {
 
 
 /* =========================================================
-   AMBIL DATA STOK
+   LOAD DATA STOK
 ========================================================= */
 
 async function loadStock() {
@@ -195,10 +180,8 @@ async function loadStock() {
       throw new Error(
         result &&
         result.message
-          ?
-          result.message
-          :
-          'Data stok gagal dimuatkan.'
+          ? result.message
+          : 'Data stok gagal dimuatkan.'
       );
 
     }
@@ -218,9 +201,7 @@ async function loadStock() {
   }
   catch (error) {
 
-    console.error(
-      error
-    );
+    console.error(error);
 
 
     setStatus(
@@ -235,14 +216,12 @@ async function loadStock() {
 
 
 /* =========================================================
-   PAPAR RINGKASAN STOK
+   PAPAR DATA STOK
 ========================================================= */
 
 function renderStock() {
 
-  if (
-    !stockData
-  ) {
+  if (!stockData) {
 
     return;
 
@@ -303,18 +282,47 @@ function renderStock() {
     stockData.trackingActive
   ) {
 
+
+    /* ================================
+       STOK HABIS
+    ================================= */
+
     if (
-      summary.lowStock
+      summary.currentBalance <= 0
     ) {
 
       mode.textContent =
-        '⚠️ AKTIF — STOK RENDAH';
+        '🚫 STOK HABIS — Pengagihan akan disekat.';
 
 
       mode.className =
         'mode low';
 
     }
+
+
+    /* ================================
+       STOK RENDAH
+    ================================= */
+
+    else if (
+      summary.lowStock
+    ) {
+
+      mode.textContent =
+        '⚠️ PENJEJAKAN AKTIF — STOK RENDAH';
+
+
+      mode.className =
+        'mode low';
+
+    }
+
+
+    /* ================================
+       STOK NORMAL
+    ================================= */
+
     else {
 
       mode.textContent =
@@ -327,6 +335,12 @@ function renderStock() {
     }
 
   }
+
+
+  /* =================================
+     TRACKING BELUM AKTIF
+  ================================== */
+
   else {
 
     mode.textContent =
@@ -406,6 +420,10 @@ async function saveStockIn() {
       .trim();
 
 
+  /* =================================
+     VALIDASI JUMLAH
+  ================================== */
+
   if (
     !quantity ||
     quantity <= 0
@@ -476,10 +494,8 @@ async function saveStockIn() {
       throw new Error(
         result &&
         result.message
-          ?
-          result.message
-          :
-          'Stok gagal ditambah.'
+          ? result.message
+          : 'Stok gagal ditambah.'
       );
 
     }
@@ -501,9 +517,7 @@ async function saveStockIn() {
   }
   catch (error) {
 
-    console.error(
-      error
-    );
+    console.error(error);
 
 
     setStatus(
@@ -533,7 +547,7 @@ async function saveStockIn() {
 
 
 /* =========================================================
-   RESET BORANG
+   RESET BORANG STOK
 ========================================================= */
 
 function resetStockForm() {
@@ -581,7 +595,159 @@ function resetStockForm() {
 
 
 /* =========================================================
-   PAPAR REKOD TRANSAKSI
+   🧪 UJIAN STOK HABIS
+   TIDAK MENGUBAH DATA SEBENAR
+========================================================= */
+
+async function testOutOfStock() {
+
+  const button =
+    document.getElementById(
+      'btnTestOutOfStock'
+    );
+
+
+  const box =
+    document.getElementById(
+      'testOutOfStockResult'
+    );
+
+
+  if (
+    !button ||
+    !box
+  ) {
+
+    alert(
+      'Komponen Ujian Stok Habis tidak dijumpai dalam stock.html.'
+    );
+
+    return;
+
+  }
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    '⏳ MENGUJI...';
+
+
+  box.className =
+    'test-result show';
+
+
+  box.innerHTML =
+    '⏳ Sedang menjalankan simulasi baki stok 0...';
+
+
+  try {
+
+    const result =
+      await callApi({
+        action:
+          'stockTestOutOfStock'
+      });
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result &&
+        result.message
+          ? result.message
+          : 'Ujian gagal.'
+      );
+
+    }
+
+
+    const stock =
+      result.stock || {};
+
+
+    /* =================================
+       KEPUTUSAN YANG KITA MAHU
+    ================================== */
+
+    if (
+      stock.status ===
+        'OUT_OF_STOCK' &&
+      stock.allowed === false &&
+      result.dataChanged === false
+    ) {
+
+      box.className =
+        'test-result show blocked';
+
+
+      box.innerHTML =
+        '✅ <strong>UJIAN BERJAYA</strong>' +
+        '<br><br>' +
+
+        '🚫 Sistem menolak pengagihan apabila baki = 0.' +
+        '<br>' +
+
+        'Status: <strong>OUT_OF_STOCK</strong>' +
+        '<br>' +
+
+        'Baki simulasi: <strong>0</strong>' +
+        '<br>' +
+
+        'Data sebenar diubah: <strong>TIDAK</strong>' +
+        '<br><br>' +
+
+        esc(
+          stock.message || ''
+        );
+
+    }
+    else {
+
+      throw new Error(
+        'Keputusan ujian tidak seperti dijangka.'
+      );
+
+    }
+
+  }
+  catch (error) {
+
+    console.error(error);
+
+
+    box.className =
+      'test-result show blocked';
+
+
+    box.innerHTML =
+      '❌ Ujian gagal: ' +
+      esc(
+        error.message
+      );
+
+  }
+  finally {
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      '🧪 UJI STOK HABIS';
+
+  }
+
+}
+
+
+/* =========================================================
+   PAPAR TRANSAKSI STOK
 ========================================================= */
 
 function renderTransactions() {
@@ -592,227 +758,235 @@ function renderTransactions() {
     );
 
 
-  const search =
-    document
-      .getElementById(
-        'searchInput'
-      )
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  const type =
-    document
-      .getElementById(
-        'typeFilter'
-      )
-      .value;
-
-
-  const transactions =
-    (
-      stockData &&
-      stockData.transactions
-        ?
-        stockData.transactions
-        :
-        []
-    );
-
-
-  const data =
-    transactions
-      .filter(
-        function (item) {
-
-          const text =
-            (
-              String(
-                item.displayDate || ''
-              )
-              +
-              ' '
-              +
-              String(
-                item.type || ''
-              )
-              +
-              ' '
-              +
-              String(
-                item.batch || ''
-              )
-              +
-              ' '
-              +
-              String(
-                item.teacher || ''
-              )
-              +
-              ' '
-              +
-              String(
-                item.reference || ''
-              )
-              +
-              ' '
-              +
-              String(
-                item.notes || ''
-              )
-            )
-            .toLowerCase();
-
-
-          const matchSearch =
-            !search ||
-            text.includes(
-              search
-            );
-
-
-          const matchType =
-            !type ||
-            item.type === type;
-
-
-          return (
-            matchSearch &&
-            matchType
-          );
-
-        }
-      );
-
-
-  if (
-    !data.length
-  ) {
-
-    tbody.innerHTML =
-      `
-      <tr>
-        <td
-          colspan="9"
-          class="center"
-        >
-          Tiada transaksi stok.
-        </td>
-      </tr>
-      `;
+  if (!tbody) {
 
     return;
 
   }
 
 
+  const searchElement =
+    document.getElementById(
+      'searchInput'
+    );
+
+
+  const typeElement =
+    document.getElementById(
+      'typeFilter'
+    );
+
+
+  const search =
+    searchElement
+      ? searchElement
+          .value
+          .trim()
+          .toLowerCase()
+      : '';
+
+
+  const type =
+    typeElement
+      ? typeElement.value
+      : '';
+
+
+  const transactions =
+    (
+      stockData &&
+      stockData.transactions
+        ? stockData.transactions
+        : []
+    );
+
+
+  const data =
+    transactions.filter(
+      function (item) {
+
+        const text =
+          (
+            String(
+              item.displayDate || ''
+            ) +
+            ' ' +
+            String(
+              item.type || ''
+            ) +
+            ' ' +
+            String(
+              item.batch || ''
+            ) +
+            ' ' +
+            String(
+              item.teacher || ''
+            ) +
+            ' ' +
+            String(
+              item.reference || ''
+            ) +
+            ' ' +
+            String(
+              item.notes || ''
+            )
+          )
+          .toLowerCase();
+
+
+        return (
+
+          (
+            !search ||
+            text.includes(
+              search
+            )
+          )
+
+          &&
+
+          (
+            !type ||
+            item.type === type
+          )
+
+        );
+
+      }
+    );
+
+
+  /* =================================
+     TIADA TRANSAKSI
+  ================================== */
+
+  if (!data.length) {
+
+    tbody.innerHTML =
+      '<tr>' +
+      '<td colspan="9" class="center">' +
+      'Tiada transaksi stok.' +
+      '</td>' +
+      '</tr>';
+
+
+    return;
+
+  }
+
+
+  /* =================================
+     PAPAR TRANSAKSI
+  ================================== */
+
   tbody.innerHTML =
-    data
-      .map(
-        function (
-          item,
-          index
-        ) {
+    data.map(
+      function (
+        item,
+        index
+      ) {
 
-          const badgeClass =
-            item.type ===
-            'MASUK'
-              ?
-              'badge in'
-              :
-              'badge out';
+        const badgeClass =
+          item.type === 'MASUK'
+            ? 'badge in'
+            : 'badge out';
 
 
-          const sign =
-            item.type ===
-            'MASUK'
-              ?
-              '+'
-              :
-              '-';
+        const sign =
+          item.type === 'MASUK'
+            ? '+'
+            : '-';
 
 
-          return `
-            <tr>
+        return (
 
-              <td>
-                ${index + 1}
-              </td>
+          '<tr>' +
 
-              <td>
-                ${esc(
-                  item.displayDate
-                )}
-              </td>
+            '<td>' +
+              (index + 1) +
+            '</td>' +
 
-              <td>
-                ${esc(
-                  item.time
-                )}
-              </td>
+            '<td>' +
+              esc(
+                item.displayDate
+              ) +
+            '</td>' +
 
-              <td>
-                <span
-                  class="${badgeClass}"
-                >
-                  ${esc(
-                    item.type
-                  )}
-                </span>
-              </td>
+            '<td>' +
+              esc(
+                item.time
+              ) +
+            '</td>' +
 
-              <td>
-                <strong>
-                  ${sign}${esc(
-                    item.quantity
-                  )}
-                </strong>
-              </td>
+            '<td>' +
 
-              <td>
-                <strong>
-                  ${esc(
-                    item.balance
-                  )}
-                </strong>
-              </td>
+              '<span class="' +
+                badgeClass +
+              '">' +
 
-              <td>
-                ${esc(
-                  item.batch || '-'
-                )}
-              </td>
+                esc(
+                  item.type
+                ) +
 
-              <td>
-                ${esc(
-                  item.teacher || '-'
-                )}
-              </td>
+              '</span>' +
 
-              <td>
-                ${esc(
-                  item.notes || '-'
-                )}
-              </td>
+            '</td>' +
 
-            </tr>
-          `;
+            '<td>' +
 
-        }
-      )
-      .join('');
+              '<strong>' +
+                sign +
+                esc(
+                  item.quantity
+                ) +
+              '</strong>' +
+
+            '</td>' +
+
+            '<td>' +
+
+              '<strong>' +
+                esc(
+                  item.balance
+                ) +
+              '</strong>' +
+
+            '</td>' +
+
+            '<td>' +
+              esc(
+                item.batch || '-'
+              ) +
+            '</td>' +
+
+            '<td>' +
+              esc(
+                item.teacher || '-'
+              ) +
+            '</td>' +
+
+            '<td>' +
+              esc(
+                item.notes || '-'
+              ) +
+            '</td>' +
+
+          '</tr>'
+
+        );
+
+      }
+    )
+    .join('');
 
 }
 
 
 /* =========================================================
-   STATUS SISTEM
+   STATUS
 ========================================================= */
 
-function setStatus(
-  text
-) {
+function setStatus(text) {
 
   const element =
     document.getElementById(
@@ -820,9 +994,7 @@ function setStatus(
     );
 
 
-  if (
-    element
-  ) {
+  if (element) {
 
     element.textContent =
       text;
@@ -836,9 +1008,7 @@ function setStatus(
    KESELAMATAN PAPARAN HTML
 ========================================================= */
 
-function esc(
-  value
-) {
+function esc(value) {
 
   return String(
     value ?? ''
