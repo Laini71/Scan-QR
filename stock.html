@@ -241,6 +241,42 @@
       cursor: not-allowed;
     }
 
+    .test-box {
+      margin-bottom: 20px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #fff7ed;
+      border: 2px dashed #f59e0b;
+    }
+
+    .test-box h2 {
+      margin-top: 0;
+      color: #9a3412;
+    }
+
+    .test-result {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      background: white;
+      font-weight: bold;
+      display: none;
+    }
+
+    .test-result.show {
+      display: block;
+    }
+
+    .test-result.blocked {
+      border: 2px solid #ef4444;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .btn.orange {
+      background: #ea580c;
+    }
+
     .meta {
       padding: 12px;
       border-radius: 10px;
@@ -457,6 +493,33 @@
   >
     Memeriksa mod penjejakan...
   </div>
+
+
+  <section class="test-box">
+
+    <h2>
+      🧪 Ujian Keselamatan Stok Habis
+    </h2>
+
+    <p>
+      Ujian ini mensimulasikan baki stok = 0.
+      <strong>Tiada stok sebenar, rekod murid atau transaksi akan diubah.</strong>
+    </p>
+
+    <button
+      id="btnTestOutOfStock"
+      class="btn orange"
+      onclick="testOutOfStock()"
+    >
+      🧪 UJI STOK HABIS
+    </button>
+
+    <div
+      id="testOutOfStockResult"
+      class="test-result"
+    ></div>
+
+  </section>
 
 
   <section class="summary-grid">
