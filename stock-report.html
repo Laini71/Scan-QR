@@ -1,118 +1,844 @@
 <!DOCTYPE html>
 <html lang="ms">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laporan Stok Susu | SK Tun Fuad</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Laporan Stok Susu | SK Tun Fuad
+  </title>
+
   <style>
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f6fb;color:#172033}
-    .header{background:linear-gradient(135deg,#0d47a1,#1976d2);color:white;text-align:center;padding:28px 18px}
-    .header .icon{font-size:46px}.header h1{margin:6px 0}
-    .menu{max-width:1400px;margin:18px auto 0;padding:0 15px;display:grid;grid-template-columns:repeat(9,1fr);gap:10px}
-    .menu a,.menu button{border:0;background:white;color:#0d47a1;text-decoration:none;text-align:center;padding:13px 8px;border-radius:12px;font-weight:bold;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.08);font-size:14px}
-    .menu .active{background:#1976d2;color:white}
-    .container{max-width:1400px;margin:20px auto 50px;padding:0 15px}
-    .card,.status,.summary-card{background:white;border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.08)}
-    .status{padding:14px 18px;margin-bottom:18px;font-weight:bold;color:#0d47a1}
-    .card{padding:20px;margin-bottom:20px}.card h2{margin-top:0;color:#0d47a1}
-    .filters{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end}
-    .form-group{display:flex;flex-direction:column;gap:6px}label{font-weight:bold}
-    select,button{padding:12px;border-radius:10px;font-size:14px}select{border:1px solid #cbd5e1;background:white}
-    .btn{border:0;cursor:pointer;color:white;background:#1976d2;font-weight:bold}.btn.secondary{background:#475569}
-    .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin-bottom:20px}
-    .summary-card{padding:18px;border-left:6px solid #1976d2}
-    .summary-card:nth-child(2){border-left-color:#16a34a}.summary-card:nth-child(3){border-left-color:#ef4444}.summary-card:nth-child(4){border-left-color:#7c3aed}.summary-card:nth-child(5){border-left-color:#f59e0b}
-    .summary-label{color:#64748b;font-size:14px}.summary-value{margin-top:6px;font-size:30px;font-weight:800}
-    .period-title{font-size:20px;font-weight:800;color:#0d47a1;margin-bottom:14px}
-    .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:850px}
-    th{background:#f1f5f9;text-align:left;padding:12px 10px;border-bottom:1px solid #dce3ec}
-    td{padding:12px 10px;border-bottom:1px solid #e5e7eb}.center{text-align:center}
-    .badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:bold}
-    .badge.in{background:#dcfce7;color:#166534}.badge.out{background:#fee2e2;color:#991b1b}
-    footer{text-align:center;padding:25px 15px;color:#64748b;font-size:13px}
-    @media print{body{background:white}.menu,.status,.filters{display:none!important}.card,.summary-card{box-shadow:none;border:1px solid #ddd}.header{background:white!important;color:black!important}}
-    @media(max-width:950px){.menu{grid-template-columns:repeat(3,1fr)}.summary-grid{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}}
-    @media(max-width:600px){.menu,.summary-grid,.filters{grid-template-columns:1fr}}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+
+    .header {
+      background: linear-gradient(
+        135deg,
+        #0d47a1,
+        #1976d2
+      );
+
+      color: white;
+      text-align: center;
+      padding: 28px 18px;
+    }
+
+    .header .icon {
+      font-size: 46px;
+    }
+
+    .header h1 {
+      margin: 6px 0;
+    }
+
+    .header p {
+      margin: 5px 0;
+    }
+
+    .menu {
+      max-width: 1400px;
+      margin: 18px auto 0;
+      padding: 0 15px;
+
+      display: grid;
+      grid-template-columns:
+        repeat(9, 1fr);
+
+      gap: 10px;
+    }
+
+    .menu a,
+    .menu button {
+
+      border: 0;
+
+      background: white;
+
+      color: #0d47a1;
+
+      text-decoration: none;
+
+      text-align: center;
+
+      padding: 13px 8px;
+
+      border-radius: 12px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.08);
+
+      font-size: 14px;
+    }
+
+    .menu a:hover,
+    .menu button:hover {
+      background: #e3f2fd;
+    }
+
+    .menu .active {
+      background: #1976d2;
+      color: white;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 20px auto 50px;
+      padding: 0 15px;
+    }
+
+    .card,
+    .status,
+    .summary-card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.08);
+    }
+
+    .status {
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      font-weight: bold;
+      color: #0d47a1;
+    }
+
+    .card {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+    .filters {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr auto auto;
+
+      gap: 10px;
+
+      align-items: end;
+    }
+
+    .form-group {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    select,
+    button {
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      font-size: 14px;
+    }
+
+    select {
+
+      border:
+        1px solid #cbd5e1;
+
+      background: white;
+    }
+
+    .btn {
+
+      border: 0;
+
+      cursor: pointer;
+
+      color: white;
+
+      background: #1976d2;
+
+      font-weight: bold;
+    }
+
+    .btn.secondary {
+      background: #475569;
+    }
+
+    .summary-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, 1fr);
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+
+      padding: 18px;
+
+      border-left:
+        6px solid #1976d2;
+    }
+
+    .summary-card:nth-child(2) {
+      border-left-color: #16a34a;
+    }
+
+    .summary-card:nth-child(3) {
+      border-left-color: #ef4444;
+    }
+
+    .summary-card:nth-child(4) {
+      border-left-color: #7c3aed;
+    }
+
+    .summary-card:nth-child(5) {
+      border-left-color: #f59e0b;
+    }
+
+    .summary-label {
+
+      color: #64748b;
+
+      font-size: 14px;
+    }
+
+    .summary-value {
+
+      margin-top: 6px;
+
+      font-size: 30px;
+
+      font-weight: 800;
+    }
+
+    .period-title {
+
+      font-size: 20px;
+
+      font-weight: 800;
+
+      color: #0d47a1;
+
+      margin-bottom: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 850px;
+    }
+
+    th {
+
+      background: #f1f5f9;
+
+      text-align: left;
+
+      padding: 12px 10px;
+
+      border-bottom:
+        1px solid #dce3ec;
+    }
+
+    td {
+
+      padding: 12px 10px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .badge {
+
+      display: inline-block;
+
+      padding: 5px 9px;
+
+      border-radius: 999px;
+
+      font-size: 12px;
+
+      font-weight: bold;
+    }
+
+    .badge.in {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.out {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    footer {
+
+      text-align: center;
+
+      padding: 25px 15px;
+
+      color: #64748b;
+
+      font-size: 13px;
+    }
+
+    @media print {
+
+      body {
+        background: white;
+      }
+
+      .menu,
+      .status,
+      .filters {
+        display: none !important;
+      }
+
+      .card,
+      .summary-card {
+
+        box-shadow: none;
+
+        border:
+          1px solid #ddd;
+      }
+
+      .header {
+
+        background:
+          white !important;
+
+        color:
+          black !important;
+      }
+
+    }
+
+    @media (max-width: 950px) {
+
+      .menu {
+        grid-template-columns:
+          repeat(3, 1fr);
+      }
+
+      .summary-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .filters {
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .menu,
+      .summary-grid,
+      .filters {
+        grid-template-columns:
+          1fr;
+      }
+
+    }
+
   </style>
+
 </head>
+
+
 <body>
+
+
 <header class="header">
-  <div class="icon">📊</div>
-  <h1>Laporan Stok Susu Bulanan</h1>
-  <p>SK Tun Fuad 2026</p>
-  <p><strong>SKTF, Together We RISE</strong></p>
+
+  <div class="icon">
+    📊
+  </div>
+
+  <h1>
+    Laporan Stok Susu Bulanan
+  </h1>
+
+  <p>
+    SK Tun Fuad 2026
+  </p>
+
+  <p>
+    <strong>
+      SKTF, Together We RISE
+    </strong>
+  </p>
+
 </header>
 
+
 <nav class="menu">
-  <a href="index.html">📷 Scanner</a>
-  <a href="dashboard.html">📊 Dashboard</a>
-  <a href="students.html">👨‍🎓 Murid</a>
-  <a href="qr.html">🔳 Jana QR</a>
-  <a href="report.html">📄 Laporan</a>
-  <a href="history.html">🗂️ Rekod</a>
-  <a href="stock.html">📦 Stok</a>
-  <a href="stock-report.html" class="active">📊 Laporan Stok</a>
-  <button type="button" onclick="loadStockReport()">🔄 Refresh</button>
+
+  <a href="index.html">
+    📷 Scanner
+  </a>
+
+  <a href="dashboard.html">
+    📊 Dashboard
+  </a>
+
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
+
+  <a href="qr.html">
+    🔳 Jana QR
+  </a>
+
+  <a href="report.html">
+    📄 Laporan
+  </a>
+
+  <a href="history.html">
+    🗂️ Rekod
+  </a>
+
+  <a href="stock.html">
+    📦 Stok
+  </a>
+
+  <a
+    href="stock-report.html"
+    class="active"
+  >
+    📊 Laporan Stok
+  </a>
+
+  <button
+    type="button"
+    onclick="loadStockReport()"
+  >
+    🔄 Refresh
+  </button>
+
 </nav>
 
+
 <main class="container">
-  <div id="reportStatus" class="status">⏳ Menyediakan laporan stok...</div>
+
+  <div
+    id="reportStatus"
+    class="status"
+  >
+    ⏳ Menyediakan laporan stok...
+  </div>
+
 
   <section class="card">
-    <h2>🗓️ Pilih Bulan Laporan</h2>
+
+    <h2>
+      🗓️ Pilih Bulan Laporan
+    </h2>
+
     <div class="filters">
+
       <div class="form-group">
-        <label for="monthSelect">Bulan</label>
+
+        <label for="monthSelect">
+          Bulan
+        </label>
+
         <select id="monthSelect">
-          <option value="1">Januari</option><option value="2">Februari</option><option value="3">Mac</option>
-          <option value="4">April</option><option value="5">Mei</option><option value="6">Jun</option>
-          <option value="7">Julai</option><option value="8">Ogos</option><option value="9">September</option>
-          <option value="10">Oktober</option><option value="11">November</option><option value="12">Disember</option>
+
+          <option value="1">
+            Januari
+          </option>
+
+          <option value="2">
+            Februari
+          </option>
+
+          <option value="3">
+            Mac
+          </option>
+
+          <option value="4">
+            April
+          </option>
+
+          <option value="5">
+            Mei
+          </option>
+
+          <option value="6">
+            Jun
+          </option>
+
+          <option value="7">
+            Julai
+          </option>
+
+          <option value="8">
+            Ogos
+          </option>
+
+          <option value="9">
+            September
+          </option>
+
+          <option value="10">
+            Oktober
+          </option>
+
+          <option value="11">
+            November
+          </option>
+
+          <option value="12">
+            Disember
+          </option>
+
         </select>
+
       </div>
+
+
       <div class="form-group">
-        <label for="yearSelect">Tahun</label>
-        <select id="yearSelect"></select>
+
+        <label for="yearSelect">
+          Tahun
+        </label>
+
+        <select id="yearSelect">
+        </select>
+
       </div>
-      <button class="btn" onclick="loadStockReport()">📊 PAPAR LAPORAN</button>
-      <button class="btn secondary" onclick="window.print()">🖨️ CETAK / PDF</button>
+
+
+      <button
+        class="btn"
+        onclick="loadStockReport()"
+      >
+        📊 PAPAR LAPORAN
+      </button>
+
+
+      <button
+        class="btn secondary"
+        onclick="window.print()"
+      >
+        🖨️ CETAK / PDF
+      </button>
+
     </div>
+
   </section>
 
+
   <section class="card">
-    <div id="periodTitle" class="period-title">-</div>
+
+    <div
+      id="periodTitle"
+      class="period-title"
+    >
+      -
+    </div>
+
+
     <section class="summary-grid">
-      <div class="summary-card"><div class="summary-label">Baki Awal Bulan</div><div id="openingBalance" class="summary-value">0</div></div>
-      <div class="summary-card"><div class="summary-label">Stok Masuk</div><div id="totalIn" class="summary-value">0</div></div>
-      <div class="summary-card"><div class="summary-label">Stok Keluar / Diagih</div><div id="totalOut" class="summary-value">0</div></div>
-      <div class="summary-card"><div class="summary-label">Baki Akhir Bulan</div><div id="closingBalance" class="summary-value">0</div></div>
-      <div class="summary-card"><div class="summary-label">Jumlah Transaksi</div><div id="transactionCount" class="summary-value">0</div></div>
+
+      <div class="summary-card">
+
+        <div class="summary-label">
+          Baki Awal Bulan
+        </div>
+
+        <div
+          id="openingBalance"
+          class="summary-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-card">
+
+        <div class="summary-label">
+          Stok Masuk
+        </div>
+
+        <div
+          id="totalIn"
+          class="summary-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-card">
+
+        <div class="summary-label">
+          Stok Keluar / Diagih
+        </div>
+
+        <div
+          id="totalOut"
+          class="summary-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-card">
+
+        <div class="summary-label">
+          Baki Akhir Bulan
+        </div>
+
+        <div
+          id="closingBalance"
+          class="summary-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="summary-card">
+
+        <div class="summary-label">
+          Jumlah Transaksi
+        </div>
+
+        <div
+          id="transactionCount"
+          class="summary-value"
+        >
+          0
+        </div>
+
+      </div>
+
     </section>
+
   </section>
 
-  <section class="card">
-    <h2>📅 Ringkasan Harian</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Tarikh</th><th class="center">Stok Masuk</th><th class="center">Stok Keluar</th><th class="center">Baki Akhir Hari</th></tr></thead>
-        <tbody id="dailyTable"><tr><td colspan="4" class="center">Memuatkan data...</td></tr></tbody>
-      </table>
-    </div>
-  </section>
 
   <section class="card">
-    <h2>📋 Senarai Transaksi Bulanan</h2>
+
+    <h2>
+      📅 Ringkasan Harian
+    </h2>
+
     <div class="table-wrap">
+
       <table>
-        <thead><tr><th>Bil.</th><th>Tarikh</th><th>Masa</th><th>Jenis</th><th>Jumlah</th><th>Baki</th><th>Batch</th><th>Guru</th><th>Rujukan</th><th>Catatan</th></tr></thead>
-        <tbody id="transactionTable"><tr><td colspan="10" class="center">Memuatkan data...</td></tr></tbody>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Tarikh
+            </th>
+
+            <th class="center">
+              Stok Masuk
+            </th>
+
+            <th class="center">
+              Stok Keluar
+            </th>
+
+            <th class="center">
+              Baki Akhir Hari
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="dailyTable">
+
+          <tr>
+
+            <td
+              colspan="4"
+              class="center"
+            >
+              Memuatkan data...
+            </td>
+
+          </tr>
+
+        </tbody>
+
       </table>
+
     </div>
+
   </section>
+
+
+  <section class="card">
+
+    <h2>
+      📋 Senarai Transaksi Bulanan
+    </h2>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Bil.
+            </th>
+
+            <th>
+              Tarikh
+            </th>
+
+            <th>
+              Masa
+            </th>
+
+            <th>
+              Jenis
+            </th>
+
+            <th>
+              Jumlah
+            </th>
+
+            <th>
+              Baki
+            </th>
+
+            <th>
+              Batch
+            </th>
+
+            <th>
+              Guru
+            </th>
+
+            <th>
+              Rujukan
+            </th>
+
+            <th>
+              Catatan
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="transactionTable">
+
+          <tr>
+
+            <td
+              colspan="10"
+              class="center"
+            >
+              Memuatkan data...
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
 </main>
 
-<footer>Sistem Pengagihan Susu QR<br>SK Tun Fuad 2026<br><br>SKTF, Together We RISE</footer>
+
+<footer>
+
+  Sistem Pengagihan Susu QR
+  <br>
+
+  SK Tun Fuad 2026
+
+  <br><br>
+
+  SKTF, Together We RISE
+
+</footer>
+
+
 <script src="stock-report.js"></script>
+
+
 </body>
+
 </html>
