@@ -1,911 +1,1012 @@
-<!DOCTYPE html>
-<html lang="ms">
+const APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbytIw-xa_0FdLtZFfeRpLil3lrYjnNKo0jYJsN5dY5icdxSmHEXnH6ugDbz5Enn9P8-fA/exec';
 
-<head>
-  <meta charset="UTF-8">
+let dashboardData = null;
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
 
-  <title>
-    Dashboard Susu | SK Tun Fuad
-  </title>
+/* =========================================================
+   MULA SISTEM
+========================================================= */
 
-  <style>
+window.addEventListener(
+  'load',
+  function () {
 
-    * {
-      box-sizing: border-box;
-    }
+    loadDashboard();
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f3f6fb;
-      color: #172033;
-    }
+  }
+);
 
-    .header {
-      background: linear-gradient(135deg, #0d47a1, #1976d2);
-      color: white;
-      padding: 30px 18px;
-      text-align: center;
-    }
 
-    .header-icon {
-      font-size: 50px;
-      margin-bottom: 5px;
-    }
+/* =========================================================
+   API JSONP
+========================================================= */
 
-    .header h1 {
-      margin: 0;
-      font-size: 30px;
-    }
+function callDashboardApi(params) {
 
-    .header p {
-      margin: 7px 0 0;
-    }
+  return new Promise(
+    function (resolve, reject) {
 
-    .menu {
-      max-width: 1250px;
-      margin: 18px auto 0;
-      padding: 0 15px;
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 10px;
-    }
+      const callback =
+        'dashboardApi_' +
+        Date.now() +
+        '_' +
+        Math.floor(
+          Math.random() * 100000
+        );
 
-    .menu a,
-    .menu button {
-      border: 0;
-      text-decoration: none;
-      background: white;
-      color: #0d47a1;
-      padding: 13px 8px;
-      border-radius: 12px;
-      text-align: center;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-      font-size: 14px;
-    }
 
-    .menu a:hover,
-    .menu button:hover {
-      background: #e3f2fd;
-    }
+      const script =
+        document.createElement(
+          'script'
+        );
 
-    .menu .active {
-      background: #1976d2;
-      color: white;
-    }
 
-    .container {
-      max-width: 1250px;
-      margin: 20px auto 50px;
-      padding: 0 15px;
-    }
+      const timer =
+        setTimeout(
+          function () {
 
-    .status {
-      background: white;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 18px;
-      color: #0d47a1;
-      font-weight: bold;
-      box-shadow: 0 3px 12px rgba(0,0,0,.07);
-    }
+            cleanup();
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+            reject(
+              new Error(
+                'Server tidak memberi respons.'
+              )
+            );
 
-    .summary-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      position: relative;
-      overflow: hidden;
-    }
+          },
+          15000
+        );
 
-    .summary-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: #1976d2;
-    }
 
-    .summary-card.success::before {
-      background: #16a34a;
-    }
+      window[callback] =
+        function (result) {
 
-    .summary-card.warning::before {
-      background: #f59e0b;
-    }
+          clearTimeout(
+            timer
+          );
 
-    .summary-card.percent::before {
-      background: #7c3aed;
-    }
+          cleanup();
 
-    .summary-icon {
-      font-size: 30px;
-    }
+          resolve(
+            result
+          );
 
-    .summary-label {
-      color: #64748b;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+        };
 
-    .summary-value {
-      font-size: 34px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
 
-    .progress-card {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      margin-bottom: 20px;
-    }
+      function cleanup() {
 
-    .progress-card h2 {
-      margin-top: 0;
-      color: #0d47a1;
-    }
+        try {
 
-    .progress-track {
-      width: 100%;
-      height: 25px;
-      background: #e5e7eb;
-      border-radius: 999px;
-      overflow: hidden;
-    }
+          delete window[
+            callback
+          ];
 
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #1976d2, #16a34a);
-      border-radius: 999px;
-      transition: width .5s ease;
-    }
+        }
+        catch (e) {}
 
-    .progress-text {
-      margin-top: 10px;
-      font-weight: bold;
-      text-align: right;
-    }
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-    }
+        if (
+          script.parentNode
+        ) {
 
-    .card h2 {
-      margin-top: 0;
-      color: #0d47a1;
-    }
+          script.parentNode
+            .removeChild(
+              script
+            );
 
-    .filters {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+        }
 
-    .filters input,
-    .filters select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d4dbe7;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
-    }
-
-    th {
-      background: #f1f5f9;
-      padding: 12px 10px;
-      text-align: left;
-      color: #172033;
-      border-bottom: 1px solid #dce3ec;
-    }
-
-    td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    tbody tr:hover {
-      background: #f8fafc;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .badge-success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge-warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .stock-panel {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-    }
-
-    .stock-panel h2 {
-      margin-top: 0;
-      color: #0d47a1;
-    }
-
-    .stock-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
-
-    .stock-card {
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 18px;
-      border-left: 6px solid #1976d2;
-    }
-
-    .stock-card.in {
-      border-left-color: #16a34a;
-    }
-
-    .stock-card.out {
-      border-left-color: #ef4444;
-    }
-
-    .stock-card.status-normal {
-      border-left-color: #16a34a;
-      background: #f0fdf4;
-    }
-
-    .stock-card.status-low {
-      border-left-color: #f59e0b;
-      background: #fffbeb;
-    }
-
-    .stock-card.status-empty {
-      border-left-color: #dc2626;
-      background: #fef2f2;
-    }
-
-    .stock-label {
-      color: #64748b;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
-    .stock-value {
-      font-size: 30px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
-
-    .stock-status-text {
-      font-size: 18px;
-      font-weight: 800;
-      margin-top: 10px;
-    }
-
-    .action-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .action-btn {
-      border: 0;
-      padding: 12px 17px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      background: #1976d2;
-      color: white;
-    }
-
-    .action-btn.secondary {
-      background: #475569;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px 15px;
-      color: #64748b;
-      font-size: 13px;
-    }
-
-    @media print {
-
-      body {
-        background: white;
       }
 
-      .menu,
-      .action-row,
-      .filters,
-      .status {
-        display: none !important;
-      }
 
-      .header {
-        background: white !important;
-        color: black !important;
-        padding: 10px;
-      }
+      const query =
+        new URLSearchParams();
 
-      .summary-card,
-      .progress-card,
-      .card {
-        box-shadow: none;
-        border: 1px solid #ddd;
-      }
+
+      Object.keys(
+        params
+      )
+      .forEach(
+        function (key) {
+
+          query.set(
+            key,
+            params[key] ?? ''
+          );
+
+        }
+      );
+
+
+      query.set(
+        'callback',
+        callback
+      );
+
+
+      query.set(
+        '_',
+        Date.now()
+      );
+
+
+      script.src =
+        APPS_SCRIPT_URL +
+        '?' +
+        query.toString();
+
+
+      script.onerror =
+        function () {
+
+          clearTimeout(
+            timer
+          );
+
+          cleanup();
+
+
+          reject(
+            new Error(
+              'Gagal menghubungi server.'
+            )
+          );
+
+        };
+
+
+      document.body
+        .appendChild(
+          script
+        );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
+
+  setDashboardStatus(
+    '⏳ Mengambil data dashboard...'
+  );
+
+
+  try {
+
+    const result =
+      await callDashboardApi({
+        action:
+          'dashboard'
+      });
+
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result &&
+        result.message
+          ?
+          result.message
+          :
+          'Data dashboard gagal dimuatkan.'
+      );
 
     }
 
-    @media (max-width: 850px) {
 
-      .summary-grid,
-      .stock-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    dashboardData =
+      result;
 
-      .menu {
-        grid-template-columns: repeat(2, 1fr);
-      }
 
-    }
+    renderDashboard();
 
-    @media (max-width: 550px) {
 
-      .summary-grid,
-      .stock-grid,
-      .filters {
-        grid-template-columns: 1fr;
-      }
+    setDashboardStatus(
+      '✅ Data dashboard berjaya dimuatkan.'
+    );
 
-      .header h1 {
-        font-size: 24px;
-      }
+
+    if (
+      typeof loadDashboardStock ===
+      'function'
+    ) {
+
+      loadDashboardStock();
 
     }
 
-  </style>
-</head>
+  }
+  catch (error) {
+
+    console.error(
+      error
+    );
 
 
-<body>
+    setDashboardStatus(
+      '❌ ' +
+      error.message
+    );
 
-  <header class="header">
+  }
 
-    <div class="header-icon">
-      🥛
-    </div>
-
-    <h1>
-      Dashboard Pengagihan Susu
-    </h1>
-
-    <p>
-      SK Tun Fuad 2026
-    </p>
-
-    <p>
-      <strong>
-        SKTF, Together We RISE
-      </strong>
-    </p>
-
-  </header>
+}
 
 
-  <nav class="menu">
+/* =========================================================
+   PAPAR DASHBOARD
+========================================================= */
 
-    <a href="index.html">
-      📷 Scanner
-    </a>
+function renderDashboard() {
 
-    <a
-      href="dashboard.html"
-      class="active"
-    >
-      📊 Dashboard
-    </a>
+  if (
+    !dashboardData
+  ) {
 
-    <a href="students.html">
-      👨‍🎓 Murid
-    </a>
+    return;
 
-    <a href="qr.html">
-      🔳 Jana QR
-    </a>
-
-    <a href="report.html">
-      📄 Laporan
-    </a>
-
-    <a href="history.html">
-      🗂️ Rekod
-    </a>
-
-    <a href="stock.html">
-      📦 Stok
-    </a>
-
-    <button
-      type="button"
-      onclick="loadDashboard()"
-    >
-      🔄 Refresh
-    </button>
-
-  </nav>
+  }
 
 
-  <main class="container">
-
-    <div
-      id="dashboardStatus"
-      class="status"
-    >
-      ⏳ Mengambil data dashboard...
-    </div>
+  const summary =
+    dashboardData.summary || {};
 
 
-    <div class="card">
-
-      <strong>
-        📅 Tarikh:
-      </strong>
-
-      <span id="reportDate">
-        -
-      </span>
-
-      &nbsp;&nbsp;
-
-      <strong>
-        🕐 Kemaskini:
-      </strong>
-
-      <span id="lastUpdate">
-        -
-      </span>
-
-    </div>
+  setText(
+    'reportDate',
+    dashboardData.date || '-'
+  );
 
 
-    <section class="summary-grid">
+  setText(
+    'lastUpdate',
+    dashboardData.timestamp || '-'
+  );
 
-      <div class="summary-card">
 
-        <div class="summary-icon">
-          👨‍🎓
-        </div>
+  setText(
+    'totalActive',
+    summary.totalActive || 0
+  );
 
-        <div class="summary-label">
-          Jumlah Murid Aktif
-        </div>
 
-        <div
-          id="totalActive"
-          class="summary-value"
+  setText(
+    'totalTaken',
+    summary.distributed || 0
+  );
+
+
+  setText(
+    'totalPending',
+    summary.pending || 0
+  );
+
+
+  const percentage =
+    Number(
+      summary.percentage || 0
+    );
+
+
+  setText(
+    'percentage',
+    percentage + '%'
+  );
+
+
+  const progressBar =
+    document.getElementById(
+      'progressBar'
+    );
+
+
+  if (
+    progressBar
+  ) {
+
+    progressBar.style.width =
+      percentage + '%';
+
+  }
+
+
+  setText(
+    'progressText',
+    percentage + '%'
+  );
+
+
+  renderClassTable();
+
+
+  populateClassFilters();
+
+
+  renderTakenStudents();
+
+
+  renderPendingStudents();
+
+}
+
+
+/* =========================================================
+   STATISTIK MENGIKUT KELAS
+========================================================= */
+
+function renderClassTable() {
+
+  const tbody =
+    document.getElementById(
+      'classTable'
+    );
+
+
+  if (
+    !tbody
+  ) {
+
+    return;
+
+  }
+
+
+  const data =
+    dashboardData &&
+    dashboardData.byClass
+      ?
+      dashboardData.byClass
+      :
+      [];
+
+
+  if (
+    !data.length
+  ) {
+
+    tbody.innerHTML =
+      `
+      <tr>
+        <td
+          colspan="5"
+          class="center"
         >
-          0
-        </div>
+          Tiada data kelas.
+        </td>
+      </tr>
+      `;
 
-      </div>
+    return;
 
+  }
 
-      <div class="summary-card success">
 
-        <div class="summary-icon">
-          ✅
-        </div>
+  tbody.innerHTML =
+    data
+      .map(
+        function (item) {
 
-        <div class="summary-label">
-          Sudah Ambil Susu
-        </div>
-
-        <div
-          id="totalTaken"
-          class="summary-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="summary-card warning">
-
-        <div class="summary-icon">
-          ⏳
-        </div>
-
-        <div class="summary-label">
-          Belum Ambil Susu
-        </div>
-
-        <div
-          id="totalPending"
-          class="summary-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="summary-card percent">
-
-        <div class="summary-icon">
-          📈
-        </div>
-
-        <div class="summary-label">
-          Peratus Pengagihan
-        </div>
-
-        <div
-          id="percentage"
-          class="summary-value"
-        >
-          0%
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <section class="progress-card">
-
-      <h2>
-        📈 Kemajuan Pengagihan Hari Ini
-      </h2>
-
-      <div class="progress-track">
-
-        <div
-          id="progressBar"
-          class="progress-bar"
-        ></div>
-
-      </div>
-
-      <div
-        id="progressText"
-        class="progress-text"
-      >
-        0%
-      </div>
-
-    </section>
-
-
-    <section class="stock-panel">
-
-      <h2>
-        📦 Status Stok Susu
-      </h2>
-
-      <div class="stock-grid">
-
-        <div class="stock-card">
-
-          <div>
-            📦
-          </div>
-
-          <div class="stock-label">
-            Baki Stok Semasa
-          </div>
-
-          <div
-            id="dashStockBalance"
-            class="stock-value"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div class="stock-card in">
-
-          <div>
-            ➕
-          </div>
-
-          <div class="stock-label">
-            Jumlah Stok Masuk
-          </div>
-
-          <div
-            id="dashStockIn"
-            class="stock-value"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div class="stock-card out">
-
-          <div>
-            🥛
-          </div>
-
-          <div class="stock-label">
-            Agihan Hari Ini
-          </div>
-
-          <div
-            id="dashStockTodayOut"
-            class="stock-value"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div
-          id="dashStockStatusCard"
-          class="stock-card"
-        >
-
-          <div>
-            ⚠️
-          </div>
-
-          <div class="stock-label">
-            Status Stok
-          </div>
-
-          <div
-            id="dashStockStatus"
-            class="stock-status-text"
-          >
-            Memeriksa...
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <div class="action-row">
-
-      <button
-        class="action-btn"
-        onclick="loadDashboard()"
-      >
-        🔄 Refresh Data
-      </button>
-
-      <button
-        class="action-btn secondary"
-        onclick="window.print()"
-      >
-        🖨️ Cetak / Simpan PDF
-      </button>
-
-    </div>
-
-
-    <section class="card">
-
-      <h2>
-        🏫 Statistik Mengikut Kelas
-      </h2>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
+          return `
             <tr>
-              <th>Kelas</th>
-              <th class="center">Jumlah</th>
-              <th class="center">Sudah Ambil</th>
-              <th class="center">Belum Ambil</th>
-              <th class="center">Peratus</th>
-            </tr>
-          </thead>
 
-          <tbody id="classTable">
-
-            <tr>
-              <td colspan="5" class="center">
-                Memuatkan data...
+              <td>
+                <strong>
+                  ${esc(
+                    item.className
+                  )}
+                </strong>
               </td>
-            </tr>
 
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-    <section class="card">
-
-      <h2>
-        ✅ Murid Sudah Ambil Susu
-      </h2>
-
-      <div class="filters">
-
-        <input
-          type="text"
-          id="takenSearch"
-          placeholder="Cari nama atau kelas..."
-          oninput="renderTakenStudents()"
-        >
-
-        <select
-          id="takenClassFilter"
-          onchange="renderTakenStudents()"
-        >
-          <option value="">
-            Semua Kelas
-          </option>
-        </select>
-
-      </div>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-            <tr>
-              <th>Bil.</th>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>ID Murid</th>
-              <th>Masa</th>
-              <th>Guru</th>
-            </tr>
-          </thead>
-
-          <tbody id="takenTable">
-
-            <tr>
-              <td colspan="6" class="center">
-                Memuatkan data...
+              <td class="center">
+                ${esc(
+                  item.total
+                )}
               </td>
-            </tr>
 
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-    <section class="card">
-
-      <h2>
-        ⏳ Murid Belum Ambil Susu
-      </h2>
-
-      <div class="filters">
-
-        <input
-          type="text"
-          id="pendingSearch"
-          placeholder="Cari nama atau kelas..."
-          oninput="renderPendingStudents()"
-        >
-
-        <select
-          id="pendingClassFilter"
-          onchange="renderPendingStudents()"
-        >
-          <option value="">
-            Semua Kelas
-          </option>
-        </select>
-
-      </div>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-            <tr>
-              <th>Bil.</th>
-              <th>Nama</th>
-              <th>Kelas</th>
-              <th>ID Murid</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody id="pendingTable">
-
-            <tr>
-              <td colspan="5" class="center">
-                Memuatkan data...
+              <td class="center">
+                ${esc(
+                  item.taken
+                )}
               </td>
+
+              <td class="center">
+                ${esc(
+                  item.pending
+                )}
+              </td>
+
+              <td class="center">
+
+                <span class="badge ${
+                  item.percentage >= 100
+                    ?
+                    'badge-success'
+                    :
+                    'badge-warning'
+                }">
+
+                  ${esc(
+                    item.percentage
+                  )}%
+
+                </span>
+
+              </td>
+
             </tr>
+          `;
 
-          </tbody>
+        }
+      )
+      .join('');
 
-        </table>
-
-      </div>
-
-    </section>
-
-  </main>
+}
 
 
-  <footer>
-    Sistem Pengagihan Susu QR SK Tun Fuad 2026
-    <br>
-    SKTF, Together We RISE
-  </footer>
+/* =========================================================
+   SENARAI KELAS UNTUK FILTER
+========================================================= */
+
+function populateClassFilters() {
+
+  const classes =
+    (
+      dashboardData &&
+      dashboardData.byClass
+        ?
+        dashboardData.byClass
+        :
+        []
+    )
+    .map(
+      function (item) {
+
+        return item.className;
+
+      }
+    );
 
 
-  <script src="dashboard-stock.js"></script>
-  <script src="dashboard.js"></script>
+  const taken =
+    document.getElementById(
+      'takenClassFilter'
+    );
 
-</body>
 
-</html>
+  const pending =
+    document.getElementById(
+      'pendingClassFilter'
+    );
+
+
+  populateSelect(
+    taken,
+    classes
+  );
+
+
+  populateSelect(
+    pending,
+    classes
+  );
+
+}
+
+
+function populateSelect(
+  select,
+  classes
+) {
+
+  if (
+    !select
+  ) {
+
+    return;
+
+  }
+
+
+  const current =
+    select.value;
+
+
+  select.innerHTML =
+    '<option value="">Semua Kelas</option>';
+
+
+  classes.forEach(
+    function (className) {
+
+      const option =
+        document.createElement(
+          'option'
+        );
+
+
+      option.value =
+        className;
+
+
+      option.textContent =
+        className;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  if (
+    classes.includes(
+      current
+    )
+  ) {
+
+    select.value =
+      current;
+
+  }
+
+}
+
+
+/* =========================================================
+   MURID SUDAH AMBIL SUSU
+========================================================= */
+
+function renderTakenStudents() {
+
+  const tbody =
+    document.getElementById(
+      'takenTable'
+    );
+
+
+  if (
+    !tbody
+  ) {
+
+    return;
+
+  }
+
+
+  const searchElement =
+    document.getElementById(
+      'takenSearch'
+    );
+
+
+  const classElement =
+    document.getElementById(
+      'takenClassFilter'
+    );
+
+
+  const search =
+    searchElement
+      ?
+      searchElement.value
+        .trim()
+        .toLowerCase()
+      :
+      '';
+
+
+  const className =
+    classElement
+      ?
+      classElement.value
+      :
+      '';
+
+
+  const data =
+    (
+      dashboardData &&
+      dashboardData
+        .distributedStudents
+        ?
+        dashboardData
+          .distributedStudents
+        :
+        []
+    )
+    .filter(
+      function (item) {
+
+        const text =
+          (
+            String(
+              item.name || ''
+            ) +
+            ' ' +
+            String(
+              item.className || ''
+            )
+          )
+          .toLowerCase();
+
+
+        return (
+
+          (
+            !search ||
+            text.includes(
+              search
+            )
+          )
+
+          &&
+
+          (
+            !className ||
+            item.className ===
+            className
+          )
+
+        );
+
+      }
+    );
+
+
+  if (
+    !data.length
+  ) {
+
+    tbody.innerHTML =
+      `
+      <tr>
+        <td
+          colspan="6"
+          class="center"
+        >
+          Tiada murid direkodkan.
+        </td>
+      </tr>
+      `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+    data
+      .map(
+        function (
+          item,
+          index
+        ) {
+
+          return `
+            <tr>
+
+              <td>
+                ${index + 1}
+              </td>
+
+              <td>
+                <strong>
+                  ${esc(
+                    item.name
+                  )}
+                </strong>
+              </td>
+
+              <td>
+                ${esc(
+                  item.className
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  item.studentId
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  item.time
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  item.teacher || '-'
+                )}
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+/* =========================================================
+   MURID BELUM AMBIL
+========================================================= */
+
+function renderPendingStudents() {
+
+  const tbody =
+    document.getElementById(
+      'pendingTable'
+    );
+
+
+  if (
+    !tbody
+  ) {
+
+    return;
+
+  }
+
+
+  const searchElement =
+    document.getElementById(
+      'pendingSearch'
+    );
+
+
+  const classElement =
+    document.getElementById(
+      'pendingClassFilter'
+    );
+
+
+  const search =
+    searchElement
+      ?
+      searchElement.value
+        .trim()
+        .toLowerCase()
+      :
+      '';
+
+
+  const className =
+    classElement
+      ?
+      classElement.value
+      :
+      '';
+
+
+  const data =
+    (
+      dashboardData &&
+      dashboardData
+        .pendingStudents
+        ?
+        dashboardData
+          .pendingStudents
+        :
+        []
+    )
+    .filter(
+      function (item) {
+
+        const text =
+          (
+            String(
+              item.name || ''
+            ) +
+            ' ' +
+            String(
+              item.className || ''
+            )
+          )
+          .toLowerCase();
+
+
+        return (
+
+          (
+            !search ||
+            text.includes(
+              search
+            )
+          )
+
+          &&
+
+          (
+            !className ||
+            item.className ===
+            className
+          )
+
+        );
+
+      }
+    );
+
+
+  if (
+    !data.length
+  ) {
+
+    tbody.innerHTML =
+      `
+      <tr>
+
+        <td
+          colspan="5"
+          class="center"
+        >
+          Tiada murid belum ambil susu.
+        </td>
+
+      </tr>
+      `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+    data
+      .map(
+        function (
+          item,
+          index
+        ) {
+
+          return `
+            <tr>
+
+              <td>
+                ${index + 1}
+              </td>
+
+              <td>
+                <strong>
+                  ${esc(
+                    item.name
+                  )}
+                </strong>
+              </td>
+
+              <td>
+                ${esc(
+                  item.className
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  item.studentId
+                )}
+              </td>
+
+              <td>
+
+                <span
+                  class="badge badge-warning"
+                >
+                  BELUM AMBIL
+                </span>
+
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+/* =========================================================
+   STATUS DASHBOARD
+========================================================= */
+
+function setDashboardStatus(
+  text
+) {
+
+  const element =
+    document.getElementById(
+      'dashboardStatus'
+    );
+
+
+  if (
+    element
+  ) {
+
+    element.textContent =
+      text;
+
+  }
+
+}
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+function setText(
+  id,
+  value
+) {
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if (
+    element
+  ) {
+
+    element.textContent =
+      value;
+
+  }
+
+}
+
+
+function esc(
+  value
+) {
+
+  return String(
+    value ?? ''
+  )
+
+  .replace(
+    /&/g,
+    '&amp;'
+  )
+
+  .replace(
+    /</g,
+    '&lt;'
+  )
+
+  .replace(
+    />/g,
+    '&gt;'
+  )
+
+  .replace(
+    /"/g,
+    '&quot;'
+  )
+
+  .replace(
+    /'/g,
+    '&#039;'
+  );
+
+}
