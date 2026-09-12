@@ -121,6 +121,35 @@
       color: #92400e;
     }
 
+    .smart-stock-alert {
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 2px solid #bfdbfe;
+    }
+
+    .smart-stock-alert.normal {
+      background: #f0fdf4;
+      color: #166534;
+      border-color: #86efac;
+    }
+
+    .smart-stock-alert.low {
+      background: #fffbeb;
+      color: #92400e;
+      border-color: #fcd34d;
+    }
+
+    .smart-stock-alert.empty {
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #fca5a5;
+    }
+
+
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -492,6 +521,14 @@
     class="mode"
   >
     Memeriksa mod penjejakan...
+  </div>
+
+
+  <div
+    id="smartStockAlert"
+    class="smart-stock-alert"
+  >
+    Memeriksa status stok...
   </div>
 
 
