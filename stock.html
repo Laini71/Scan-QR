@@ -150,6 +150,44 @@
     }
 
 
+    .expiry-alert {
+      margin-bottom: 20px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+    }
+
+    .expiry-alert h2 {
+      margin: 0 0 10px;
+      color: #0d47a1;
+      font-size: 20px;
+    }
+
+    .expiry-alert.ok {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .expiry-alert.warning {
+      background: #fffbeb;
+      border-color: #fcd34d;
+      color: #92400e;
+    }
+
+    .expiry-alert.danger {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    .expiry-list {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -536,6 +574,27 @@
   </div>
 
 
+  <section
+    id="expiryAlertBox"
+    class="expiry-alert"
+  >
+
+    <h2>
+      📅 Pemantauan Tarikh Luput
+    </h2>
+
+    <div id="expiryAlertText">
+      Memeriksa tarikh luput stok...
+    </div>
+
+    <ul
+      id="expiryAlertList"
+      class="expiry-list"
+    ></ul>
+
+  </section>
+
+
   <section class="test-box">
 
     <h2>
@@ -857,6 +916,7 @@
             <th>Jumlah</th>
             <th>Baki</th>
             <th>Batch</th>
+            <th>Tarikh Luput</th>
             <th>Guru</th>
             <th>Catatan</th>
           </tr>
@@ -867,7 +927,7 @@
 
           <tr>
             <td
-              colspan="9"
+              colspan="10"
               class="center"
             >
               Memuatkan transaksi...
