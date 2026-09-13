@@ -11,9 +11,7 @@ let stockData = null;
 window.addEventListener(
   'load',
   function () {
-
     loadStock();
-
   }
 );
 
@@ -35,12 +33,10 @@ function callApi(params) {
           Math.random() * 100000
         );
 
-
       const script =
         document.createElement(
           'script'
         );
-
 
       const timer =
         setTimeout(
@@ -58,7 +54,6 @@ function callApi(params) {
           15000
         );
 
-
       window[callback] =
         function (result) {
 
@@ -70,18 +65,12 @@ function callApi(params) {
 
         };
 
-
       function cleanup() {
 
         try {
-
-          delete window[
-            callback
-          ];
-
+          delete window[callback];
         }
         catch (e) {}
-
 
         if (
           script.parentNode
@@ -96,10 +85,8 @@ function callApi(params) {
 
       }
 
-
       const query =
         new URLSearchParams();
-
 
       Object.keys(params)
         .forEach(
@@ -113,24 +100,20 @@ function callApi(params) {
           }
         );
 
-
       query.set(
         'callback',
         callback
       );
-
 
       query.set(
         '_',
         Date.now()
       );
 
-
       script.src =
         APPS_SCRIPT_URL +
         '?' +
         query.toString();
-
 
       script.onerror =
         function () {
@@ -139,7 +122,6 @@ function callApi(params) {
 
           cleanup();
 
-
           reject(
             new Error(
               'Gagal menghubungi server.'
@@ -147,7 +129,6 @@ function callApi(params) {
           );
 
         };
-
 
       document.body
         .appendChild(
@@ -170,7 +151,6 @@ async function loadStock() {
     '⏳ Mengambil data stok...'
   );
 
-
   try {
 
     const result =
@@ -178,7 +158,6 @@ async function loadStock() {
         action:
           'stockDashboard'
       });
-
 
     if (
       !result ||
@@ -196,13 +175,10 @@ async function loadStock() {
 
     }
 
-
     stockData =
       result;
 
-
     renderStock();
-
 
     setStatus(
       '✅ Data stok berjaya dimuatkan.'
@@ -214,7 +190,6 @@ async function loadStock() {
     console.error(
       error
     );
-
 
     setStatus(
       '❌ ' +
@@ -236,51 +211,48 @@ function renderStock() {
   if (
     !stockData
   ) {
-
     return;
-
   }
-
 
   const summary =
     stockData.summary || {};
-
 
   setText(
     'currentBalance',
     summary.currentBalance || 0
   );
 
-
   setText(
     'totalIn',
     summary.totalIn || 0
   );
-
 
   setText(
     'totalOut',
     summary.totalOut || 0
   );
 
-
   setText(
     'todayOut',
     summary.todayOut || 0
   );
-
 
   setText(
     'generatedAt',
     stockData.generatedAt || '-'
   );
 
-
   const mode =
     document.getElementById(
       'trackingMode'
     );
 
+  const usableBalance =
+    Number(
+      summary.usableBalance ??
+      summary.currentBalance ??
+      0
+    );
 
   if (
     mode
@@ -290,23 +262,23 @@ function renderStock() {
       stockData.trackingActive
     ) {
 
-
       if (
-        Number(
-          summary.currentBalance || 0
-        ) <= 0
+        usableBalance <= 0
       ) {
 
         mode.textContent =
-          '🚫 STOK HABIS — Pengagihan akan disekat.';
-
+          Number(
+            summary.expiredBalance || 0
+          ) > 0
+            ?
+            '🚫 TIADA STOK BOLEH GUNA — stok yang tinggal telah luput.'
+            :
+            '🚫 STOK HABIS — Pengagihan akan disekat.';
 
         mode.className =
           'mode low';
 
       }
-
-
       else if (
         summary.lowStock
       ) {
@@ -314,18 +286,14 @@ function renderStock() {
         mode.textContent =
           '⚠️ PENJEJAKAN AKTIF — STOK RENDAH';
 
-
         mode.className =
           'mode low';
 
       }
-
-
       else {
 
         mode.textContent =
           '✅ PENJEJAKAN STOK AKTIF';
-
 
         mode.className =
           'mode active';
@@ -333,13 +301,10 @@ function renderStock() {
       }
 
     }
-
-
     else {
 
       mode.textContent =
         'ℹ️ PENJEJAKAN BELUM AKTIF — tambah stok pertama untuk mula menjejak.';
-
 
       mode.className =
         'mode';
@@ -348,15 +313,14 @@ function renderStock() {
 
   }
 
-
   renderSmartStockAlert(
     summary,
     stockData
   );
 
+  renderFefoPanel();
 
   renderExpiryAlerts();
-
 
   renderTransactions();
 
@@ -377,15 +341,9 @@ function renderSmartStockAlert(
       'smartStockAlert'
     );
 
-
-  if (
-    !box
-  ) {
-
+  if (!box) {
     return;
-
   }
-
 
   if (
     !data ||
@@ -395,38 +353,54 @@ function renderSmartStockAlert(
     box.className =
       'smart-stock-alert';
 
-
     box.textContent =
       'ℹ️ Penjejakan stok belum aktif. Tambah stok pertama untuk mula menjejak.';
 
-
     return;
-
   }
 
-
-  const balance =
+  const physicalBalance =
     Number(
       summary.currentBalance || 0
     );
 
+  const usableBalance =
+    Number(
+      summary.usableBalance ??
+      physicalBalance
+    );
+
+  const expiredBalance =
+    Number(
+      summary.expiredBalance || 0
+    );
 
   if (
-    balance <= 0
+    usableBalance <= 0
   ) {
 
     box.className =
       'smart-stock-alert empty';
 
+    if (
+      expiredBalance > 0
+    ) {
 
-    box.textContent =
-      '🚫 STOK SUSU HABIS — Pengagihan telah disekat. Tambah stok susu dengan segera.';
+      box.textContent =
+        '🚫 TIADA STOK BOLEH GUNA — ' +
+        expiredBalance +
+        ' unit yang tinggal telah luput. Asingkan stok luput dan tambah stok baharu.';
 
+    }
+    else {
+
+      box.textContent =
+        '🚫 STOK SUSU HABIS — Pengagihan telah disekat. Tambah stok susu dengan segera.';
+
+    }
 
     return;
-
   }
-
 
   if (
     summary.lowStock
@@ -435,26 +409,373 @@ function renderSmartStockAlert(
     box.className =
       'smart-stock-alert low';
 
-
     box.textContent =
-      '⚠️ STOK RENDAH — Baki tinggal ' +
-      balance +
+      '⚠️ STOK RENDAH — Baki boleh guna tinggal ' +
+      usableBalance +
       ' unit. Sila rancang penambahan stok.';
 
-
     return;
-
   }
-
 
   box.className =
     'smart-stock-alert normal';
 
-
   box.textContent =
-    '✅ STOK MENCUKUPI — Baki semasa ' +
-    balance +
+    '✅ STOK MENCUKUPI — Baki boleh guna ' +
+    usableBalance +
     ' unit.';
+
+}
+
+
+/* =========================================================
+   FEFO — FIRST EXPIRED, FIRST OUT
+========================================================= */
+
+function renderFefoPanel() {
+
+  ensureFefoPanel_();
+
+  const box =
+    document.getElementById(
+      'fefoPanel'
+    );
+
+  if (!box) {
+    return;
+  }
+
+  const fefo =
+    stockData &&
+    stockData.fefo
+      ?
+      stockData.fefo
+      :
+      null;
+
+  const summary =
+    stockData &&
+    stockData.summary
+      ?
+      stockData.summary
+      :
+      {};
+
+  const usableBalance =
+    Number(
+      summary.usableBalance ??
+      summary.currentBalance ??
+      0
+    );
+
+  const expiredBalance =
+    Number(
+      summary.expiredBalance || 0
+    );
+
+  if (
+    !stockData ||
+    !stockData.trackingActive
+  ) {
+
+    box.className =
+      'fefo-panel';
+
+    box.innerHTML =
+      '<h2>🥛 FEFO — Gunakan Dahulu</h2>' +
+      '<div class="fefo-message">' +
+      'ℹ️ Penjejakan stok belum aktif.' +
+      '</div>';
+
+    return;
+  }
+
+  if (
+    !fefo ||
+    usableBalance <= 0
+  ) {
+
+    box.className =
+      'fefo-panel danger';
+
+    box.innerHTML =
+      '<h2>🥛 FEFO — Gunakan Dahulu</h2>' +
+      '<div class="fefo-message">' +
+      (
+        expiredBalance > 0
+          ?
+          '🚫 Tiada stok selamat untuk diagihkan. ' +
+          expiredBalance +
+          ' unit yang tinggal telah luput.'
+          :
+          '🚫 Tiada stok yang boleh diagihkan.'
+      ) +
+      '</div>';
+
+    return;
+  }
+
+  const expiryText =
+    fefo.expiryDate
+      ?
+      (
+        fefo.displayExpiryDate ||
+        formatDateMs(
+          fefo.expiryDate
+        )
+      )
+      :
+      'Tiada tarikh luput';
+
+  const daysText =
+    fefo.daysToExpiry === null ||
+    fefo.daysToExpiry === undefined
+      ?
+      ''
+      :
+      (
+        ' • ' +
+        fefo.daysToExpiry +
+        ' hari lagi'
+      );
+
+  box.className =
+    fefo.daysToExpiry !== null &&
+    fefo.daysToExpiry <= 30
+      ?
+      'fefo-panel warning'
+      :
+      'fefo-panel active';
+
+  box.innerHTML =
+    '<h2>🥛 FEFO — GUNAKAN DAHULU</h2>' +
+
+    '<div class="fefo-grid">' +
+
+      '<div class="fefo-item">' +
+        '<span>Batch</span>' +
+        '<strong>' +
+          esc(
+            fefo.batch || '-'
+          ) +
+        '</strong>' +
+      '</div>' +
+
+      '<div class="fefo-item">' +
+        '<span>Tarikh Luput</span>' +
+        '<strong>' +
+          esc(
+            expiryText
+          ) +
+        '</strong>' +
+      '</div>' +
+
+      '<div class="fefo-item">' +
+        '<span>Baki Batch</span>' +
+        '<strong>' +
+          esc(
+            fefo.remaining || 0
+          ) +
+          ' unit' +
+        '</strong>' +
+      '</div>' +
+
+      '<div class="fefo-item">' +
+        '<span>Status</span>' +
+        '<strong>' +
+          (
+            fefo.expiryDate
+              ?
+              'Guna terlebih dahulu' +
+              esc(
+                daysText
+              )
+              :
+              'Guna selepas batch bertarikh luput'
+          ) +
+        '</strong>' +
+      '</div>' +
+
+    '</div>';
+
+}
+
+
+/* =========================================================
+   CIPTA PANEL FEFO SECARA AUTOMATIK
+========================================================= */
+
+function ensureFefoPanel_() {
+
+  if (
+    document.getElementById(
+      'fefoPanel'
+    )
+  ) {
+    return;
+  }
+
+  if (
+    !document.getElementById(
+      'fefoDynamicStyle'
+    )
+  ) {
+
+    const style =
+      document.createElement(
+        'style'
+      );
+
+    style.id =
+      'fefoDynamicStyle';
+
+    style.textContent =
+      `
+      .fefo-panel {
+        margin-bottom: 20px;
+        padding: 18px;
+        border-radius: 16px;
+        background: #eff6ff;
+        border: 2px solid #bfdbfe;
+        color: #1e3a8a;
+      }
+
+      .fefo-panel h2 {
+        margin: 0 0 14px;
+        color: inherit;
+        font-size: 21px;
+      }
+
+      .fefo-panel.active {
+        background: #f0fdf4;
+        border-color: #86efac;
+        color: #166534;
+      }
+
+      .fefo-panel.warning {
+        background: #fffbeb;
+        border-color: #fcd34d;
+        color: #92400e;
+      }
+
+      .fefo-panel.danger {
+        background: #fef2f2;
+        border-color: #fca5a5;
+        color: #991b1b;
+      }
+
+      .fefo-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .fefo-item {
+        background: rgba(255,255,255,.72);
+        border-radius: 12px;
+        padding: 13px;
+      }
+
+      .fefo-item span {
+        display: block;
+        font-size: 12px;
+        opacity: .78;
+        margin-bottom: 5px;
+      }
+
+      .fefo-item strong {
+        display: block;
+        font-size: 16px;
+      }
+
+      .fefo-message {
+        font-weight: 700;
+      }
+
+      @media (max-width: 850px) {
+        .fefo-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 550px) {
+        .fefo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      `;
+
+    document.head
+      .appendChild(
+        style
+      );
+
+  }
+
+  const panel =
+    document.createElement(
+      'section'
+    );
+
+  panel.id =
+    'fefoPanel';
+
+  panel.className =
+    'fefo-panel';
+
+  const expiryBox =
+    document.getElementById(
+      'expiryAlertBox'
+    );
+
+  const smartBox =
+    document.getElementById(
+      'smartStockAlert'
+    );
+
+  if (
+    expiryBox &&
+    expiryBox.parentNode
+  ) {
+
+    expiryBox.parentNode
+      .insertBefore(
+        panel,
+        expiryBox
+      );
+
+  }
+  else if (
+    smartBox &&
+    smartBox.parentNode
+  ) {
+
+    smartBox.parentNode
+      .insertBefore(
+        panel,
+        smartBox.nextSibling
+      );
+
+  }
+  else {
+
+    const main =
+      document.querySelector(
+        'main'
+      );
+
+    if (
+      main
+    ) {
+
+      main.insertBefore(
+        panel,
+        main.firstChild
+      );
+
+    }
+
+  }
 
 }
 
@@ -480,115 +801,62 @@ function renderExpiryAlerts() {
       'expiryAlertList'
     );
 
-
   if (
     !box ||
     !text ||
     !list
   ) {
-
     return;
-
   }
 
-
-  const transactions =
+  const batches =
     stockData &&
-    stockData.transactions
+    Array.isArray(
+      stockData.batches
+    )
       ?
-      stockData.transactions
+      stockData.batches
+          .filter(
+            function (item) {
+
+              return (
+                Number(
+                  item.remaining || 0
+                ) > 0
+                &&
+                item.expiryDate
+              );
+
+            }
+          )
       :
       [];
-
-
-  const batches =
-    transactions
-
-      .filter(
-        function (item) {
-
-          return (
-            String(
-              item.type || ''
-            )
-            .toUpperCase() ===
-            'MASUK'
-            &&
-            item.expiryDate
-          );
-
-        }
-      )
-
-      .map(
-        function (item) {
-
-          const days =
-            daysUntilExpiry(
-              item.expiryDate
-            );
-
-
-          return {
-
-            batch:
-              item.batch || '-',
-
-            expiryDate:
-              item.expiryDate,
-
-            displayExpiryDate:
-              item.displayExpiryDate ||
-              formatDateMs(
-                item.expiryDate
-              ),
-
-            days:
-              days,
-
-            quantity:
-              item.quantity || 0
-
-          };
-
-        }
-      )
-
-      .sort(
-        function (a, b) {
-
-          return a.days - b.days;
-
-        }
-      );
-
 
   const expired =
     batches.filter(
       function (item) {
-
-        return item.days < 0;
-
+        return item.expired === true;
       }
     );
-
 
   const nearExpiry =
     batches.filter(
       function (item) {
 
         return (
-          item.days >= 0 &&
-          item.days <= 30
+          item.expired !== true &&
+          Number(
+            item.daysToExpiry
+          ) >= 0 &&
+          Number(
+            item.daysToExpiry
+          ) <= 30
         );
 
       }
     );
 
-
-  list.innerHTML =
-    '';
-
+  list.innerHTML = '';
 
   if (
     expired.length
@@ -597,12 +865,10 @@ function renderExpiryAlerts() {
     box.className =
       'expiry-alert danger';
 
-
     text.innerHTML =
       '🚫 <strong>AMARAN:</strong> ' +
       expired.length +
-      ' batch telah melepasi tarikh luput.';
-
+      ' batch aktif telah melepasi tarikh luput.';
 
     expired.forEach(
       function (item) {
@@ -612,18 +878,18 @@ function renderExpiryAlerts() {
             'li'
           );
 
-
         li.textContent =
           'Batch ' +
           item.batch +
-          ' — luput ' +
-          item.displayExpiryDate +
-          ' (' +
-          Math.abs(
-            item.days
-          ) +
-          ' hari lepas)';
-
+          ' — baki ' +
+          item.remaining +
+          ' unit — luput ' +
+          (
+            item.displayExpiryDate ||
+            formatDateMs(
+              item.expiryDate
+            )
+          );
 
         list.appendChild(
           li
@@ -631,7 +897,6 @@ function renderExpiryAlerts() {
 
       }
     );
-
 
     nearExpiry.forEach(
       function (item) {
@@ -641,16 +906,21 @@ function renderExpiryAlerts() {
             'li'
           );
 
-
         li.textContent =
           'Batch ' +
           item.batch +
-          ' — akan luput ' +
-          item.displayExpiryDate +
+          ' — baki ' +
+          item.remaining +
+          ' unit — akan luput ' +
+          (
+            item.displayExpiryDate ||
+            formatDateMs(
+              item.expiryDate
+            )
+          ) +
           ' (' +
-          item.days +
+          item.daysToExpiry +
           ' hari lagi)';
-
 
         list.appendChild(
           li
@@ -659,11 +929,8 @@ function renderExpiryAlerts() {
       }
     );
 
-
     return;
-
   }
-
 
   if (
     nearExpiry.length
@@ -672,12 +939,10 @@ function renderExpiryAlerts() {
     box.className =
       'expiry-alert warning';
 
-
     text.innerHTML =
       '⚠️ <strong>STOK HAMPIR LUPUT:</strong> ' +
       nearExpiry.length +
-      ' batch akan luput dalam tempoh 30 hari.';
-
+      ' batch aktif akan luput dalam tempoh 30 hari.';
 
     nearExpiry.forEach(
       function (item) {
@@ -687,16 +952,21 @@ function renderExpiryAlerts() {
             'li'
           );
 
-
         li.textContent =
           'Batch ' +
           item.batch +
-          ' — ' +
-          item.displayExpiryDate +
+          ' — baki ' +
+          item.remaining +
+          ' unit — ' +
+          (
+            item.displayExpiryDate ||
+            formatDateMs(
+              item.expiryDate
+            )
+          ) +
           ' (' +
-          item.days +
+          item.daysToExpiry +
           ' hari lagi)';
-
 
         list.appendChild(
           li
@@ -705,22 +975,18 @@ function renderExpiryAlerts() {
       }
     );
 
-
     return;
-
   }
-
 
   box.className =
     'expiry-alert ok';
 
-
   text.textContent =
     batches.length
       ?
-      '✅ Tiada batch yang akan luput dalam 30 hari.'
+      '✅ Tiada batch aktif yang akan luput dalam 30 hari.'
       :
-      'ℹ️ Tiada tarikh luput direkodkan untuk stok semasa.';
+      'ℹ️ Tiada batch aktif bertarikh luput untuk dipantau.';
 
 }
 
@@ -739,15 +1005,11 @@ function daysUntilExpiry(
     )
     .split('-');
 
-
   if (
     parts.length !== 3
   ) {
-
     return 999999;
-
   }
-
 
   const expiry =
     new Date(
@@ -759,15 +1021,12 @@ function daysUntilExpiry(
       59
     );
 
-
   const now =
     new Date();
-
 
   const diff =
     expiry.getTime() -
     now.getTime();
-
 
   return Math.ceil(
     diff /
@@ -783,7 +1042,7 @@ function daysUntilExpiry(
 
 
 /* =========================================================
-   FORMAT TARIKH MS
+   FORMAT TARIKH
 ========================================================= */
 
 function formatDateMs(
@@ -796,15 +1055,11 @@ function formatDateMs(
     )
     .split('-');
 
-
   if (
     parts.length !== 3
   ) {
-
     return dateText || '-';
-
   }
-
 
   return (
     parts[2] +
@@ -832,7 +1087,6 @@ async function saveStockIn() {
         .value
     );
 
-
   const batch =
     document
       .getElementById(
@@ -841,14 +1095,12 @@ async function saveStockIn() {
       .value
       .trim();
 
-
   const expiryDate =
     document
       .getElementById(
         'expiryDate'
       )
       .value;
-
 
   const teacher =
     document
@@ -860,7 +1112,6 @@ async function saveStockIn() {
       ||
       'GURU SKTF';
 
-
   const reference =
     document
       .getElementById(
@@ -869,7 +1120,6 @@ async function saveStockIn() {
       .value
       .trim();
 
-
   const notes =
     document
       .getElementById(
@@ -877,7 +1127,6 @@ async function saveStockIn() {
       )
       .value
       .trim();
-
 
   if (
     !quantity ||
@@ -889,28 +1138,22 @@ async function saveStockIn() {
     );
 
     return;
-
   }
-
 
   const button =
     document.getElementById(
       'btnSaveStock'
     );
 
-
   button.disabled =
     true;
-
 
   button.textContent =
     '⏳ MENYIMPAN...';
 
-
   setStatus(
     '⏳ Menambah stok...'
   );
-
 
   try {
 
@@ -940,7 +1183,6 @@ async function saveStockIn() {
 
       });
 
-
     if (
       !result ||
       !result.success
@@ -957,7 +1199,6 @@ async function saveStockIn() {
 
     }
 
-
     alert(
       '✅ Stok berjaya ditambah.\n\n' +
       'Baki stok sekarang: ' +
@@ -965,9 +1206,7 @@ async function saveStockIn() {
       ' unit'
     );
 
-
     resetStockForm();
-
 
     await loadStock();
 
@@ -978,12 +1217,10 @@ async function saveStockIn() {
       error
     );
 
-
     setStatus(
       '❌ ' +
       error.message
     );
-
 
     alert(
       '❌ ' +
@@ -996,7 +1233,6 @@ async function saveStockIn() {
     button.disabled =
       false;
 
-
     button.textContent =
       '📦 SIMPAN STOK MASUK';
 
@@ -1006,7 +1242,7 @@ async function saveStockIn() {
 
 
 /* =========================================================
-   RESET BORANG STOK
+   RESET BORANG
 ========================================================= */
 
 function resetStockForm() {
@@ -1016,24 +1252,20 @@ function resetStockForm() {
     ''
   );
 
-
   setInputValue(
     'batch',
     ''
   );
-
 
   setInputValue(
     'expiryDate',
     ''
   );
 
-
   setInputValue(
     'reference',
     ''
   );
-
 
   setInputValue(
     'notes',
@@ -1054,12 +1286,10 @@ async function testOutOfStock() {
       'btnTestOutOfStock'
     );
 
-
   const box =
     document.getElementById(
       'testOutOfStockResult'
     );
-
 
   if (
     !button ||
@@ -1071,25 +1301,19 @@ async function testOutOfStock() {
     );
 
     return;
-
   }
-
 
   button.disabled =
     true;
 
-
   button.textContent =
     '⏳ MENGUJI...';
-
 
   box.className =
     'test-result show';
 
-
   box.innerHTML =
     '⏳ Sedang menjalankan simulasi baki stok 0...';
-
 
   try {
 
@@ -1098,7 +1322,6 @@ async function testOutOfStock() {
         action:
           'stockTestOutOfStock'
       });
-
 
     if (
       !result ||
@@ -1116,10 +1339,8 @@ async function testOutOfStock() {
 
     }
 
-
     const stock =
       result.stock || {};
-
 
     if (
       stock.status ===
@@ -1134,7 +1355,6 @@ async function testOutOfStock() {
 
       box.className =
         'test-result show blocked';
-
 
       box.innerHTML =
         '✅ <strong>UJIAN BERJAYA</strong>' +
@@ -1167,10 +1387,8 @@ async function testOutOfStock() {
       error
     );
 
-
     box.className =
       'test-result show blocked';
-
 
     box.innerHTML =
       '❌ Ujian gagal: ' +
@@ -1183,7 +1401,6 @@ async function testOutOfStock() {
 
     button.disabled =
       false;
-
 
     button.textContent =
       '🧪 UJI STOK HABIS';
@@ -1204,27 +1421,19 @@ function renderTransactions() {
       'transactionTable'
     );
 
-
-  if (
-    !tbody
-  ) {
-
+  if (!tbody) {
     return;
-
   }
-
 
   const searchElement =
     document.getElementById(
       'searchInput'
     );
 
-
   const typeElement =
     document.getElementById(
       'typeFilter'
     );
-
 
   const search =
     searchElement
@@ -1235,14 +1444,12 @@ function renderTransactions() {
       :
       '';
 
-
   const type =
     typeElement
       ?
       typeElement.value
       :
       '';
-
 
   const transactions =
     (
@@ -1253,7 +1460,6 @@ function renderTransactions() {
         :
         []
     );
-
 
   const data =
     transactions.filter(
@@ -1297,7 +1503,6 @@ function renderTransactions() {
           )
           .toLowerCase();
 
-
         return (
           (
             !search ||
@@ -1315,7 +1520,6 @@ function renderTransactions() {
       }
     );
 
-
   if (
     !data.length
   ) {
@@ -1332,11 +1536,8 @@ function renderTransactions() {
       </tr>
       `;
 
-
     return;
-
   }
-
 
   tbody.innerHTML =
     data
@@ -1354,7 +1555,6 @@ function renderTransactions() {
               :
               'badge out';
 
-
           const sign =
             item.type ===
               'MASUK'
@@ -1362,7 +1562,6 @@ function renderTransactions() {
               '+'
               :
               '-';
-
 
           return `
             <tr>
@@ -1458,14 +1657,11 @@ function setStatus(
       'stockStatus'
     );
 
-
   if (
     element
   ) {
-
     element.textContent =
       text;
-
   }
 
 }
@@ -1485,14 +1681,11 @@ function setText(
       id
     );
 
-
   if (
     element
   ) {
-
     element.textContent =
       value;
-
   }
 
 }
@@ -1508,14 +1701,11 @@ function setInputValue(
       id
     );
 
-
   if (
     element
   ) {
-
     element.value =
       value;
-
   }
 
 }
