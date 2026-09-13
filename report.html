@@ -1,867 +1,606 @@
 <!DOCTYPE html>
+
 <html lang="ms">
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <title>
-    Laporan Pengagihan Susu | SK Tun Fuad
-  </title>
+<title>
+  QR Murid SK Tun Fuad
+</title>
 
 
-  <style>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+</script>
 
-    * {
-      box-sizing: border-box;
-    }
 
+<style>
 
-    body {
+* {
+  box-sizing: border-box;
+}
 
-      margin: 0;
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+body {
 
-      background:
-        #f3f6fb;
+  margin: 0;
 
-      color:
-        #172033;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    }
+  background:
+    #f1f5f9;
 
+  color:
+    #172033;
 
-    /* ==========================================
-       HEADER
-    =========================================== */
+}
 
-    .header {
 
-      background:
-        linear-gradient(
-          135deg,
-          #0d47a1,
-          #1976d2
-        );
+/* HEADER */
 
-      color:
-        white;
+.header {
 
-      padding:
-        30px 18px;
+  background:
+    linear-gradient(
+      135deg,
+      #075985,
+      #0284c7
+    );
 
-      text-align:
-        center;
+  color:
+    white;
 
-    }
+  padding:
+    25px;
 
+}
 
-    .header-icon {
 
-      font-size:
-        48px;
+.header-inner {
 
-      margin-bottom:
-        5px;
+  max-width:
+    1200px;
 
-    }
+  margin:
+    auto;
 
+}
 
-    .header h1 {
 
-      margin:
-        0;
+.header h1 {
 
-      font-size:
-        30px;
+  margin:
+    0;
 
-    }
+}
 
 
-    .header p {
+.header p {
 
-      margin:
-        6px 0 0;
+  margin:
+    8px 0 0;
 
-    }
+}
 
 
-    /* ==========================================
-       MENU
-    =========================================== */
+/* MENU */
 
-    .menu {
+.qr-menu {
 
-      max-width:
-        1250px;
+  max-width:
+    1200px;
 
-      margin:
-        18px auto 0;
+  margin:
+    18px auto 0;
 
-      padding:
-        0 15px;
+  padding:
+    0 20px;
 
-      display:
-        grid;
+  display:
+    grid;
 
-      grid-template-columns:
-        repeat(8, 1fr);
+  grid-template-columns:
+    repeat(9, 1fr);
 
-      gap:
-        10px;
+  gap:
+    10px;
 
-    }
+}
 
 
-    .menu a,
-    .menu button {
+.qr-menu a,
+.qr-menu button {
 
-      border:
-        none;
+  border:
+    none;
 
-      text-decoration:
-        none;
+  text-decoration:
+    none;
 
-      background:
-        white;
+  background:
+    white;
 
-      color:
-        #0d47a1;
+  color:
+    #075985;
 
-      padding:
-        13px 8px;
+  padding:
+    13px 8px;
 
-      border-radius:
-        12px;
+  border-radius:
+    12px;
 
-      text-align:
-        center;
+  text-align:
+    center;
 
-      font-weight:
-        bold;
+  font-weight:
+    bold;
 
-      cursor:
-        pointer;
+  cursor:
+    pointer;
 
-      box-shadow:
-        0 3px 12px
-        rgba(0,0,0,.08);
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,.08);
 
-      font-size:
-        14px;
+  font-size:
+    14px;
 
-    }
+}
 
 
-    .menu a:hover,
-    .menu button:hover {
+.qr-menu a:hover,
+.qr-menu button:hover {
 
-      background:
-        #e3f2fd;
+  background:
+    #e0f2fe;
 
-    }
+}
 
 
-    .menu .active {
+.qr-menu .active {
 
-      background:
-        #1976d2;
+  background:
+    #0284c7;
 
-      color:
-        white;
+  color:
+    white;
 
-    }
+}
 
 
-    .menu .active:hover {
+.qr-menu .active:hover {
 
-      background:
-        #0d47a1;
+  background:
+    #0369a1;
 
-      color:
-        white;
+  color:
+    white;
 
-    }
+}
 
 
-    /* ==========================================
-       CONTAINER
-    =========================================== */
+/* CONTAINER */
 
-    .container {
+.container {
 
-      max-width:
-        1250px;
+  max-width:
+    1200px;
 
-      margin:
-        20px auto 50px;
+  margin:
+    auto;
 
-      padding:
-        0 15px;
+  padding:
+    20px;
 
-    }
+}
 
 
-    /* ==========================================
-       STATUS
-    =========================================== */
+/* TOOLBAR */
 
-    .status {
+.toolbar {
 
-      background:
-        white;
+  background:
+    white;
 
-      padding:
-        14px 18px;
+  padding:
+    18px;
 
-      border-radius:
-        12px;
+  border-radius:
+    18px;
 
-      margin-bottom:
-        18px;
+  margin-bottom:
+    20px;
 
-      font-weight:
-        bold;
+  box-shadow:
+    0 5px 20px
+    rgba(0,0,0,.08);
 
-      color:
-        #0d47a1;
+}
 
-      box-shadow:
-        0 3px 12px
-        rgba(0,0,0,.07);
 
-    }
+.toolbar-row {
 
+  display:
+    flex;
 
-    /* ==========================================
-       CARD
-    =========================================== */
+  flex-wrap:
+    wrap;
 
-    .card {
+  gap:
+    12px;
 
-      background:
-        white;
+  align-items:
+    center;
 
-      border-radius:
-        16px;
+}
 
-      padding:
-        20px;
 
-      margin-bottom:
-        20px;
+select,
+input {
 
-      box-shadow:
-        0 4px 18px
-        rgba(0,0,0,.08);
+  padding:
+    12px;
 
-    }
+  border:
+    1px solid #cbd5e1;
 
+  border-radius:
+    10px;
 
-    .card h2 {
+  font-size:
+    15px;
 
-      margin-top:
-        0;
+}
 
-      color:
-        #0d47a1;
 
-    }
+input {
 
+  flex:
+    1;
 
-    /* ==========================================
-       REPORT CONTROL
-    =========================================== */
+  min-width:
+    200px;
 
-    .report-control {
+}
 
-      display:
-        grid;
 
-      grid-template-columns:
-        1fr auto auto auto;
+/* BUTTON */
 
-      gap:
-        10px;
+button,
+.button-link {
 
-      align-items:
-        end;
+  border:
+    none;
 
-    }
+  padding:
+    12px 18px;
 
+  border-radius:
+    10px;
 
-    .form-group {
+  cursor:
+    pointer;
 
-      display:
-        flex;
+  font-weight:
+    bold;
 
-      flex-direction:
-        column;
+  text-decoration:
+    none;
 
-      gap:
-        6px;
+  display:
+    inline-block;
 
-    }
+}
 
 
-    .form-group label {
+.btn-print {
 
-      font-weight:
-        bold;
+  background:
+    #0f766e;
 
-      color:
-        #374151;
+  color:
+    white;
 
-    }
+}
 
 
-    .form-group input {
+/* STATUS */
 
-      width:
-        100%;
+.status {
 
-      padding:
-        12px;
+  margin-top:
+    15px;
 
-      border:
-        1px solid #d1d5db;
+  font-weight:
+    bold;
 
-      border-radius:
-        10px;
+}
 
-      font-size:
-        15px;
 
-    }
+/* QR GRID */
 
+#qrGrid {
 
-    /* ==========================================
-       BUTTONS
-    =========================================== */
+  display:
+    grid;
 
-    .btn {
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(
+        230px,
+        1fr
+      )
+    );
 
-      border:
-        none;
+  gap:
+    18px;
 
-      padding:
-        12px 18px;
+}
 
-      border-radius:
-        10px;
 
-      font-weight:
-        bold;
+/* QR CARD */
 
-      cursor:
-        pointer;
+.qr-card {
 
-      color:
-        white;
+  background:
+    white;
 
-      background:
-        #1976d2;
+  border:
+    2px solid #e2e8f0;
 
-      font-size:
-        14px;
+  border-radius:
+    18px;
 
-    }
+  padding:
+    18px;
 
+  text-align:
+    center;
 
-    .btn.today {
+  page-break-inside:
+    avoid;
 
-      background:
-        #0f766e;
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.06);
 
-    }
+}
 
 
-    .btn.print {
+.school-name {
 
-      background:
-        #475569;
+  font-size:
+    12px;
 
-    }
+  font-weight:
+    bold;
 
+  color:
+    #0369a1;
 
-    /* ==========================================
-       META
-    =========================================== */
+}
 
-    .report-meta {
 
-      display:
-        grid;
+.card-title {
 
-      grid-template-columns:
-        repeat(2, 1fr);
+  font-size:
+    13px;
 
-      gap:
-        10px;
+  font-weight:
+    bold;
 
-    }
+  margin-top:
+    4px;
 
+}
 
-    .meta-item {
 
-      background:
-        #f8fafc;
+.qr-image {
 
-      border-radius:
-        10px;
+  margin:
+    15px auto;
 
-      padding:
-        12px;
+  display:
+    flex;
 
-    }
+  justify-content:
+    center;
 
+}
 
-    /* ==========================================
-       SUMMARY
-    =========================================== */
 
-    .summary-grid {
+.student-name {
 
-      display:
-        grid;
+  font-weight:
+    bold;
 
-      grid-template-columns:
-        repeat(4, 1fr);
+  font-size:
+    17px;
 
-      gap:
-        15px;
+  margin-top:
+    8px;
 
-      margin-bottom:
-        20px;
+}
 
-    }
 
+.student-class {
 
-    .summary-card {
+  margin-top:
+    5px;
 
-      background:
-        white;
+  font-size:
+    15px;
 
-      border-radius:
-        16px;
+}
 
-      padding:
-        20px;
 
-      box-shadow:
-        0 4px 18px
-        rgba(0,0,0,.08);
+.student-id {
 
-      position:
-        relative;
+  margin-top:
+    5px;
 
-      overflow:
-        hidden;
+  font-size:
+    12px;
 
-    }
+  color:
+    #64748b;
 
+}
 
-    .summary-card::before {
 
-      content:
-        "";
+.qr-id {
 
-      position:
-        absolute;
+  margin-top:
+    8px;
 
-      left:
-        0;
+  font-size:
+    10px;
 
-      top:
-        0;
+  word-break:
+    break-all;
 
-      bottom:
-        0;
+  color:
+    #94a3b8;
 
-      width:
-        6px;
+}
 
-      background:
-        #1976d2;
 
-    }
+/* LOADING */
 
+.loading {
 
-    .summary-card.success::before {
+  background:
+    white;
 
-      background:
-        #16a34a;
+  padding:
+    30px;
 
-    }
+  border-radius:
+    18px;
 
+  text-align:
+    center;
 
-    .summary-card.warning::before {
+}
 
-      background:
-        #f59e0b;
 
-    }
+@media print {
 
+  body {
 
-    .summary-card.percent::before {
+    background:
+      white;
 
-      background:
-        #7c3aed;
+  }
 
-    }
 
+  .header,
+  .qr-menu,
+  .toolbar {
 
-    .summary-icon {
+    display:
+      none !important;
 
-      font-size:
-        30px;
+  }
 
-    }
 
+  .container {
 
-    .summary-label {
+    max-width:
+      none;
 
-      margin-top:
-        9px;
+    padding:
+      0;
 
-      font-size:
-        14px;
+  }
 
-      color:
-        #64748b;
 
-    }
+  #qrGrid {
 
+    display:
+      grid;
 
-    .summary-value {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
 
-      margin-top:
-        5px;
+    gap:
+      8mm;
 
-      font-size:
-        34px;
+  }
 
-      font-weight:
-        800;
 
-    }
+  .qr-card {
 
+    box-shadow:
+      none;
 
-    /* ==========================================
-       FILTER
-    =========================================== */
+    border:
+      1px solid #999;
 
-    .filters {
+    border-radius:
+      8px;
 
-      display:
-        grid;
+    padding:
+      10px;
 
-      grid-template-columns:
-        2fr 1fr;
+  }
 
-      gap:
-        10px;
+}
 
-      margin-bottom:
-        15px;
 
-    }
+@media (
+  max-width: 850px
+) {
 
+  .qr-menu {
 
-    .filters input,
-    .filters select {
+    grid-template-columns:
+      repeat(2, 1fr);
 
-      width:
-        100%;
+  }
 
-      padding:
-        12px;
+}
 
-      border:
-        1px solid #d4dbe7;
 
-      border-radius:
-        10px;
+@media (
+  max-width: 600px
+) {
 
-      font-size:
-        14px;
+  #qrGrid {
 
-      background:
-        white;
+    grid-template-columns:
+      1fr;
 
-    }
+  }
 
 
-    /* ==========================================
-       TABLE
-    =========================================== */
+  .toolbar-row {
 
-    .table-wrap {
+    flex-direction:
+      column;
 
-      overflow-x:
-        auto;
+    align-items:
+      stretch;
 
-    }
+  }
 
+}
 
-    table {
-
-      width:
-        100%;
-
-      border-collapse:
-        collapse;
-
-      min-width:
-        720px;
-
-    }
-
-
-    th {
-
-      background:
-        #f1f5f9;
-
-      padding:
-        12px 10px;
-
-      text-align:
-        left;
-
-      color:
-        #172033;
-
-      border-bottom:
-        1px solid #dce3ec;
-
-    }
-
-
-    td {
-
-      padding:
-        12px 10px;
-
-      border-bottom:
-        1px solid #e5e7eb;
-
-    }
-
-
-    tbody tr:hover {
-
-      background:
-        #f8fafc;
-
-    }
-
-
-    .center {
-
-      text-align:
-        center;
-
-    }
-
-
-    .badge {
-
-      display:
-        inline-block;
-
-      padding:
-        6px 10px;
-
-      border-radius:
-        999px;
-
-      font-size:
-        12px;
-
-      font-weight:
-        bold;
-
-    }
-
-
-    .badge-success {
-
-      background:
-        #dcfce7;
-
-      color:
-        #166534;
-
-    }
-
-
-    .badge-warning {
-
-      background:
-        #fef3c7;
-
-      color:
-        #92400e;
-
-    }
-
-
-    /* ==========================================
-       FOOTER
-    =========================================== */
-
-    footer {
-
-      text-align:
-        center;
-
-      padding:
-        25px 15px;
-
-      color:
-        #64748b;
-
-      font-size:
-        13px;
-
-    }
-
-
-    /* ==========================================
-       PRINT
-    =========================================== */
-
-    @media print {
-
-      body {
-
-        background:
-          white;
-
-      }
-
-
-      .menu,
-      .status,
-      .report-control,
-      .filters {
-
-        display:
-          none !important;
-
-      }
-
-
-      .header {
-
-        background:
-          white !important;
-
-        color:
-          black !important;
-
-        padding:
-          10px;
-
-      }
-
-
-      .card,
-      .summary-card {
-
-        box-shadow:
-          none;
-
-        border:
-          1px solid #ddd;
-
-      }
-
-    }
-
-
-    /* ==========================================
-       MOBILE
-    =========================================== */
-
-    @media (
-      max-width: 850px
-    ) {
-
-      .menu {
-
-        grid-template-columns:
-          repeat(2, 1fr);
-
-      }
-
-
-      .summary-grid {
-
-        grid-template-columns:
-          repeat(2, 1fr);
-
-      }
-
-
-      .report-control {
-
-        grid-template-columns:
-          1fr;
-
-      }
-
-    }
-
-
-    @media (
-      max-width: 550px
-    ) {
-
-      .summary-grid {
-
-        grid-template-columns:
-          1fr;
-
-      }
-
-
-      .report-meta {
-
-        grid-template-columns:
-          1fr;
-
-      }
-
-
-      .filters {
-
-        grid-template-columns:
-          1fr;
-
-      }
-
-
-      .header h1 {
-
-        font-size:
-          24px;
-
-      }
-
-    }
-
-  </style>
+</style>
 
 </head>
 
@@ -869,568 +608,141 @@
 <body>
 
 
-  <!-- ==========================================
-       HEADER
-  =========================================== -->
+<header class="header">
 
-  <header class="header">
+<div class="header-inner">
 
-    <div class="header-icon">
-      📄
-    </div>
+<h1>
+🥛 Jana QR Murid
+</h1>
 
-    <h1>
-      Laporan Pengagihan Susu
-    </h1>
+<p>
+Sistem Pengagihan Susu QR
+SK Tun Fuad 2026
+</p>
 
-    <p>
-      SK Tun Fuad 2026
-    </p>
+<p>
+<strong>
+SKTF, Together We RISE
+</strong>
+</p>
 
-    <p>
-      <strong>
-        SKTF, Together We RISE
-      </strong>
-    </p>
+</div>
 
-  </header>
+</header>
 
 
+<nav class="qr-menu">
 
-  <!-- ==========================================
-       MENU
-  =========================================== -->
+  <a href="index.html">
+    📷 Scanner
+  </a>
 
-  <nav class="menu">
+  <a href="dashboard.html">
+    📊 Dashboard
+  </a>
 
-    <a href="index.html">
-      📷 Scanner
-    </a>
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
 
-    <a href="dashboard.html">
-      📊 Dashboard
-    </a>
+  <a
+    href="qr.html"
+    class="active"
+  >
+    🔳 Jana QR
+  </a>
 
-    <a href="students.html">
-      👨‍🎓 Murid
-    </a>
+  <a href="report.html">
+    📄 Laporan
+  </a>
 
-    <a href="qr.html">
-      🔳 Jana QR
-    </a>
+  <a href="history.html">
+    🗂️ Rekod
+  </a>
 
-    <a
-      href="report.html"
-      class="active"
-    >
-      📄 Laporan
-    </a>
+  <a href="stock.html">
+    📦 Stok
+  </a>
 
-    <a href="history.html">
-      🗂️ Rekod
-    </a>
+  <a href="stock-report.html">
+    📊 Laporan Stok
+  </a>
 
-    <a href="stock.html">
-      📦 Stok
-    </a>
+  <button
+    type="button"
+    onclick="location.reload()"
+  >
+    🔄 Refresh
+  </button>
 
-    <button
-      type="button"
-      onclick="loadReport()"
-    >
-      🔄 Refresh
-    </button>
+</nav>
 
-  </nav>
 
+<div class="container">
 
 
-  <main class="container">
+<section class="toolbar">
 
+<div class="toolbar-row">
 
-    <!-- STATUS -->
 
-    <div
-      id="reportStatus"
-      class="status"
-    >
-      ⏳ Mengambil laporan...
-    </div>
+<select
+  id="classFilter"
+  onchange="applyFilter()">
 
+<option value="">
+Semua Kelas
+</option>
 
+</select>
 
-    <!-- PILIH TARIKH -->
 
-    <section class="card">
+<input
+  type="text"
+  id="searchInput"
+  placeholder="Cari nama murid..."
+  oninput="applyFilter()"
+>
 
-      <h2>
-        📅 Pilih Tarikh Laporan
-      </h2>
 
+<button
+  class="btn-print"
+  onclick="window.print()">
 
-      <div class="report-control">
+🖨️ Cetak QR
 
-        <div class="form-group">
+</button>
 
-          <label for="reportDateInput">
-            Tarikh
-          </label>
 
-          <input
-            type="date"
-            id="reportDateInput"
-          >
+</div>
 
-        </div>
 
+<div
+  id="status"
+  class="status">
 
-        <button
-          type="button"
-          class="btn"
-          onclick="loadReport()"
-        >
-          🔍 Papar Laporan
-        </button>
+Memuatkan murid...
 
+</div>
 
-        <button
-          type="button"
-          class="btn today"
-          onclick="setTodayAndLoad()"
-        >
-          📅 Hari Ini
-        </button>
+</section>
 
 
-        <button
-          type="button"
-          class="btn print"
-          onclick="window.print()"
-        >
-          🖨️ Cetak / Simpan PDF
-        </button>
+<div
+  id="qrGrid">
 
-      </div>
+<div class="loading">
+⏳ Sedang mengambil data murid...
+</div>
 
-    </section>
+</div>
 
 
+</div>
 
-    <!-- META -->
 
-    <section class="card">
-
-      <div class="report-meta">
-
-        <div class="meta-item">
-
-          <strong>
-            📅 Tarikh Laporan:
-          </strong>
-
-          <span id="displayDate">
-            -
-          </span>
-
-        </div>
-
-
-        <div class="meta-item">
-
-          <strong>
-            🕐 Dijana:
-          </strong>
-
-          <span id="generatedAt">
-            -
-          </span>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- SUMMARY -->
-
-    <section class="summary-grid">
-
-
-      <div class="summary-card">
-
-        <div class="summary-icon">
-          👨‍🎓
-        </div>
-
-        <div class="summary-label">
-          Jumlah Murid Aktif
-        </div>
-
-        <div
-          id="totalActive"
-          class="summary-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="summary-card success">
-
-        <div class="summary-icon">
-          ✅
-        </div>
-
-        <div class="summary-label">
-          Sudah Ambil Susu
-        </div>
-
-        <div
-          id="totalTaken"
-          class="summary-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="summary-card warning">
-
-        <div class="summary-icon">
-          ⏳
-        </div>
-
-        <div class="summary-label">
-          Belum Ambil Susu
-        </div>
-
-        <div
-          id="totalPending"
-          class="summary-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="summary-card percent">
-
-        <div class="summary-icon">
-          📈
-        </div>
-
-        <div class="summary-label">
-          Peratus Pengagihan
-        </div>
-
-        <div
-          id="percentage"
-          class="summary-value"
-        >
-          0%
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- STATISTIK KELAS -->
-
-    <section class="card">
-
-      <h2>
-        🏫 Statistik Mengikut Kelas
-      </h2>
-
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Kelas
-              </th>
-
-              <th class="center">
-                Jumlah
-              </th>
-
-              <th class="center">
-                Sudah Ambil
-              </th>
-
-              <th class="center">
-                Belum Ambil
-              </th>
-
-              <th class="center">
-                Peratus
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="classTable">
-
-            <tr>
-
-              <td
-                colspan="5"
-                class="center"
-              >
-                Memuatkan data...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- SUDAH AMBIL -->
-
-    <section class="card">
-
-      <h2>
-        ✅ Murid Sudah Ambil Susu
-      </h2>
-
-
-      <div class="filters">
-
-        <input
-          type="text"
-          id="takenSearch"
-          placeholder="Cari nama, ID atau kelas..."
-          oninput="renderTaken()"
-        >
-
-
-        <select
-          id="takenClassFilter"
-          onchange="renderTaken()"
-        >
-
-          <option value="">
-            Semua Kelas
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Bil.
-              </th>
-
-              <th>
-                Nama
-              </th>
-
-              <th>
-                Kelas
-              </th>
-
-              <th>
-                ID Murid
-              </th>
-
-              <th>
-                Masa
-              </th>
-
-              <th>
-                Guru
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="takenTable">
-
-            <tr>
-
-              <td
-                colspan="6"
-                class="center"
-              >
-                Memuatkan data...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- BELUM AMBIL -->
-
-    <section class="card">
-
-      <h2>
-        ⏳ Murid Belum Ambil Susu
-      </h2>
-
-
-      <div class="filters">
-
-        <input
-          type="text"
-          id="pendingSearch"
-          placeholder="Cari nama, ID atau kelas..."
-          oninput="renderPending()"
-        >
-
-
-        <select
-          id="pendingClassFilter"
-          onchange="renderPending()"
-        >
-
-          <option value="">
-            Semua Kelas
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Bil.
-              </th>
-
-              <th>
-                Nama
-              </th>
-
-              <th>
-                Kelas
-              </th>
-
-              <th>
-                ID Murid
-              </th>
-
-              <th>
-                Status
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="pendingTable">
-
-            <tr>
-
-              <td
-                colspan="5"
-                class="center"
-              >
-                Memuatkan data...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-
-  </main>
-
-
-
-  <footer>
-
-    Sistem Pengagihan Susu QR
-    <br>
-    SK Tun Fuad 2026
-    <br><br>
-    Hak Cipta Terpelihara @ Cikgu Haji
-
-  </footer>
-
-
-
-  <script src="report.js"></script>
-
-
-  <script>
-
-    function setTodayAndLoad() {
-
-      if (
-        typeof setTodayDate ===
-        'function'
-      ) {
-
-        setTodayDate();
-
-      }
-
-      if (
-        typeof loadReport ===
-        'function'
-      ) {
-
-        loadReport();
-
-      }
-
-    }
-
-  </script>
+<script src="qr.js"></script>
 
 
 </body>
