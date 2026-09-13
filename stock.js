@@ -355,6 +355,9 @@ function renderStock() {
   );
 
 
+  renderExpiryAlerts();
+
+
   renderTransactions();
 
 }
@@ -452,6 +455,364 @@ function renderSmartStockAlert(
     '✅ STOK MENCUKUPI — Baki semasa ' +
     balance +
     ' unit.';
+
+}
+
+
+/* =========================================================
+   PEMANTAUAN TARIKH LUPUT
+========================================================= */
+
+function renderExpiryAlerts() {
+
+  const box =
+    document.getElementById(
+      'expiryAlertBox'
+    );
+
+  const text =
+    document.getElementById(
+      'expiryAlertText'
+    );
+
+  const list =
+    document.getElementById(
+      'expiryAlertList'
+    );
+
+
+  if (
+    !box ||
+    !text ||
+    !list
+  ) {
+
+    return;
+
+  }
+
+
+  const transactions =
+    stockData &&
+    stockData.transactions
+      ?
+      stockData.transactions
+      :
+      [];
+
+
+  const batches =
+    transactions
+
+      .filter(
+        function (item) {
+
+          return (
+            String(
+              item.type || ''
+            )
+            .toUpperCase() ===
+            'MASUK'
+            &&
+            item.expiryDate
+          );
+
+        }
+      )
+
+      .map(
+        function (item) {
+
+          const days =
+            daysUntilExpiry(
+              item.expiryDate
+            );
+
+
+          return {
+
+            batch:
+              item.batch || '-',
+
+            expiryDate:
+              item.expiryDate,
+
+            displayExpiryDate:
+              item.displayExpiryDate ||
+              formatDateMs(
+                item.expiryDate
+              ),
+
+            days:
+              days,
+
+            quantity:
+              item.quantity || 0
+
+          };
+
+        }
+      )
+
+      .sort(
+        function (a, b) {
+
+          return a.days - b.days;
+
+        }
+      );
+
+
+  const expired =
+    batches.filter(
+      function (item) {
+
+        return item.days < 0;
+
+      }
+    );
+
+
+  const nearExpiry =
+    batches.filter(
+      function (item) {
+
+        return (
+          item.days >= 0 &&
+          item.days <= 30
+        );
+
+      }
+    );
+
+
+  list.innerHTML =
+    '';
+
+
+  if (
+    expired.length
+  ) {
+
+    box.className =
+      'expiry-alert danger';
+
+
+    text.innerHTML =
+      '🚫 <strong>AMARAN:</strong> ' +
+      expired.length +
+      ' batch telah melepasi tarikh luput.';
+
+
+    expired.forEach(
+      function (item) {
+
+        const li =
+          document.createElement(
+            'li'
+          );
+
+
+        li.textContent =
+          'Batch ' +
+          item.batch +
+          ' — luput ' +
+          item.displayExpiryDate +
+          ' (' +
+          Math.abs(
+            item.days
+          ) +
+          ' hari lepas)';
+
+
+        list.appendChild(
+          li
+        );
+
+      }
+    );
+
+
+    nearExpiry.forEach(
+      function (item) {
+
+        const li =
+          document.createElement(
+            'li'
+          );
+
+
+        li.textContent =
+          'Batch ' +
+          item.batch +
+          ' — akan luput ' +
+          item.displayExpiryDate +
+          ' (' +
+          item.days +
+          ' hari lagi)';
+
+
+        list.appendChild(
+          li
+        );
+
+      }
+    );
+
+
+    return;
+
+  }
+
+
+  if (
+    nearExpiry.length
+  ) {
+
+    box.className =
+      'expiry-alert warning';
+
+
+    text.innerHTML =
+      '⚠️ <strong>STOK HAMPIR LUPUT:</strong> ' +
+      nearExpiry.length +
+      ' batch akan luput dalam tempoh 30 hari.';
+
+
+    nearExpiry.forEach(
+      function (item) {
+
+        const li =
+          document.createElement(
+            'li'
+          );
+
+
+        li.textContent =
+          'Batch ' +
+          item.batch +
+          ' — ' +
+          item.displayExpiryDate +
+          ' (' +
+          item.days +
+          ' hari lagi)';
+
+
+        list.appendChild(
+          li
+        );
+
+      }
+    );
+
+
+    return;
+
+  }
+
+
+  box.className =
+    'expiry-alert ok';
+
+
+  text.textContent =
+    batches.length
+      ?
+      '✅ Tiada batch yang akan luput dalam 30 hari.'
+      :
+      'ℹ️ Tiada tarikh luput direkodkan untuk stok semasa.';
+
+}
+
+
+/* =========================================================
+   KIRA HARI KE TARIKH LUPUT
+========================================================= */
+
+function daysUntilExpiry(
+  dateText
+) {
+
+  const parts =
+    String(
+      dateText || ''
+    )
+    .split('-');
+
+
+  if (
+    parts.length !== 3
+  ) {
+
+    return 999999;
+
+  }
+
+
+  const expiry =
+    new Date(
+      Number(parts[0]),
+      Number(parts[1]) - 1,
+      Number(parts[2]),
+      23,
+      59,
+      59
+    );
+
+
+  const now =
+    new Date();
+
+
+  const diff =
+    expiry.getTime() -
+    now.getTime();
+
+
+  return Math.ceil(
+    diff /
+    (
+      1000 *
+      60 *
+      60 *
+      24
+    )
+  );
+
+}
+
+
+/* =========================================================
+   FORMAT TARIKH MS
+========================================================= */
+
+function formatDateMs(
+  dateText
+) {
+
+  const parts =
+    String(
+      dateText || ''
+    )
+    .split('-');
+
+
+  if (
+    parts.length !== 3
+  ) {
+
+    return dateText || '-';
+
+  }
+
+
+  return (
+    parts[2] +
+    '/' +
+    parts[1] +
+    '/' +
+    parts[0]
+  );
 
 }
 
@@ -684,7 +1045,6 @@ function resetStockForm() {
 
 /* =========================================================
    UJIAN STOK HABIS
-   TIDAK MENGUBAH DATA SEBENAR
 ========================================================= */
 
 async function testOutOfStock() {
@@ -779,19 +1139,14 @@ async function testOutOfStock() {
       box.innerHTML =
         '✅ <strong>UJIAN BERJAYA</strong>' +
         '<br><br>' +
-
         '🚫 Sistem menolak pengagihan apabila baki = 0.' +
         '<br>' +
-
         'Status: <strong>OUT_OF_STOCK</strong>' +
         '<br>' +
-
         'Baki simulasi: <strong>0</strong>' +
         '<br>' +
-
         'Data sebenar diubah: <strong>TIDAK</strong>' +
         '<br><br>' +
-
         esc(
           stock.message || ''
         );
@@ -944,21 +1299,17 @@ function renderTransactions() {
 
 
         return (
-
           (
             !search ||
             text.includes(
               search
             )
           )
-
           &&
-
           (
             !type ||
             item.type === type
           )
-
         );
 
       }
@@ -973,7 +1324,7 @@ function renderTransactions() {
       `
       <tr>
         <td
-          colspan="9"
+          colspan="10"
           class="center"
         >
           Tiada transaksi stok.
@@ -1033,7 +1384,6 @@ function renderTransactions() {
               </td>
 
               <td>
-
                 <span
                   class="${badgeClass}"
                 >
@@ -1041,32 +1391,35 @@ function renderTransactions() {
                     item.type
                   )}
                 </span>
-
               </td>
 
               <td>
-
                 <strong>
                   ${sign}${esc(
                     item.quantity
                   )}
                 </strong>
-
               </td>
 
               <td>
-
                 <strong>
                   ${esc(
                     item.balance
                   )}
                 </strong>
-
               </td>
 
               <td>
                 ${esc(
                   item.batch || '-'
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  item.displayExpiryDate ||
+                  item.expiryDate ||
+                  '-'
                 )}
               </td>
 
