@@ -26,10 +26,6 @@
       color: #172033;
     }
 
-    /* =========================
-       HEADER
-    ========================= */
-
     .header {
       background: linear-gradient(135deg, #0d47a1, #1976d2);
       color: white;
@@ -51,17 +47,12 @@
       margin: 7px 0 0;
     }
 
-    /* =========================
-       MENU
-    ========================= */
-
     .menu {
       max-width: 1250px;
       margin: 18px auto 0;
       padding: 0 15px;
-
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
+      grid-template-columns: repeat(9, 1fr);
       gap: 10px;
     }
 
@@ -90,10 +81,6 @@
       color: white;
     }
 
-    /* =========================
-       MAIN
-    ========================= */
-
     .container {
       max-width: 1250px;
       margin: 20px auto 50px;
@@ -109,10 +96,6 @@
       font-weight: bold;
       box-shadow: 0 3px 12px rgba(0,0,0,.07);
     }
-
-    /* =========================
-       SUMMARY
-    ========================= */
 
     .summary-grid {
       display: grid;
@@ -168,10 +151,6 @@
       margin-top: 4px;
     }
 
-    /* =========================
-       PROGRESS
-    ========================= */
-
     .progress-card {
       background: white;
       padding: 20px;
@@ -207,10 +186,6 @@
       text-align: right;
     }
 
-    /* =========================
-       CARD
-    ========================= */
-
     .card {
       background: white;
       border-radius: 16px;
@@ -223,10 +198,6 @@
       margin-top: 0;
       color: #0d47a1;
     }
-
-    /* =========================
-       FILTER
-    ========================= */
 
     .filters {
       display: grid;
@@ -243,10 +214,6 @@
       border-radius: 10px;
       font-size: 14px;
     }
-
-    /* =========================
-       TABLE
-    ========================= */
 
     .table-wrap {
       overflow-x: auto;
@@ -296,10 +263,6 @@
       background: #fef3c7;
       color: #92400e;
     }
-
-    /* =========================
-       STATUS STOK SUSU
-    ========================= */
 
     .stock-panel {
       background: white;
@@ -368,23 +331,6 @@
       margin-top: 10px;
     }
 
-    @media (max-width: 850px) {
-      .stock-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 550px) {
-      .stock-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-
-    /* =========================
-       ACTION
-    ========================= */
-
     .action-row {
       display: flex;
       gap: 10px;
@@ -406,20 +352,12 @@
       background: #475569;
     }
 
-    /* =========================
-       FOOTER
-    ========================= */
-
     footer {
       text-align: center;
       padding: 25px 15px;
       color: #64748b;
       font-size: 13px;
     }
-
-    /* =========================
-       PRINT
-    ========================= */
 
     @media print {
 
@@ -449,13 +387,10 @@
 
     }
 
-    /* =========================
-       MOBILE
-    ========================= */
-
     @media (max-width: 850px) {
 
-      .summary-grid {
+      .summary-grid,
+      .stock-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
@@ -467,10 +402,8 @@
 
     @media (max-width: 550px) {
 
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
-
+      .summary-grid,
+      .stock-grid,
       .filters {
         grid-template-columns: 1fr;
       }
@@ -486,8 +419,6 @@
 
 
 <body>
-
-  <!-- HEADER -->
 
   <header class="header">
 
@@ -512,54 +443,54 @@
   </header>
 
 
-  <!-- MENU -->
-
   <nav class="menu">
 
-    <a href="index.html">
-      📷 Scanner
-    </a>
+  <a href="index.html">
+    📷 Scanner
+  </a>
 
-    <a
-      href="dashboard.html"
-      class="active"
-    >
-      📊 Dashboard
-    </a>
+  <a
+    href="dashboard.html"
+    class="active"
+  >
+    📊 Dashboard
+  </a>
 
-    <a href="students.html">
-      👨‍🎓 Murid
-    </a>
+  <a href="students.html">
+    👨‍🎓 Murid
+  </a>
 
-    <a href="qr.html">
-      🔳 Jana QR
-    </a>
+  <a href="qr.html">
+    🔳 Jana QR
+  </a>
 
-    <a href="report.html">
-      📄 Laporan
-    </a>
+  <a href="report.html">
+    📄 Laporan
+  </a>
 
-    <a href="history.html">
-      🗂️ Rekod
-    </a>
+  <a href="history.html">
+    🗂️ Rekod
+  </a>
 
-    <a href="stock.html">
-      📦 Stok
-    </a>
+  <a href="stock.html">
+    📦 Stok
+  </a>
 
-    <button
-      type="button"
-      onclick="loadDashboard()"
-    >
-      🔄 Refresh
-    </button>
+  <a href="stock-report.html">
+    📊 Laporan Stok
+  </a>
 
-  </nav>
+  <button
+    type="button"
+    onclick="loadDashboard()"
+  >
+    🔄 Refresh
+  </button>
+
+</nav>
 
 
   <main class="container">
-
-    <!-- STATUS -->
 
     <div
       id="dashboardStatus"
@@ -568,8 +499,6 @@
       ⏳ Mengambil data dashboard...
     </div>
 
-
-    <!-- TARIKH -->
 
     <div class="card">
 
@@ -593,8 +522,6 @@
 
     </div>
 
-
-    <!-- SUMMARY -->
 
     <section class="summary-grid">
 
@@ -680,8 +607,6 @@
     </section>
 
 
-    <!-- PROGRESS -->
-
     <section class="progress-card">
 
       <h2>
@@ -707,8 +632,6 @@
     </section>
 
 
-    <!-- STATUS STOK SUSU -->
-
     <section class="stock-panel">
 
       <h2>
@@ -718,44 +641,62 @@
       <div class="stock-grid">
 
         <div class="stock-card">
-          <div>📦</div>
+
+          <div>
+            📦
+          </div>
+
           <div class="stock-label">
             Baki Stok Semasa
           </div>
+
           <div
             id="dashStockBalance"
             class="stock-value"
           >
             -
           </div>
+
         </div>
 
 
         <div class="stock-card in">
-          <div>➕</div>
+
+          <div>
+            ➕
+          </div>
+
           <div class="stock-label">
             Jumlah Stok Masuk
           </div>
+
           <div
             id="dashStockIn"
             class="stock-value"
           >
             -
           </div>
+
         </div>
 
 
         <div class="stock-card out">
-          <div>🥛</div>
+
+          <div>
+            🥛
+          </div>
+
           <div class="stock-label">
             Agihan Hari Ini
           </div>
+
           <div
             id="dashStockTodayOut"
             class="stock-value"
           >
             -
           </div>
+
         </div>
 
 
@@ -763,24 +704,28 @@
           id="dashStockStatusCard"
           class="stock-card"
         >
-          <div>⚠️</div>
+
+          <div>
+            ⚠️
+          </div>
+
           <div class="stock-label">
             Status Stok
           </div>
+
           <div
             id="dashStockStatus"
             class="stock-status-text"
           >
             Memeriksa...
           </div>
+
         </div>
 
       </div>
 
     </section>
 
-
-    <!-- ACTION -->
 
     <div class="action-row">
 
@@ -800,8 +745,6 @@
 
     </div>
 
-
-    <!-- STATISTIK KELAS -->
 
     <section class="card">
 
@@ -839,8 +782,6 @@
 
     </section>
 
-
-    <!-- SUDAH AMBIL -->
 
     <section class="card">
 
@@ -899,8 +840,6 @@
 
     </section>
 
-
-    <!-- BELUM AMBIL -->
 
     <section class="card">
 
@@ -964,13 +903,13 @@
   <footer>
     Sistem Pengagihan Susu QR SK Tun Fuad 2026
     <br>
-    Hak Cipta Terpelihara @ Cikgu Haji
+    SKTF, Together We RISE
   </footer>
 
 
   <script src="dashboard-stock.js"></script>
-
   <script src="dashboard.js"></script>
 
 </body>
+
 </html>
