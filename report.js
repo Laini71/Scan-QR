@@ -32,19 +32,15 @@ function setTodayDate() {
       'reportDateInput'
     );
 
-
   if (!input) {
     return;
   }
 
-
   const now =
     new Date();
 
-
   const year =
     now.getFullYear();
-
 
   const month =
     String(
@@ -54,7 +50,6 @@ function setTodayDate() {
       '0'
     );
 
-
   const day =
     String(
       now.getDate()
@@ -62,7 +57,6 @@ function setTodayDate() {
       2,
       '0'
     );
-
 
   input.value =
     year +
@@ -75,7 +69,7 @@ function setTodayDate() {
 
 
 /* =====================================================
-   JSONP
+   JSONP — SAMBUNGAN APPS SCRIPT
 ===================================================== */
 
 function callAppsScript(params) {
@@ -88,35 +82,84 @@ function callAppsScript(params) {
         Date.now() +
         '_' +
         Math.floor(
-          Math.random() * 100000
+          Math.random() * 1000000
         );
-
 
       const script =
         document.createElement(
           'script'
         );
 
+      let finished =
+        false;
+
+
+      function cleanup() {
+
+        if (
+          script.parentNode
+        ) {
+
+          script.parentNode
+            .removeChild(
+              script
+            );
+
+        }
+
+        try {
+
+          delete window[
+            callbackName
+          ];
+
+        }
+        catch (e) {
+
+          window[
+            callbackName
+          ] = undefined;
+
+        }
+
+      }
+
 
       const timeout =
         setTimeout(
           function () {
 
+            if (finished) {
+              return;
+            }
+
+            finished =
+              true;
+
             cleanup();
 
             reject(
               new Error(
-                'Server tidak memberi respons.'
+                'Server tidak memberi respons selepas 20 saat.'
               )
             );
 
           },
-          15000
+          20000
         );
 
 
-      window[callbackName] =
+      window[
+        callbackName
+      ] =
         function (result) {
+
+          if (finished) {
+            return;
+          }
+
+          finished =
+            true;
 
           clearTimeout(
             timeout
@@ -131,25 +174,29 @@ function callAppsScript(params) {
         };
 
 
-      function cleanup() {
+      script.onerror =
+        function () {
 
-        try {
-          delete window[callbackName];
-        } catch (e) {}
+          if (finished) {
+            return;
+          }
 
+          finished =
+            true;
 
-        if (
-          script.parentNode
-        ) {
+          clearTimeout(
+            timeout
+          );
 
-          script.parentNode
-            .removeChild(
-              script
-            );
+          cleanup();
 
-        }
+          reject(
+            new Error(
+              'Gagal menghubungi Google Apps Script.'
+            )
+          );
 
-      }
+        };
 
 
       const query =
@@ -157,13 +204,16 @@ function callAppsScript(params) {
 
 
       Object.keys(
-        params
-      ).forEach(
+        params || {}
+      )
+      .forEach(
         function (key) {
 
           query.set(
             key,
-            params[key] ?? ''
+            String(
+              params[key] ?? ''
+            )
           );
 
         }
@@ -178,35 +228,33 @@ function callAppsScript(params) {
 
       query.set(
         '_',
-        Date.now()
+        String(
+          Date.now()
+        )
       );
 
 
-      script.src =
+      const requestUrl =
         APPS_SCRIPT_URL +
         '?' +
         query.toString();
 
 
-      script.onerror =
-        function () {
-
-          clearTimeout(
-            timeout
-          );
-
-          cleanup();
-
-          reject(
-            new Error(
-              'Gagal menghubungi server.'
-            )
-          );
-
-        };
+      console.log(
+        'Report API:',
+        requestUrl
+      );
 
 
-      document.body
+      script.async =
+        true;
+
+
+      script.src =
+        requestUrl;
+
+
+      document.head
         .appendChild(
           script
         );
@@ -223,12 +271,24 @@ function callAppsScript(params) {
 
 async function loadReport() {
 
+  const dateInput =
+    document.getElementById(
+      'reportDateInput'
+    );
+
+  if (!dateInput) {
+
+    console.error(
+      'reportDateInput tidak dijumpai.'
+    );
+
+    return;
+
+  }
+
+
   const date =
-    document
-      .getElementById(
-        'reportDateInput'
-      )
-      .value;
+    dateInput.value;
 
 
   if (!date) {
@@ -253,11 +313,20 @@ async function loadReport() {
 
     const result =
       await callAppsScript({
+
         action:
           'report',
+
         date:
           date
+
       });
+
+
+    console.log(
+      'Report Result:',
+      result
+    );
 
 
     if (
@@ -268,8 +337,10 @@ async function loadReport() {
       throw new Error(
         result &&
         result.message
-          ? result.message
-          : 'Laporan gagal dimuatkan.'
+          ?
+          result.message
+          :
+          'Laporan gagal dimuatkan.'
       );
 
     }
@@ -287,10 +358,10 @@ async function loadReport() {
     );
 
   }
-
   catch (error) {
 
     console.error(
+      'REPORT ERROR:',
       error
     );
 
@@ -320,56 +391,43 @@ function renderReport() {
     reportData.summary || {};
 
 
-  document
-    .getElementById(
-      'displayDate'
-    )
-    .textContent =
-      reportData.displayDate || '-';
+  setText(
+    'displayDate',
+    reportData.displayDate || '-'
+  );
 
 
-  document
-    .getElementById(
-      'generatedAt'
-    )
-    .textContent =
-      reportData.generatedAt || '-';
+  setText(
+    'generatedAt',
+    reportData.generatedAt || '-'
+  );
 
 
-  document
-    .getElementById(
-      'totalActive'
-    )
-    .textContent =
-      summary.totalActive || 0;
+  setText(
+    'totalActive',
+    summary.totalActive || 0
+  );
 
 
-  document
-    .getElementById(
-      'totalTaken'
-    )
-    .textContent =
-      summary.distributed || 0;
+  setText(
+    'totalTaken',
+    summary.distributed || 0
+  );
 
 
-  document
-    .getElementById(
-      'totalPending'
-    )
-    .textContent =
-      summary.pending || 0;
+  setText(
+    'totalPending',
+    summary.pending || 0
+  );
 
 
-  document
-    .getElementById(
-      'percentage'
-    )
-    .textContent =
-      (
-        summary.percentage ||
-        0
-      ) +
-      '%';
+  setText(
+    'percentage',
+    (
+      summary.percentage || 0
+    ) +
+    '%'
+  );
 
 
   renderClassStats();
@@ -393,11 +451,18 @@ function renderClassStats() {
     );
 
 
+  if (!tbody) {
+    return;
+  }
+
+
   const data =
     reportData &&
     reportData.byClass
-      ? reportData.byClass
-      : [];
+      ?
+      reportData.byClass
+      :
+      [];
 
 
   if (!data.length) {
@@ -405,9 +470,14 @@ function renderClassStats() {
     tbody.innerHTML =
       `
       <tr>
-        <td colspan="5" class="center">
+
+        <td
+          colspan="5"
+          class="center"
+        >
           Tiada data kelas.
         </td>
+
       </tr>
       `;
 
@@ -417,54 +487,65 @@ function renderClassStats() {
 
 
   tbody.innerHTML =
-    data.map(
-      function (item) {
+    data
+      .map(
+        function (item) {
 
-        return `
-          <tr>
+          return `
+            <tr>
 
-            <td>
-              <strong>
-                ${escapeHtml(
-                  item.className
-                )}
-              </strong>
-            </td>
+              <td>
+                <strong>
+                  ${escapeHtml(
+                    item.className
+                  )}
+                </strong>
+              </td>
 
-            <td class="center">
-              ${item.total || 0}
-            </td>
+              <td class="center">
+                ${item.total || 0}
+              </td>
 
-            <td class="center">
-              <span class="badge badge-success">
-                ${item.taken || 0}
-              </span>
-            </td>
+              <td class="center">
 
-            <td class="center">
-              <span class="badge badge-warning">
-                ${item.pending || 0}
-              </span>
-            </td>
+                <span
+                  class="badge badge-success"
+                >
+                  ${item.taken || 0}
+                </span>
 
-            <td class="center">
-              <strong>
-                ${item.percentage || 0}%
-              </strong>
-            </td>
+              </td>
 
-          </tr>
-        `;
+              <td class="center">
 
-      }
-    )
-    .join('');
+                <span
+                  class="badge badge-warning"
+                >
+                  ${item.pending || 0}
+                </span>
+
+              </td>
+
+              <td class="center">
+
+                <strong>
+                  ${item.percentage || 0}%
+                </strong>
+
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
 
 }
 
 
 /* =====================================================
-   SUDAH AMBIL
+   MURID SUDAH AMBIL
 ===================================================== */
 
 function renderTaken() {
@@ -474,14 +555,20 @@ function renderTaken() {
   }
 
 
+  const searchInput =
+    document.getElementById(
+      'takenSearch'
+    );
+
+
   const keyword =
-    document
-      .getElementById(
-        'takenSearch'
-      )
-      .value
-      .trim()
-      .toLowerCase();
+    searchInput
+      ?
+      searchInput.value
+        .trim()
+        .toLowerCase()
+      :
+      '';
 
 
   const students =
@@ -497,11 +584,13 @@ function renderTaken() {
           (
             String(
               student.name || ''
-            ) +
+            )
+            +
             ' ' +
             String(
               student.className || ''
-            ) +
+            )
+            +
             ' ' +
             String(
               student.studentId || ''
@@ -527,14 +616,24 @@ function renderTaken() {
     );
 
 
+  if (!tbody) {
+    return;
+  }
+
+
   if (!students.length) {
 
     tbody.innerHTML =
       `
       <tr>
-        <td colspan="6" class="center">
+
+        <td
+          colspan="6"
+          class="center"
+        >
           Tiada murid mengambil susu pada tarikh ini.
         </td>
+
       </tr>
       `;
 
@@ -544,60 +643,64 @@ function renderTaken() {
 
 
   tbody.innerHTML =
-    students.map(
-      function (student, index) {
+    students
+      .map(
+        function (
+          student,
+          index
+        ) {
 
-        return `
-          <tr>
+          return `
+            <tr>
 
-            <td>
-              ${index + 1}
-            </td>
+              <td>
+                ${index + 1}
+              </td>
 
-            <td>
-              <strong>
+              <td>
+                <strong>
+                  ${escapeHtml(
+                    student.name
+                  )}
+                </strong>
+              </td>
+
+              <td>
                 ${escapeHtml(
-                  student.name
+                  student.className
                 )}
-              </strong>
-            </td>
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.className
-              )}
-            </td>
+              <td>
+                ${escapeHtml(
+                  student.studentId
+                )}
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.studentId
-              )}
-            </td>
+              <td>
+                ${escapeHtml(
+                  student.time || '-'
+                )}
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.time || '-'
-              )}
-            </td>
+              <td>
+                ${escapeHtml(
+                  student.teacher || '-'
+                )}
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.teacher || '-'
-              )}
-            </td>
+            </tr>
+          `;
 
-          </tr>
-        `;
-
-      }
-    )
-    .join('');
+        }
+      )
+      .join('');
 
 }
 
 
 /* =====================================================
-   BELUM AMBIL
+   MURID BELUM AMBIL
 ===================================================== */
 
 function renderPending() {
@@ -607,14 +710,20 @@ function renderPending() {
   }
 
 
+  const searchInput =
+    document.getElementById(
+      'pendingSearch'
+    );
+
+
   const keyword =
-    document
-      .getElementById(
-        'pendingSearch'
-      )
-      .value
-      .trim()
-      .toLowerCase();
+    searchInput
+      ?
+      searchInput.value
+        .trim()
+        .toLowerCase()
+      :
+      '';
 
 
   const students =
@@ -630,11 +739,13 @@ function renderPending() {
           (
             String(
               student.name || ''
-            ) +
+            )
+            +
             ' ' +
             String(
               student.className || ''
-            ) +
+            )
+            +
             ' ' +
             String(
               student.studentId || ''
@@ -660,14 +771,24 @@ function renderPending() {
     );
 
 
+  if (!tbody) {
+    return;
+  }
+
+
   if (!students.length) {
 
     tbody.innerHTML =
       `
       <tr>
-        <td colspan="5" class="center">
+
+        <td
+          colspan="5"
+          class="center"
+        >
           🎉 Semua murid sudah mengambil susu.
         </td>
+
       </tr>
       `;
 
@@ -677,48 +798,56 @@ function renderPending() {
 
 
   tbody.innerHTML =
-    students.map(
-      function (student, index) {
+    students
+      .map(
+        function (
+          student,
+          index
+        ) {
 
-        return `
-          <tr>
+          return `
+            <tr>
 
-            <td>
-              ${index + 1}
-            </td>
+              <td>
+                ${index + 1}
+              </td>
 
-            <td>
-              <strong>
+              <td>
+                <strong>
+                  ${escapeHtml(
+                    student.name
+                  )}
+                </strong>
+              </td>
+
+              <td>
                 ${escapeHtml(
-                  student.name
+                  student.className
                 )}
-              </strong>
-            </td>
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.className
-              )}
-            </td>
+              <td>
+                ${escapeHtml(
+                  student.studentId
+                )}
+              </td>
 
-            <td>
-              ${escapeHtml(
-                student.studentId
-              )}
-            </td>
+              <td>
 
-            <td>
-              <span class="badge badge-warning">
-                BELUM AMBIL
-              </span>
-            </td>
+                <span
+                  class="badge badge-warning"
+                >
+                  BELUM AMBIL
+                </span>
 
-          </tr>
-        `;
+              </td>
 
-      }
-    )
-    .join('');
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
 
 }
 
@@ -727,9 +856,7 @@ function renderPending() {
    STATUS
 ===================================================== */
 
-function setStatus(
-  text
-) {
+function setStatus(text) {
 
   const element =
     document.getElementById(
@@ -748,32 +875,60 @@ function setStatus(
 
 
 /* =====================================================
-   ESCAPE HTML
+   SET TEXT
 ===================================================== */
 
-function escapeHtml(
+function setText(
+  id,
   value
 ) {
 
+  const element =
+    document.getElementById(
+      id
+    );
+
+
+  if (element) {
+
+    element.textContent =
+      value;
+
+  }
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
   return String(
-    value || ''
+    value ?? ''
   )
+
   .replace(
     /&/g,
     '&amp;'
   )
+
   .replace(
     /</g,
     '&lt;'
   )
+
   .replace(
     />/g,
     '&gt;'
   )
+
   .replace(
     /"/g,
     '&quot;'
   )
+
   .replace(
     /'/g,
     '&#039;'
