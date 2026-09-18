@@ -833,22 +833,40 @@ function renderFefoPanel() {
 
   ensureFefoPanel();
 
-
   const panel =
-    document.getElementById(
-      'fefoPanel'
-    );
-
+    document.getElementById('fefoPanel');
 
   if (!panel) {
     return;
   }
 
+  if (!stockData) {
+    return;
+  }
 
-  if (
-    !stockData ||
-    !stockData.trackingActive
-  ) {
+  const summary =
+    stockData.summary || {};
+
+  const usableBalance =
+    Number(
+      summary.usableBalance ??
+      summary.currentBalance ??
+      0
+    );
+
+  // ==========================================
+  // AMBIL FEFO TERUS DARIPADA BACKEND
+  // ==========================================
+
+  const fefo =
+    stockData.fefo || null;
+
+
+  // ==========================================
+  // PENJEJAKAN BELUM AKTIF
+  // ==========================================
+
+  if (!stockData.trackingActive) {
 
     panel.className =
       'fefo-panel';
@@ -869,11 +887,11 @@ function renderFefoPanel() {
   }
 
 
-  const batches =
-    getFefoBatches();
+  // ==========================================
+  // BENAR-BENAR TIADA STOK BOLEH GUNA
+  // ==========================================
 
-
-  if (!batches.length) {
+  if (usableBalance <= 0) {
 
     panel.className =
       'fefo-panel danger';
@@ -894,9 +912,77 @@ function renderFefoPanel() {
   }
 
 
-  const first =
-    batches[0];
+  // ==========================================
+  // STOK ADA TETAPI DATA FEFO TIADA
+  // ==========================================
 
+  if (!fefo) {
+
+    panel.className =
+      'fefo-panel warning';
+
+    panel.innerHTML = `
+
+      <div class="fefo-title">
+        🥛 FEFO — Gunakan Dahulu
+      </div>
+
+      <div class="fefo-empty">
+
+        ⚠️ Baki boleh guna masih
+        <strong>${esc(usableBalance)} unit</strong>.
+
+        <br><br>
+
+        Maklumat batch FEFO belum diterima
+        daripada server.
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  // ==========================================
+  // BACA BAKI BATCH
+  // Backend menggunakan "remaining"
+  // ==========================================
+
+  const remaining =
+    Number(
+      fefo.remaining ?? 0
+    );
+
+
+  // ==========================================
+  // BACA BAKI HARI SEBELUM LUPUT
+  // ==========================================
+
+  let days =
+    fefo.daysToExpiry;
+
+  if (
+    days === null ||
+    days === undefined ||
+    days === ''
+  ) {
+
+    days =
+      getDaysUntilExpiry(
+        fefo.expiryDate
+      );
+
+  }
+
+  days =
+    Number(days);
+
+
+  // ==========================================
+  // STATUS FEFO
+  // ==========================================
 
   let statusClass =
     'safe';
@@ -905,32 +991,33 @@ function renderFefoPanel() {
     '✅ MASIH BAIK';
 
 
-  if (first.expiryDate) {
+  if (days < 0) {
 
-    const days =
-      getDaysUntilExpiry(
-        first.expiryDate
-      );
+    statusClass =
+      'danger';
 
+    statusText =
+      '🚫 TELAH LUPUT';
 
-    if (days <= 3) {
+  }
 
-      statusClass =
-        'danger';
+  else if (days <= 3) {
 
-      statusText =
-        '🚨 HAMPIR LUPUT';
+    statusClass =
+      'danger';
 
-    }
-    else if (days <= 7) {
+    statusText =
+      '🚨 HAMPIR LUPUT';
 
-      statusClass =
-        'warning';
+  }
 
-      statusText =
-        '⚠️ GUNA SEGERA';
+  else if (days <= 7) {
 
-    }
+    statusClass =
+      'warning';
+
+    statusText =
+      '⚠️ GUNA SEGERA';
 
   }
 
@@ -940,65 +1027,94 @@ function renderFefoPanel() {
     statusClass;
 
 
+  // ==========================================
+  // PAPAR DATA FEFO
+  // ==========================================
+
   panel.innerHTML = `
 
     <div class="fefo-title">
       🥛 FEFO — Gunakan Dahulu
     </div>
 
+
     <div class="fefo-main">
 
+
       <div>
+
         <div class="fefo-label">
           Batch Keutamaan
         </div>
 
         <div class="fefo-value">
-          ${esc(first.batch || '-')}
+          ${esc(
+            fefo.batch || '-'
+          )}
         </div>
+
       </div>
 
+
       <div>
+
         <div class="fefo-label">
           Tarikh Luput
         </div>
 
         <div class="fefo-value">
+
           ${esc(
-            first.displayExpiryDate ||
+            fefo.displayExpiryDate ||
             formatDateMs(
-              first.expiryDate
+              fefo.expiryDate
             )
           )}
+
         </div>
+
       </div>
 
+
       <div>
+
         <div class="fefo-label">
           Baki Batch
         </div>
 
         <div class="fefo-value">
-          ${esc(first.balance)} unit
+          ${esc(remaining)} unit
         </div>
+
       </div>
 
+
       <div>
+
         <div class="fefo-label">
           Status
         </div>
 
-        <div class="fefo-status ${statusClass}">
+        <div
+          class="fefo-status ${statusClass}"
+        >
           ${statusText}
         </div>
+
       </div>
+
 
     </div>
 
+
     <div class="fefo-note">
-      📌 Gunakan stok batch ini terlebih dahulu
-      sebelum batch yang mempunyai tarikh luput
-      lebih lewat.
+
+      📌 Gunakan batch ini terlebih dahulu
+      mengikut kaedah
+      <strong>
+        First Expired, First Out (FEFO)
+      </strong>.
+
     </div>
 
   `;
