@@ -1448,20 +1448,14 @@ function renderExpiryAlerts() {
       'expiryAlertBox'
     );
 
-
   if (!box) {
     return;
   }
 
 
-  /*
-   * stock.html asal mempunyai:
-   * expiryAlertText
-   * expiryAlertList
-   *
-   * Kita gunakan kedua-duanya dan TIDAK
-   * menggantikan keseluruhan expiryAlertBox.
-   */
+  // =====================================================
+  // DAPATKAN / CIPTA RUANG TEKS DAN SENARAI
+  // =====================================================
 
   let textBox =
     document.getElementById(
@@ -1473,12 +1467,6 @@ function renderExpiryAlerts() {
       'expiryAlertList'
     );
 
-
-  /*
-   * Fallback:
-   * jika struktur dalaman belum ada,
-   * cipta secara automatik.
-   */
 
   if (!textBox) {
 
@@ -1514,6 +1502,10 @@ function renderExpiryAlerts() {
   }
 
 
+  // =====================================================
+  // AMBIL SEMUA BATCH DARIPADA DATA BACKEND
+  // =====================================================
+
   const batches =
     getAllStockBatches_();
 
@@ -1531,8 +1523,13 @@ function renderExpiryAlerts() {
       'ℹ️ Tiada maklumat batch stok untuk dipantau.';
 
     return;
+
   }
 
+
+  // =====================================================
+  // KUMPULAN PEMANTAUAN
+  // =====================================================
 
   const expired = [];
   const critical = [];
@@ -1541,15 +1538,30 @@ function renderExpiryAlerts() {
   const noDate = [];
 
 
+  // =====================================================
+  // PROSES SETIAP BATCH
+  // =====================================================
+
   batches.forEach(
     function (item) {
 
+      /*
+       * PENTING:
+       * Backend baharu menggunakan "remaining".
+       *
+       * "balance" dikekalkan sebagai fallback
+       * supaya masih serasi dengan data lama.
+       */
+
       const balance =
         Number(
-          item.balance || 0
+          item.remaining ??
+          item.balance ??
+          0
         );
 
 
+      // Batch yang sudah kosong tidak perlu dipantau.
       if (balance <= 0) {
         return;
       }
@@ -1561,24 +1573,54 @@ function renderExpiryAlerts() {
         ).trim();
 
 
+      // =================================================
+      // BATCH TIADA TARIKH LUPUT
+      // =================================================
+
       if (!expiryDate) {
 
         noDate.push({
+
           batch:
             item.batch || '-',
 
           balance:
             balance
+
         });
 
         return;
+
       }
 
 
-      const days =
-        getDaysUntilExpiry(
-          expiryDate
-        );
+      // =================================================
+      // KIRA BAKI HARI
+      // =================================================
+
+      let days;
+
+
+      if (
+        item.daysToExpiry !== null &&
+        item.daysToExpiry !== undefined &&
+        item.daysToExpiry !== ''
+      ) {
+
+        days =
+          Number(
+            item.daysToExpiry
+          );
+
+      }
+      else {
+
+        days =
+          getDaysUntilExpiry(
+            expiryDate
+          );
+
+      }
 
 
       const data = {
@@ -1604,30 +1646,52 @@ function renderExpiryAlerts() {
       };
 
 
-      if (days < 0) {
+      // =================================================
+      // KATEGORI TARIKH LUPUT
+      // =================================================
 
-        expired.push(data);
+      if (
+        item.expired === true ||
+        days < 0
+      ) {
+
+        expired.push(
+          data
+        );
 
       }
+
       else if (days <= 3) {
 
-        critical.push(data);
+        critical.push(
+          data
+        );
 
       }
+
       else if (days <= 7) {
 
-        warning.push(data);
+        warning.push(
+          data
+        );
 
       }
+
       else {
 
-        safe.push(data);
+        safe.push(
+          data
+        );
 
       }
 
     }
   );
 
+
+  // =====================================================
+  // SUSUN TARIKH PALING AWAL DAHULU
+  // =====================================================
 
   function sortByExpiry(a, b) {
 
@@ -1642,11 +1706,26 @@ function renderExpiryAlerts() {
   }
 
 
-  expired.sort(sortByExpiry);
-  critical.sort(sortByExpiry);
-  warning.sort(sortByExpiry);
-  safe.sort(sortByExpiry);
+  expired.sort(
+    sortByExpiry
+  );
 
+  critical.sort(
+    sortByExpiry
+  );
+
+  warning.sort(
+    sortByExpiry
+  );
+
+  safe.sort(
+    sortByExpiry
+  );
+
+
+  // =====================================================
+  // TENTUKAN STATUS UTAMA
+  // =====================================================
 
   if (expired.length > 0) {
 
@@ -1678,6 +1757,7 @@ function renderExpiryAlerts() {
       'Stok ini <strong>tidak boleh diagihkan</strong>.';
 
   }
+
   else if (critical.length > 0) {
 
     box.className =
@@ -1689,6 +1769,7 @@ function renderExpiryAlerts() {
       'Gunakan stok ini terlebih dahulu mengikut FEFO.';
 
   }
+
   else if (warning.length > 0) {
 
     box.className =
@@ -1700,44 +1781,63 @@ function renderExpiryAlerts() {
       'Utamakan batch ini semasa pengagihan.';
 
   }
-  else {
+
+  else if (safe.length > 0) {
 
     box.className =
       'expiry-alert ok';
 
 
-    if (safe.length > 0) {
+    const nearest =
+      safe[0];
 
-      const nearest =
-        safe[0];
 
-      textBox.innerHTML =
-        '✅ <strong>STOK SELAMAT.</strong> ' +
-        'Tiada stok yang luput atau akan luput ' +
-        'dalam masa 7 hari. ' +
-        'Batch terdekat: <strong>' +
-        esc(nearest.batch) +
-        '</strong> — ' +
-        esc(nearest.days) +
-        ' hari lagi.';
-
-    }
-    else {
-
-      textBox.innerHTML =
-        'ℹ️ Tiada stok aktif yang mempunyai ' +
-        'tarikh luput untuk dipantau.';
-
-    }
+    textBox.innerHTML =
+      '✅ <strong>STOK SELAMAT.</strong> ' +
+      'Tiada stok yang luput atau akan luput ' +
+      'dalam masa 7 hari. ' +
+      'Batch terdekat: <strong>' +
+      esc(nearest.batch) +
+      '</strong> — ' +
+      esc(nearest.days) +
+      ' hari lagi.';
 
   }
 
+  else if (noDate.length > 0) {
+
+    box.className =
+      'expiry-alert warning';
+
+    textBox.innerHTML =
+      'ℹ️ <strong>PERHATIAN:</strong> ' +
+      'Terdapat stok aktif tetapi tarikh luput ' +
+      'belum direkodkan.';
+
+  }
+
+  else {
+
+    box.className =
+      'expiry-alert ok';
+
+    textBox.innerHTML =
+      'ℹ️ Tiada stok aktif yang mempunyai ' +
+      'tarikh luput untuk dipantau.';
+
+  }
+
+
+  // =====================================================
+  // PAPAR STOK YANG TELAH LUPUT
+  // =====================================================
 
   expired.forEach(
     function (item) {
 
       addExpiryListItem_(
         listBox,
+
         '🚫 Batch <strong>' +
         esc(item.batch) +
         '</strong> — <strong>' +
@@ -1745,11 +1845,16 @@ function renderExpiryAlerts() {
         ' unit</strong> — Luput: <strong>' +
         esc(item.displayExpiryDate) +
         '</strong>'
+
       );
 
     }
   );
 
+
+  // =====================================================
+  // PAPAR STOK KRITIKAL <= 3 HARI
+  // =====================================================
 
   critical.forEach(
     function (item) {
@@ -1763,6 +1868,7 @@ function renderExpiryAlerts() {
 
       addExpiryListItem_(
         listBox,
+
         '🚨 Batch <strong>' +
         esc(item.batch) +
         '</strong> — <strong>' +
@@ -1772,17 +1878,23 @@ function renderExpiryAlerts() {
         ' (' +
         esc(item.displayExpiryDate) +
         ')'
+
       );
 
     }
   );
 
 
+  // =====================================================
+  // PAPAR AMARAN <= 7 HARI
+  // =====================================================
+
   warning.forEach(
     function (item) {
 
       addExpiryListItem_(
         listBox,
+
         '⚠️ Batch <strong>' +
         esc(item.batch) +
         '</strong> — <strong>' +
@@ -1792,45 +1904,85 @@ function renderExpiryAlerts() {
         ' hari lagi (' +
         esc(item.displayExpiryDate) +
         ')'
+
       );
 
     }
   );
 
+
+  // =====================================================
+  // PAPAR BATCH SELAMAT
+  // =====================================================
+
+  safe.forEach(
+    function (item) {
+
+      addExpiryListItem_(
+        listBox,
+
+        '✅ Batch <strong>' +
+        esc(item.batch) +
+        '</strong> — <strong>' +
+        esc(item.balance) +
+        ' unit</strong> — ' +
+        esc(item.days) +
+        ' hari lagi (' +
+        esc(item.displayExpiryDate) +
+        ')'
+
+      );
+
+    }
+  );
+
+
+  // =====================================================
+  // PAPAR BATCH TANPA TARIKH LUPUT
+  // =====================================================
 
   noDate.forEach(
     function (item) {
 
       addExpiryListItem_(
         listBox,
+
         'ℹ️ Batch <strong>' +
         esc(item.batch) +
         '</strong> — <strong>' +
         esc(item.balance) +
-        ' unit</strong> — Tiada tarikh luput direkodkan.'
+        ' unit</strong> — ' +
+        'Tiada tarikh luput direkodkan.'
+
       );
 
     }
   );
 
 
+  // =====================================================
+  // NOTA FEFO
+  // =====================================================
+
   if (
     expired.length > 0 ||
     critical.length > 0 ||
-    warning.length > 0
+    warning.length > 0 ||
+    safe.length > 0
   ) {
 
     addExpiryListItem_(
       listBox,
+
       '🥛 <strong>FEFO:</strong> ' +
       'Gunakan stok yang mempunyai tarikh ' +
       'luput paling awal terlebih dahulu.'
+
     );
 
   }
 
 }
-
 
 /* =========================================================
    TAMBAH ITEM SENARAI TARIKH LUPUT
