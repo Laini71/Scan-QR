@@ -303,6 +303,11 @@
       background: #0d47a1;
     }
 
+    .save-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
     .reset-btn {
 
       border: none;
@@ -320,6 +325,211 @@
       cursor: pointer;
 
       font-size: 15px;
+    }
+
+
+    /* =========================
+       IMPORT MURID PUKAL
+    ========================= */
+
+    .bulk-card {
+      border:
+        2px solid #bbdefb;
+    }
+
+    .bulk-intro {
+      margin:
+        0 0 16px;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+
+    .bulk-format-box {
+      background: #eff6ff;
+      border:
+        1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 15px;
+      color: #1e3a8a;
+      line-height: 1.6;
+    }
+
+    .bulk-format-box strong {
+      color: #0d47a1;
+    }
+
+    .bulk-textarea {
+      width: 100%;
+      min-height: 220px;
+      resize: vertical;
+      padding: 14px;
+      border:
+        1px solid #cbd5e1;
+      border-radius: 12px;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      background: #fff;
+    }
+
+    .bulk-textarea:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow:
+        0 0 0 3px
+        rgba(25,118,210,.12);
+    }
+
+    .bulk-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .bulk-preview-btn,
+    .bulk-import-btn,
+    .bulk-clear-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .bulk-preview-btn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .bulk-import-btn {
+      background: #16a34a;
+      color: white;
+    }
+
+    .bulk-clear-btn {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .bulk-import-btn:disabled,
+    .bulk-preview-btn:disabled,
+    .bulk-clear-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .bulk-status {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border:
+        1px solid #e2e8f0;
+      line-height: 1.6;
+    }
+
+    .bulk-progress-wrap {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .bulk-progress-text {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #0d47a1;
+    }
+
+    .bulk-progress {
+      width: 100%;
+      height: 18px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bulk-progress-bar {
+      width: 0%;
+      height: 100%;
+      background:
+        linear-gradient(
+          90deg,
+          #1976d2,
+          #16a34a
+        );
+      transition:
+        width .25s ease;
+    }
+
+    .bulk-preview-wrap {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .bulk-preview-summary {
+      background: #f8fafc;
+      border:
+        1px solid #e2e8f0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    .bulk-preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    .bulk-preview-table th {
+      background: #1565c0;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .bulk-preview-table td {
+      padding: 10px;
+      border-bottom:
+        1px solid #e5e7eb;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    .bulk-row-invalid {
+      background: #fff1f2;
+    }
+
+    .bulk-result-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .bulk-result-item {
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      background: white;
+      border:
+        1px solid #e5e7eb;
+    }
+
+    .bulk-result-item strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 4px;
     }
 
 
@@ -523,6 +733,15 @@
           1fr;
       }
 
+      .bulk-result-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .bulk-actions button {
+        width: 100%;
+      }
+
     }
 
   </style>
@@ -571,49 +790,49 @@
 
   <nav class="student-menu">
 
-  <a href="index.html">
-    📷 Scanner
-  </a>
+    <a href="index.html">
+      📷 Scanner
+    </a>
 
-  <a href="dashboard.html">
-    📊 Dashboard
-  </a>
+    <a href="dashboard.html">
+      📊 Dashboard
+    </a>
 
-  <a
-    href="students.html"
-    class="menu-active"
-  >
-    👨‍🎓 Murid
-  </a>
+    <a
+      href="students.html"
+      class="menu-active"
+    >
+      👨‍🎓 Murid
+    </a>
 
-  <a href="qr.html">
-    🔳 Jana QR
-  </a>
+    <a href="qr.html">
+      🔳 Jana QR
+    </a>
 
-  <a href="report.html">
-    📄 Laporan
-  </a>
+    <a href="report.html">
+      📄 Laporan
+    </a>
 
-  <a href="history.html">
-    🗂️ Rekod
-  </a>
+    <a href="history.html">
+      🗂️ Rekod
+    </a>
 
-  <a href="stock.html">
-    📦 Stok
-  </a>
+    <a href="stock.html">
+      📦 Stok
+    </a>
 
-  <a href="stock-report.html">
-    📊 Laporan Stok
-  </a>
+    <a href="stock-report.html">
+      📊 Laporan Stok
+    </a>
 
-  <button
-    type="button"
-    onclick="loadStudents()"
-  >
-    🔄 Refresh
-  </button>
+    <button
+      type="button"
+      onclick="loadStudents()"
+    >
+      🔄 Refresh
+    </button>
 
-</nav>
+  </nav>
 
 
 
@@ -854,6 +1073,240 @@
 
 
     <!-- ========================================
+         IMPORT MURID PUKAL
+    ========================================= -->
+
+    <section class="student-card bulk-card">
+
+      <h2>
+        📥 Import Murid Pukal
+      </h2>
+
+      <p class="bulk-intro">
+        Salin senarai murid terus daripada
+        <strong>Microsoft Excel</strong> atau
+        <strong>Google Sheets</strong>,
+        kemudian tampal ke dalam ruangan di bawah.
+        Sistem akan menyemak data sebelum import dibuat.
+      </p>
+
+
+      <div class="bulk-format-box">
+
+        <strong>
+          Susunan kolum:
+        </strong>
+
+        <br>
+
+        NAMA MURID |
+        KELAS |
+        TAHUN |
+        JANTINA |
+        NO KP / MYKID |
+        CATATAN
+
+        <br><br>
+
+        <strong>
+          Contoh:
+        </strong>
+
+        <br>
+
+        ALI BIN AHMAD &nbsp; 1A &nbsp; 1 &nbsp;
+        L &nbsp; 180101120001
+
+        <br>
+
+        SITI NUR AISYAH &nbsp; 1A &nbsp; 1 &nbsp;
+        P &nbsp; 180202120002
+
+        <br><br>
+
+        <small>
+          * Nama dan kelas wajib.
+          Tahun boleh dikesan daripada kelas jika kosong.
+          L/P akan ditukar secara automatik kepada
+          LELAKI/PEREMPUAN.
+        </small>
+
+      </div>
+
+
+      <label
+        for="bulkStudentData"
+        style="
+          display:block;
+          font-weight:bold;
+          margin-bottom:8px;
+        "
+      >
+        Tampal Data Murid
+      </label>
+
+
+      <textarea
+        id="bulkStudentData"
+        class="bulk-textarea"
+        placeholder="Paste data daripada Excel / Google Sheets di sini...
+
+Contoh:
+NAMA MURID	KELAS	TAHUN	JANTINA	NO KP
+ALI BIN AHMAD	1A	1	L	180101120001
+SITI NUR AISYAH	1A	1	P	180202120002"
+      ></textarea>
+
+
+      <div class="bulk-actions">
+
+        <button
+          type="button"
+          id="btnBulkPreview"
+          class="bulk-preview-btn"
+          onclick="previewBulkStudents()"
+        >
+          👁️ PREVIEW DATA
+        </button>
+
+
+        <button
+          type="button"
+          id="btnBulkImport"
+          class="bulk-import-btn"
+          onclick="importBulkStudents()"
+        >
+          📥 IMPORT MURID
+        </button>
+
+
+        <button
+          type="button"
+          id="btnBulkClear"
+          class="bulk-clear-btn"
+          onclick="clearBulkImport()"
+        >
+          🗑️ KOSONGKAN
+        </button>
+
+      </div>
+
+
+      <!-- STATUS IMPORT -->
+
+      <div
+        id="bulkStatus"
+        class="bulk-status"
+      ></div>
+
+
+      <!-- PROGRESS IMPORT -->
+
+      <div
+        id="bulkProgressWrap"
+        class="bulk-progress-wrap"
+      >
+
+        <div
+          id="bulkProgressText"
+          class="bulk-progress-text"
+        >
+          Bersedia untuk import...
+        </div>
+
+        <div class="bulk-progress">
+
+          <div
+            id="bulkProgressBar"
+            class="bulk-progress-bar"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PREVIEW -->
+
+      <div
+        id="bulkPreviewWrap"
+        class="bulk-preview-wrap"
+      >
+
+        <div
+          id="bulkPreviewSummary"
+          class="bulk-preview-summary"
+        >
+          Belum ada data untuk dipaparkan.
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table class="bulk-preview-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Bil.
+                </th>
+
+                <th>
+                  Nama Murid
+                </th>
+
+                <th>
+                  Kelas
+                </th>
+
+                <th>
+                  Tahun
+                </th>
+
+                <th>
+                  Jantina
+                </th>
+
+                <th>
+                  No. KP / MyKid
+                </th>
+
+                <th>
+                  Semakan
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="bulkPreviewTable">
+
+              <tr>
+
+                <td
+                  colspan="7"
+                  style="
+                    text-align:center;
+                    padding:25px;
+                  "
+                >
+                  Tiada preview.
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>    <!-- ========================================
          SENARAI MURID
     ========================================= -->
 
