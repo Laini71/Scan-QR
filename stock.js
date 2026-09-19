@@ -844,8 +844,10 @@ function renderFefoPanel() {
     return;
   }
 
+
   const summary =
     stockData.summary || {};
+
 
   const usableBalance =
     Number(
@@ -854,18 +856,13 @@ function renderFefoPanel() {
       0
     );
 
-  // ==========================================
-  // AMBIL FEFO TERUS DARIPADA BACKEND
-  // ==========================================
 
+  // FEFO datang terus daripada backend.
   const fefo =
     stockData.fefo || null;
 
 
-  // ==========================================
-  // PENJEJAKAN BELUM AKTIF
-  // ==========================================
-
+  // Penjejakan belum aktif.
   if (!stockData.trackingActive) {
 
     panel.className =
@@ -887,10 +884,7 @@ function renderFefoPanel() {
   }
 
 
-  // ==========================================
-  // BENAR-BENAR TIADA STOK BOLEH GUNA
-  // ==========================================
-
+  // Benar-benar tiada stok boleh guna.
   if (usableBalance <= 0) {
 
     panel.className =
@@ -912,10 +906,7 @@ function renderFefoPanel() {
   }
 
 
-  // ==========================================
-  // STOK ADA TETAPI DATA FEFO TIADA
-  // ==========================================
-
+  // Stok masih ada tetapi backend belum beri FEFO.
   if (!fefo) {
 
     panel.className =
@@ -945,44 +936,51 @@ function renderFefoPanel() {
   }
 
 
-  // ==========================================
-  // BACA BAKI BATCH
-  // Backend menggunakan "remaining"
-  // ==========================================
-
   const remaining =
     Number(
       fefo.remaining ?? 0
     );
 
 
-  // ==========================================
-  // BACA BAKI HARI SEBELUM LUPUT
-  // ==========================================
+  /*
+   * PEMBAIKAN:
+   * Jangan anggap batch tanpa tarikh luput sebagai
+   * "masih baik".
+   */
+  const hasExpiryDate =
+    String(
+      fefo.expiryDate || ''
+    ).trim() !== '';
 
-  let days =
-    fefo.daysToExpiry;
 
-  if (
-    days === null ||
-    days === undefined ||
-    days === ''
-  ) {
+  let days = null;
+
+
+  if (hasExpiryDate) {
 
     days =
-      getDaysUntilExpiry(
-        fefo.expiryDate
-      );
+      fefo.daysToExpiry;
+
+
+    if (
+      days === null ||
+      days === undefined ||
+      days === ''
+    ) {
+
+      days =
+        getDaysUntilExpiry(
+          fefo.expiryDate
+        );
+
+    }
+
+
+    days =
+      Number(days);
 
   }
 
-  days =
-    Number(days);
-
-
-  // ==========================================
-  // STATUS FEFO
-  // ==========================================
 
   let statusClass =
     'safe';
@@ -991,7 +989,23 @@ function renderFefoPanel() {
     '✅ MASIH BAIK';
 
 
-  if (days < 0) {
+  /*
+   * BATCH TIADA TARIKH LUPUT
+   */
+  if (!hasExpiryDate) {
+
+    statusClass =
+      'no-expiry';
+
+    statusText =
+      '⚪ TARIKH LUPUT TIADA';
+
+  }
+
+  /*
+   * BATCH SUDAH LUPUT
+   */
+  else if (days < 0) {
 
     statusClass =
       'danger';
@@ -1001,6 +1015,9 @@ function renderFefoPanel() {
 
   }
 
+  /*
+   * 0–3 HARI
+   */
   else if (days <= 3) {
 
     statusClass =
@@ -1011,6 +1028,9 @@ function renderFefoPanel() {
 
   }
 
+  /*
+   * 4–7 HARI
+   */
   else if (days <= 7) {
 
     statusClass =
@@ -1026,10 +1046,6 @@ function renderFefoPanel() {
     'fefo-panel ' +
     statusClass;
 
-
-  // ==========================================
-  // PAPAR DATA FEFO
-  // ==========================================
 
   panel.innerHTML = `
 
@@ -1064,12 +1080,16 @@ function renderFefoPanel() {
 
         <div class="fefo-value">
 
-          ${esc(
-            fefo.displayExpiryDate ||
-            formatDateMs(
-              fefo.expiryDate
-            )
-          )}
+          ${
+            hasExpiryDate
+              ? esc(
+                  fefo.displayExpiryDate ||
+                  formatDateMs(
+                    fefo.expiryDate
+                  )
+                )
+              : '-'
+          }
 
         </div>
 
@@ -1107,22 +1127,29 @@ function renderFefoPanel() {
     </div>
 
 
-    <div class="fefo-note">
+    <div class="fefo-note ${!hasExpiryDate ? 'no-expiry' : ''}">
 
-      📌 Gunakan batch ini terlebih dahulu
-      mengikut kaedah
-      <strong>
-        First Expired, First Out (FEFO)
-      </strong>.
+      ${
+        !hasExpiryDate
+
+          ?
+
+          `⚠️ <strong>Tarikh luput batch ini belum direkodkan.</strong>
+           Sila lengkapkan tarikh luput supaya kaedah FEFO
+           dapat menentukan keutamaan stok dengan tepat.`
+
+          :
+
+          `📌 Gunakan batch ini terlebih dahulu
+           mengikut kaedah
+           <strong>First Expired, First Out (FEFO)</strong>.`
+      }
 
     </div>
 
   `;
 
-}
-
-
-/* =========================================================
+}/* =========================================================
    CIPTA PANEL FEFO
 ========================================================= */
 
@@ -1254,6 +1281,14 @@ function ensureFefoStyle_() {
       border-left-color:#dc2626;
     }
 
+    /*
+     * BAHARU:
+     * Batch yang tiada tarikh luput.
+     */
+    .fefo-panel.no-expiry {
+      border-left-color:#64748b;
+    }
+
     .fefo-title {
       font-size:21px;
       font-weight:800;
@@ -1303,6 +1338,14 @@ function ensureFefoStyle_() {
       color:#dc2626;
     }
 
+    /*
+     * BAHARU:
+     * Status khas jika tarikh luput belum direkodkan.
+     */
+    .fefo-status.no-expiry {
+      color:#64748b;
+    }
+
     .fefo-note {
       margin-top:15px;
       padding:12px 14px;
@@ -1311,6 +1354,17 @@ function ensureFefoStyle_() {
       color:#1e40af;
       font-size:13px;
       font-weight:600;
+      line-height:1.6;
+    }
+
+    /*
+     * BAHARU:
+     * Nota khas untuk batch tanpa tarikh luput.
+     */
+    .fefo-note.no-expiry {
+      background:#f8fafc;
+      color:#475569;
+      border:1px solid #cbd5e1;
     }
 
     .fefo-empty {
@@ -1357,9 +1411,15 @@ function getFefoBatches() {
     batches.filter(
       function (item) {
 
+        /*
+         * Backend baharu menggunakan remaining.
+         * balance dikekalkan untuk keserasian data lama.
+         */
         const balance =
           Number(
-            item.balance || 0
+            item.remaining ??
+            item.balance ??
+            0
           );
 
 
@@ -1374,13 +1434,20 @@ function getFefoBatches() {
           ).trim();
 
 
-        // Batch tanpa tarikh masih boleh digunakan,
-        // tetapi akan diletakkan selepas batch bertarikh.
+        /*
+         * Batch tanpa tarikh masih disenaraikan,
+         * tetapi diletakkan SELEPAS semua batch
+         * yang mempunyai tarikh luput sah.
+         */
         if (!expiryDate) {
           return true;
         }
 
 
+        /*
+         * Batch yang telah luput tidak dianggap
+         * sebagai stok FEFO yang boleh digunakan.
+         */
         return (
           getDaysUntilExpiry(
             expiryDate
@@ -1397,14 +1464,17 @@ function getFefoBatches() {
       const aDate =
         String(
           a.expiryDate || ''
-        );
+        ).trim();
 
       const bDate =
         String(
           b.expiryDate || ''
-        );
+        ).trim();
 
 
+      /*
+       * Kedua-duanya tiada tarikh.
+       */
       if (
         !aDate &&
         !bDate
@@ -1413,16 +1483,28 @@ function getFefoBatches() {
       }
 
 
+      /*
+       * A tiada tarikh:
+       * letakkan A selepas B.
+       */
       if (!aDate) {
         return 1;
       }
 
 
+      /*
+       * B tiada tarikh:
+       * letakkan B selepas A.
+       */
       if (!bDate) {
         return -1;
       }
 
 
+      /*
+       * Kedua-duanya ada tarikh:
+       * tarikh paling awal berada di atas.
+       */
       return aDate.localeCompare(
         bDate
       );
@@ -1546,7 +1628,6 @@ function renderExpiryAlerts() {
     function (item) {
 
       /*
-       * PENTING:
        * Backend baharu menggunakan "remaining".
        *
        * "balance" dikekalkan sebagai fallback
@@ -1810,9 +1891,10 @@ function renderExpiryAlerts() {
       'expiry-alert warning';
 
     textBox.innerHTML =
-      'ℹ️ <strong>PERHATIAN:</strong> ' +
+      '⚠️ <strong>TARIKH LUPUT BELUM LENGKAP.</strong> ' +
       'Terdapat stok aktif tetapi tarikh luput ' +
-      'belum direkodkan.';
+      'belum direkodkan. Sila lengkapkan tarikh luput ' +
+      'supaya pemantauan FEFO lebih tepat.';
 
   }
 
@@ -1947,12 +2029,13 @@ function renderExpiryAlerts() {
       addExpiryListItem_(
         listBox,
 
-        'ℹ️ Batch <strong>' +
+        '⚪ Batch <strong>' +
         esc(item.batch) +
         '</strong> — <strong>' +
         esc(item.balance) +
         ' unit</strong> — ' +
-        'Tiada tarikh luput direkodkan.'
+        '<strong>TARIKH LUPUT TIADA</strong>. ' +
+        'Sila lengkapkan tarikh luput.'
 
       );
 
@@ -1982,7 +2065,27 @@ function renderExpiryAlerts() {
 
   }
 
+
+  /*
+   * Jika ada batch tanpa tarikh luput,
+   * beri peringatan tambahan.
+   */
+  if (noDate.length > 0) {
+
+    addExpiryListItem_(
+      listBox,
+
+      '⚠️ <strong>PERINGATAN:</strong> ' +
+      'Batch tanpa tarikh luput tidak boleh dinilai ' +
+      'dengan tepat mengikut FEFO. Lengkapkan tarikh ' +
+      'luput batch berkenaan.'
+
+    );
+
+  }
+
 }
+
 
 /* =========================================================
    TAMBAH ITEM SENARAI TARIKH LUPUT
@@ -2167,10 +2270,7 @@ function formatDateMs(
     parts[0]
   );
 
-}
-
-
-/* =========================================================
+}/* =========================================================
    SIMPAN STOK MASUK
 ========================================================= */
 
