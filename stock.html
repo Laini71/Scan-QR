@@ -149,7 +149,6 @@
       border-color: #fca5a5;
     }
 
-
     .expiry-alert {
       margin-bottom: 20px;
       padding: 18px;
@@ -273,9 +272,35 @@
       background: white;
     }
 
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow: 0 0 0 3px rgba(25,118,210,.12);
+    }
+
+    input:required,
+    textarea:required,
+    select:required {
+      border-left: 4px solid #f59e0b;
+    }
+
     textarea {
       min-height: 90px;
       resize: vertical;
+    }
+
+    .required-note {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .required-mark {
+      color: #dc2626;
+      font-weight: 900;
     }
 
     .actions {
@@ -301,6 +326,10 @@
 
     .btn.gray {
       background: #475569;
+    }
+
+    .btn.orange {
+      background: #ea580c;
     }
 
     .btn:disabled {
@@ -338,10 +367,6 @@
       border: 2px solid #ef4444;
       background: #fef2f2;
       color: #991b1b;
-    }
-
-    .btn.orange {
-      background: #ea580c;
     }
 
     .meta {
@@ -603,10 +628,13 @@
 
     <p>
       Ujian ini mensimulasikan baki stok = 0.
-      <strong>Tiada stok sebenar, rekod murid atau transaksi akan diubah.</strong>
+      <strong>
+        Tiada stok sebenar, rekod murid atau transaksi akan diubah.
+      </strong>
     </p>
 
     <button
+      type="button"
       id="btnTestOutOfStock"
       class="btn orange"
       onclick="testOutOfStock()"
@@ -619,10 +647,7 @@
       class="test-result"
     ></div>
 
-  </section>
-
-
-  <section class="summary-grid">
+  </section>  <section class="summary-grid">
 
     <div class="summary-card">
 
@@ -706,58 +731,87 @@
   </section>
 
 
+  <!-- =====================================================
+       BORANG REKOD STOK MASUK
+  ====================================================== -->
+
   <section class="card stock-form">
 
     <h2>
       ➕ Rekod Stok Masuk
     </h2>
 
+    <p class="required-note">
+      Ruangan bertanda
+      <span class="required-mark">*</span>
+      wajib diisi sebelum stok boleh disimpan.
+    </p>
+
+
     <div class="form-grid">
+
+
+      <!-- JUMLAH STOK -->
 
       <div class="form-group">
 
         <label for="quantity">
-          Jumlah Unit Susu *
+          Jumlah Unit Susu
+          <span class="required-mark">*</span>
         </label>
 
         <input
           type="number"
           id="quantity"
           min="1"
+          step="1"
+          inputmode="numeric"
           placeholder="Contoh: 500"
+          required
         >
 
       </div>
 
 
+      <!-- NO. BATCH -->
+
       <div class="form-group">
 
         <label for="batch">
           No. Batch
+          <span class="required-mark">*</span>
         </label>
 
         <input
           type="text"
           id="batch"
           placeholder="Contoh: BATCH-SEP-2026"
+          autocomplete="off"
+          required
         >
 
       </div>
 
+
+      <!-- TARIKH LUPUT -->
 
       <div class="form-group">
 
         <label for="expiryDate">
           Tarikh Luput
+          <span class="required-mark">*</span>
         </label>
 
         <input
           type="date"
           id="expiryDate"
+          required
         >
 
       </div>
 
+
+      <!-- GURU -->
 
       <div class="form-group">
 
@@ -769,10 +823,13 @@
           type="text"
           id="teacher"
           value="GURU SKTF"
+          autocomplete="off"
         >
 
       </div>
 
+
+      <!-- RUJUKAN -->
 
       <div class="form-group">
 
@@ -784,10 +841,13 @@
           type="text"
           id="reference"
           placeholder="Contoh: DO-001"
+          autocomplete="off"
         >
 
       </div>
 
+
+      <!-- TARIKH REKOD -->
 
       <div class="form-group">
 
@@ -803,6 +863,8 @@
 
       </div>
 
+
+      <!-- CATATAN -->
 
       <div class="form-group full">
 
@@ -823,6 +885,7 @@
     <div class="actions">
 
       <button
+        type="button"
         id="btnSaveStock"
         class="btn green"
         onclick="saveStockIn()"
@@ -830,7 +893,9 @@
         📦 SIMPAN STOK MASUK
       </button>
 
+
       <button
+        type="button"
         class="btn gray"
         onclick="resetStockForm()"
       >
@@ -842,18 +907,27 @@
   </section>
 
 
+  <!-- =====================================================
+       REKOD PERGERAKAN STOK
+  ====================================================== -->
+
   <section class="card">
 
     <h2>
       📋 Rekod Pergerakan Stok
     </h2>
 
+
     <div class="meta">
+
       🕐 Kemaskini:
+
       <strong id="generatedAt">
         -
       </strong>
+
     </div>
+
 
     <div class="filters">
 
@@ -864,10 +938,12 @@
         oninput="renderTransactions()"
       >
 
+
       <select
         id="typeFilter"
         onchange="renderTransactions()"
       >
+
         <option value="">
           Semua Jenis
         </option>
@@ -884,16 +960,20 @@
 
     </div>
 
+
     <div class="actions">
 
       <button
+        type="button"
         class="btn"
         onclick="loadStock()"
       >
         🔄 Refresh Data
       </button>
 
+
       <button
+        type="button"
         class="btn gray"
         onclick="window.print()"
       >
@@ -902,6 +982,7 @@
 
     </div>
 
+
     <div class="table-wrap">
 
       <table>
@@ -909,29 +990,63 @@
         <thead>
 
           <tr>
-            <th>Bil.</th>
-            <th>Tarikh</th>
-            <th>Masa</th>
-            <th>Jenis</th>
-            <th>Jumlah</th>
-            <th>Baki</th>
-            <th>Batch</th>
-            <th>Tarikh Luput</th>
-            <th>Guru</th>
-            <th>Catatan</th>
+
+            <th>
+              Bil.
+            </th>
+
+            <th>
+              Tarikh
+            </th>
+
+            <th>
+              Masa
+            </th>
+
+            <th>
+              Jenis
+            </th>
+
+            <th>
+              Jumlah
+            </th>
+
+            <th>
+              Baki
+            </th>
+
+            <th>
+              Batch
+            </th>
+
+            <th>
+              Tarikh Luput
+            </th>
+
+            <th>
+              Guru
+            </th>
+
+            <th>
+              Catatan
+            </th>
+
           </tr>
 
         </thead>
 
+
         <tbody id="transactionTable">
 
           <tr>
+
             <td
               colspan="10"
               class="center"
             >
               Memuatkan transaksi...
             </td>
+
           </tr>
 
         </tbody>
@@ -941,22 +1056,26 @@
     </div>
 
   </section>
-
 </main>
 
 
 <footer>
 
   Sistem Pengagihan Susu QR
+
   <br>
+
   SK Tun Fuad 2026
+
   <br><br>
+
   Hak Cipta Terpelihara @ Cikgu Haji
 
 </footer>
 
 
 <script src="stock.js"></script>
+
 
 </body>
 
