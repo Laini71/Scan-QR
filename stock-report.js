@@ -748,7 +748,7 @@ function getFefoDisplayStatus(
 function renderDailySummary() {
 
   const tbody =
-    document.getElementById('dailySummaryBody');
+    document.getElementById('dailyTable');
 
   if (!tbody) {
     return;
@@ -1003,7 +1003,7 @@ function getDailyRowsFromReport() {
 function renderBatchSummary() {
 
   const tbody =
-    document.getElementById('batchSummaryBody');
+    document.getElementById('batchTable');
 
   if (!tbody) {
     return;
