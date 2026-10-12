@@ -458,9 +458,29 @@ function renderStockReport() {
   );
 
 
+  try {
   renderDailySummary();
+} catch (error) {
+  console.error('Ralat Ringkasan Harian:', error);
+}
 
+try {
   renderMonthlyTransactions();
+} catch (error) {
+  console.error('Ralat Transaksi Bulanan:', error);
+
+  const tbody = document.getElementById('transactionTable');
+
+  if (tbody) {
+    tbody.innerHTML =
+      '<tr>' +
+      '<td colspan="11" style="text-align:center;padding:20px;color:red;">' +
+      'Ralat memaparkan transaksi: ' +
+      esc(error.message) +
+      '</td>' +
+      '</tr>';
+  }
+}
 }
 
 
