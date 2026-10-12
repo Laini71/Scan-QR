@@ -1586,7 +1586,7 @@ function renderMonthlyTransactions() {
 
   const tbody =
     document.getElementById(
-      'monthlyTransactionBody'
+      'transactionTable'
     );
 
   if (!tbody) {
