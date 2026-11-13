@@ -1,1 +1,376 @@
 
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lampiran 1 | SMART PSS SK Tun Fuad</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#edf3fa;color:#19344f;font-family:Arial,sans-serif}
+.wrap{max-width:1050px;margin:auto;padding:20px}
+header{background:linear-gradient(120deg,#12345d,#1685a2);color:white;padding:25px;border-radius:16px}
+h1{font-size:25px;margin:0 0 8px}
+header p{margin:0}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+button,.back{background:#175b91;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:14px}
+.green{background:#168052}
+.light,.back{background:#dbe6f2;color:#19344f}
+.panel{background:white;border-radius:15px;padding:24px;box-shadow:0 4px 20px #18385812}
+.section{background:#dceaf7;padding:12px;margin:22px 0 15px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.full{grid-column:span 2}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #b7c9da;border-radius:8px;font:inherit;background:white}
+textarea{min-height:75px}
+.check{display:flex;align-items:center;gap:10px;margin:10px 0}
+.check input{width:auto}
+#status{font-size:14px;color:#137348;margin-bottom:10px}
+.note{font-size:12px;color:#66788b;margin-top:18px}
+.paper{display:none}
+table{width:100%;border-collapse:collapse}
+td,th{border:1px solid #333;padding:8px;text-align:left;vertical-align:top}
+th{background:#e7e7e7;text-align:center}
+.paper-title{text-align:center;font-weight:bold;margin:16px 0}
+.sign{height:120px;vertical-align:bottom}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+.full{grid-column:span 1}
+.wrap{padding:10px}
+.panel{padding:15px}
+}
+@media print{
+@page{size:A4 portrait;margin:12mm}
+body{background:white;color:black}
+.wrap{display:none!important}
+.paper{display:block!important}
+.paper table{font-size:11px}
+.paper td,.paper th{padding:7px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<h1>🥛 SMART PSS SK TUN FUAD</h1>
+<p>Lampiran 1 — Maklumat Sekolah dan Pengesahan</p>
+</header>
+
+<div class="toolbar">
+<a class="back" href="index.html">← Portal QR</a>
+<button class="green" onclick="saveDraft()">💾 Simpan Draf</button>
+<button class="light" onclick="loadDraft()">Muat Draf</button>
+<button onclick="printForm()">🖨️ Cetak / PDF</button>
+<button class="light" onclick="clearForm()">Kosongkan</button>
+</div>
+
+<div class="panel">
+<div id="status"></div>
+
+<form id="pssForm">
+
+<div class="section">A. MAKLUMAT SEKOLAH</div>
+
+<div class="grid">
+<div class="full">
+<label>Nama Sekolah dan Alamat</label>
+<textarea name="schoolAddress">SEKOLAH KEBANGSAAN TUN FUAD
+PETI SURAT 126, 91207 KUNAK, SABAH</textarea>
+</div>
+
+<div>
+<label>Kod Sekolah</label>
+<input name="schoolCode" placeholder="Kod sekolah">
+</div>
+
+<div>
+<label>Sesi Persekolahan</label>
+<select name="session">
+<option>Pagi</option>
+<option>Petang</option>
+<option>Pagi dan Petang</option>
+</select>
+</div>
+
+<div>
+<label>Nombor Telefon</label>
+<input name="phone">
+</div>
+
+<div>
+<label>E-mel Sekolah</label>
+<input name="email" type="email">
+</div>
+
+<div>
+<label>Nombor Faks</label>
+<input name="fax">
+</div>
+
+<div>
+<label>Lokasi Sekolah</label>
+<select name="location">
+<option value="">-- Pilih Lokasi --</option>
+<option>Bandar</option>
+<option>Luar Bandar</option>
+<option>Pedalaman 1</option>
+<option>Pedalaman 2</option>
+<option>Pedalaman 3</option>
+</select>
+</div>
+
+<div>
+<label>Nama Guru Besar</label>
+<input name="headmaster">
+</div>
+
+<div>
+<label>Nama GPK HEM</label>
+<input name="hem">
+</div>
+
+<div class="full">
+<label>Nama Guru Penyelaras PSS</label>
+<input name="coordinator">
+</div>
+</div>
+
+<div class="section">B. MAKLUMAT MURID</div>
+
+<div class="grid">
+<div>
+<label>Enrolmen Keseluruhan</label>
+<input name="enrolment" type="number" min="0">
+</div>
+
+<div>
+<label>Bilangan Penerima RMT/PSS</label>
+<input name="recipients" type="number" min="0">
+</div>
+
+<div class="full">
+<label>Catatan Jika Bilangan Penerima RMT/PSS Berbeza</label>
+<textarea name="notes"></textarea>
+</div>
+
+<div class="full">
+<label>Tempat Penyimpanan Susu</label>
+
+<label class="check">
+<input type="checkbox" name="storage" value="Stor/Bilik Khas PSS">
+Stor/Bilik Khas PSS
+</label>
+
+<label class="check">
+<input type="checkbox" name="storage" value="Bilik Kesihatan">
+Bilik Kesihatan
+</label>
+
+<label class="check">
+<input type="checkbox" name="storage" value="Bilik GPK HEM">
+Bilik GPK HEM
+</label>
+
+<label class="check">
+<input type="checkbox" name="storage" value="Kabinet">
+Kabinet
+</label>
+
+<label>Lain-lain Tempat Penyimpanan</label>
+<input name="storageOther">
+</div>
+</div>
+
+<div class="section">C. PENGESAHAN MAKLUMAT</div>
+
+<div class="grid">
+<div>
+<label>Nama Pegawai Pengesah</label>
+<input name="signName">
+</div>
+
+<div>
+<label>Jawatan</label>
+<input name="position">
+</div>
+
+<div>
+<label>Tarikh Pengesahan</label>
+<input type="date" name="signDate">
+</div>
+</div>
+
+<p class="note">
+Tandatangan dan cap sekolah disediakan pada borang cetakan.
+Draf disimpan dalam pelayar ini sahaja.
+</p>
+
+</form>
+</div>
+</div>
+
+<section class="paper">
+<div style="text-align:right;font-size:10px">
+LAMPIRAN 1 — MAKLUMAT AM PSS
+</div>
+
+<div class="paper-title">
+PENGURUSAN PROGRAM SUSU SEKOLAH (PSS)<br>
+KEMENTERIAN PENDIDIKAN MALAYSIA
+</div>
+
+<table>
+<tr><th colspan="2">A. MAKLUMAT SEKOLAH</th></tr>
+<tr><td width="35%">Nama Sekolah & Alamat</td><td id="p-schoolAddress"></td></tr>
+<tr><td>Kod Sekolah</td><td id="p-schoolCode"></td></tr>
+<tr><td>Sesi</td><td id="p-session"></td></tr>
+<tr><td>No. Telefon</td><td id="p-phone"></td></tr>
+<tr><td>No. Faks</td><td id="p-fax"></td></tr>
+<tr><td>E-mel</td><td id="p-email"></td></tr>
+<tr><td>Lokasi Sekolah</td><td id="p-location"></td></tr>
+<tr><td>Nama Guru Besar</td><td id="p-headmaster"></td></tr>
+<tr><td>Nama GPK HEM</td><td id="p-hem"></td></tr>
+<tr><td>Nama Guru Penyelaras</td><td id="p-coordinator"></td></tr>
+
+<tr><th colspan="2">B. MAKLUMAT MURID</th></tr>
+<tr><td>Enrolmen Keseluruhan</td><td id="p-enrolment"></td></tr>
+<tr><td>Bilangan Penerima RMT/PSS</td><td id="p-recipients"></td></tr>
+<tr><td>Catatan</td><td id="p-notes"></td></tr>
+<tr><td>Tempat Penyimpanan Susu</td><td id="p-storage"></td></tr>
+
+<tr><th colspan="2">C. PENGESAHAN MAKLUMAT</th></tr>
+<tr>
+<td colspan="2">
+Dengan ini saya mengesahkan bahawa maklumat yang dinyatakan adalah benar.
+</td>
+</tr>
+<tr>
+<td class="sign">
+_________________________<br>
+(Tandatangan)<br>
+Nama: <span id="p-signName"></span><br>
+Jawatan: <span id="p-position"></span><br>
+Tarikh: <span id="p-signDate"></span>
+</td>
+<td class="sign" style="text-align:center">
+CAP SEKOLAH
+</td>
+</tr>
+</table>
+
+<p style="font-size:9px">
+Borang digital berdasarkan contoh Lampiran 1 yang dibekalkan.
+Semak format rasmi sebelum penyerahan.
+</p>
+</section>
+
+<script>
+const KEY = "SKTF_PSS_LAMPIRAN1_V1";
+const form = document.getElementById("pssForm");
+
+function getData() {
+  const data = {};
+
+  form.querySelectorAll("input,select,textarea").forEach(el => {
+    if (el.name !== "storage") {
+      data[el.name] = el.value;
+    }
+  });
+
+  data.storage = Array.from(
+    form.querySelectorAll('input[name="storage"]:checked')
+  ).map(el => el.value);
+
+  return data;
+}
+
+function setData(data) {
+  if (!data) return;
+
+  form.querySelectorAll("input,select,textarea").forEach(el => {
+    if (el.name === "storage") {
+      el.checked = Array.isArray(data.storage) &&
+        data.storage.includes(el.value);
+    } else if (Object.prototype.hasOwnProperty.call(data, el.name)) {
+      el.value = data[el.name] ?? "";
+    }
+  });
+}
+
+function message(text) {
+  document.getElementById("status").textContent = text;
+}
+
+function saveDraft() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(getData()));
+    message("✅ Draf berjaya disimpan dalam pelayar ini.");
+  } catch (error) {
+    message("❌ Gagal menyimpan: " + error.message);
+  }
+}
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(KEY);
+
+    if (!raw) {
+      message("Tiada draf tersimpan.");
+      return;
+    }
+
+    setData(JSON.parse(raw));
+    message("✅ Draf berjaya dimuatkan.");
+  } catch (error) {
+    message("❌ Gagal memuatkan draf.");
+  }
+}
+
+function clearForm() {
+  if (!confirm("Kosongkan semua ruangan borang?")) return;
+  form.reset();
+  message("Borang telah dikosongkan.");
+}
+
+function printForm() {
+  const data = getData();
+
+  Object.entries(data).forEach(([key, value]) => {
+    const target = document.getElementById("p-" + key);
+    if (!target) return;
+
+    target.textContent = Array.isArray(value)
+      ? value.join(", ")
+      : (value || "—");
+  });
+
+  const places = [
+    ...(data.storage || []),
+    ...(data.storageOther ? [data.storageOther] : [])
+  ];
+
+  document.getElementById("p-storage").textContent =
+    places.join(", ") || "—";
+
+  document.getElementById("p-schoolAddress").style.whiteSpace =
+    "pre-line";
+
+  window.print();
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved) {
+      setData(JSON.parse(saved));
+      message("Draf terdahulu telah dimuatkan.");
+    }
+  } catch (error) {
+    message("Draf lama tidak dapat dibaca.");
+  }
+});
+</script>
+
+</body>
+</html>
